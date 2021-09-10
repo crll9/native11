@@ -10,14 +10,16 @@ import {Shadow} from 'react-native-neomorph-shadows';
 import ImageSlider from '../components/Carousel/ImageSlider';
 
 const dummyData = [
-  {image: 'https://pbs.twimg.com/media/CoNd16dWgAA38e6.jpg'},
+  {image: 'https://pbs.twimg.com/media/CoNd16dWgAA38e6.jpg', id: '1'},
   {
     image:
       'https://thumbs.dreamstime.com/z/soccer-fantasy-league-banner-poster-design-ball-purple-abstract-background-147469622.jpg',
+    id: '2',
   },
   {
     image:
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCXg9HzYyMJ3bYtdyncxXja8kP25jVosbehA&usqp=CAU',
+    id: '3',
   },
 ];
 
