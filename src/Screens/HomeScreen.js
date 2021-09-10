@@ -7,6 +7,19 @@ import {sizing} from '../Styles/theme';
 import {colors} from '../Styles/colors';
 import GameCard from '../components/Card/GameCard';
 import {Shadow} from 'react-native-neomorph-shadows';
+import ImageSlider from '../components/Carousel/ImageSlider';
+
+const dummyData = [
+  {image: 'https://pbs.twimg.com/media/CoNd16dWgAA38e6.jpg'},
+  {
+    image:
+      'https://thumbs.dreamstime.com/z/soccer-fantasy-league-banner-poster-design-ball-purple-abstract-background-147469622.jpg',
+  },
+  {
+    image:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCXg9HzYyMJ3bYtdyncxXja8kP25jVosbehA&usqp=CAU',
+  },
+];
 
 const HomeScreen = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -18,8 +31,9 @@ const HomeScreen = () => {
   return (
     <ScrollView style={{backgroundColor: colors.backgroundColor}}>
       <Header />
-      <View style={{height: 200}} />
-      <View style={[commonStyles.rowAlignCenter, {marginVertical: sizing.x24}]}>
+      <View style={{marginTop: sizing.x8}} />
+      <ImageSlider items={dummyData} />
+      <View style={[commonStyles.rowAlignCenter, {marginVertical: sizing.x16}]}>
         <ScrollView
           horizontal={true}
           style={{marginHorizontal: sizing.x16}}
@@ -33,7 +47,9 @@ const HomeScreen = () => {
                 onPress={() => setSelectedTab(i)}
                 key={name}>
                 <Shadow inner style={[styles.buttonGroup, {shadowRadius}]}>
-                  <Text numberOfLines={1}>{name}</Text>
+                  <Text numberOfLines={1} style={{fontSize: 16}}>
+                    {name}
+                  </Text>
                 </Shadow>
               </TouchableOpacity>
             );
