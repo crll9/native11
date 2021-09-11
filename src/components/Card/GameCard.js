@@ -12,13 +12,16 @@ import commonStyles from '../../Styles/commonStyles';
 import {sizing} from '../../Styles/theme';
 import Typography from '../../Styles/Typography';
 import {Shadow} from 'react-native-neomorph-shadows';
+import {useNavigation} from '@react-navigation/native';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
 const GameCard = () => {
+  const navigation = useNavigation();
   return (
     <TouchableOpacity
       activeOpacity={0.8}
+      onPress={() => navigation.navigate('TeamList')}
       style={[commonStyles.alignItemsCenter, {marginBottom: sizing.x12}]}>
       <Shadow inner style={styles.neomorphContainer}>
         <View

@@ -13,9 +13,24 @@ import Typography from '../Styles/Typography';
 import {sizing} from '../Styles/theme';
 import {Icon, Text} from 'react-native-elements';
 import {Shadow} from 'react-native-neomorph-shadows';
+import TeamList from '../Screens/TeamList';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import TournamentScreen from '../Screens/TournamentScreen';
 
 const MainRoot = () => {
   const Tab = createBottomTabNavigator();
+  const Stack = createNativeStackNavigator();
+
+  const HomeStack = () => {
+    return (
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="TeamList" component={TeamList} />
+        <Stack.Screen name="Tournament" component={TournamentScreen} />
+      </Stack.Navigator>
+    );
+  };
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -36,7 +51,7 @@ const MainRoot = () => {
       }}>
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeStack}
         options={{
           headerShown: false,
           tabBarShowLabel: false,

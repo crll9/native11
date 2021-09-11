@@ -6,7 +6,7 @@ export const colors = {
   danger: '#FF0000',
   success: '#31D0AA',
   text: '#4a4a68',
-  subtitleText: '#8c8ca1',
+  subtitleText: '#5f697a',
   accent: '#ecf1f4',
   light: '#fafafa',
   white: '#fff',
