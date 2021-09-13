@@ -16,7 +16,7 @@ import {useNavigation} from '@react-navigation/native';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
-const ContestCard = () => {
+const ContestCard = ({price}) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
@@ -62,10 +62,21 @@ const ContestCard = () => {
             </Text>
           </View>
           <Neomorph style={styles.valueContainer}>
-            <Text style={[Typography.h2Style, {color: colors.secondaryColor}]}>
-              10
+            <Text
+              style={{
+                color: colors.secondaryColor,
+                fontSize: Typography.fontSizes.x18,
+              }}>
+              {`${price} `}
             </Text>
-            <Text style={{color: colors.secondaryColor}}>$CRLL</Text>
+            <Text
+              style={{
+                color: colors.secondaryColor,
+                fontSize: Typography.fontSizes.x13,
+                marginTop: 2,
+              }}>
+              $CRLL
+            </Text>
           </Neomorph>
         </View>
 
@@ -74,7 +85,7 @@ const ContestCard = () => {
           <Text>2198 Teams</Text>
           <Text>5250 Teams</Text>
         </View>
-        <LinearProgress color="primary" />
+        <LinearProgress color="primary" value />
         <Shadow inner style={styles.bottomShadow}>
           <View style={commonStyles.rowAlignCenterJustifyBetween}>
             <View style={[commonStyles.rowAlignCenterJustifyBetween]}>
@@ -119,14 +130,16 @@ const styles = StyleSheet.create({
     marginVertical: sizing.x8,
   },
   valueContainer: {
-    shadowRadius: 12,
-    borderRadius: 16,
+    shadowRadius: 3,
+    borderRadius: 12,
     backgroundColor: colors.backgroundColor,
-    width: CARD_WIDTH * 0.21,
-    height: 50,
+    width: CARD_WIDTH * 0.24,
+    height: 44,
     padding: sizing.x8,
-    ...commonStyles.rowAlignCenterJustifyBetween,
     paddingHorizontal: sizing.x4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   bottomShadow: {
     shadowRadius: 12,

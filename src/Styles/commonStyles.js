@@ -42,6 +42,10 @@ const commonStyles = StyleSheet.create({
   alignItemsCenter: {
     alignItems: 'center',
   },
+  logo: {
+    height: 64,
+    width: 64,
+  },
 });
 
 export default commonStyles;
