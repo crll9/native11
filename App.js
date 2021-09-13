@@ -25,8 +25,6 @@ import withThemeAndSafeArea from './src/components/HigherOrder/withThemeAndSafeA
 import MainRoot from './src/navigation/MainRoot';
 import HomeScreen from './src//Screens/HomeScreen';
 import theme from './src/Styles/theme';
-import TeamList from './src/Screens/TeamList';
-import TournamentScreen from './src/Screens/TournamentScreen';
 
 const App = () => {
   return (

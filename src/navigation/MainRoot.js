@@ -16,6 +16,7 @@ import {Shadow} from 'react-native-neomorph-shadows';
 import TeamList from '../Screens/TeamList';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import TournamentScreen from '../Screens/TournamentScreen';
+import CreateTeamScreen from '../Screens/CreateTeamScreen';
 
 const MainRoot = () => {
   const Tab = createBottomTabNavigator();
@@ -27,6 +28,7 @@ const MainRoot = () => {
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="TeamList" component={TeamList} />
         <Stack.Screen name="Tournament" component={TournamentScreen} />
+        <Stack.Screen name="CreateTeam" component={CreateTeamScreen} />
       </Stack.Navigator>
     );
   };
