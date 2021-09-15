@@ -16,6 +16,7 @@ import GameCard from '../components/Card/GameCard';
 import {Shadow, Neomorph} from 'react-native-neomorph-shadows';
 import Typography from '../Styles/Typography';
 import TeamHeader from '../components/Header/TeamHeader';
+import {useNavigation} from '@react-navigation/native';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
@@ -33,6 +34,7 @@ const mockPlayers = [
 ];
 
 const CreateTeamScreen = () => {
+	const navigation = useNavigation();
 	return (
 		<ScrollView style={{backgroundColor: colors.backgroundColor}}>
 			<TeamHeader />
@@ -168,6 +170,11 @@ const CreateTeamScreen = () => {
 							</View>
 						);
 					})}
+
+					<TouchableOpacity
+						onPress={() => navigation.navigate('CaptainChoose')}>
+						<Text>Press here</Text>
+					</TouchableOpacity>
 				</Shadow>
 			</View>
 		</ScrollView>

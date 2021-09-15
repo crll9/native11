@@ -17,6 +17,8 @@ import TeamList from '../Screens/TeamList';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import TournamentScreen from '../Screens/TournamentScreen';
 import CreateTeamScreen from '../Screens/CreateTeamScreen';
+import CaptainChooseScreen from '../Screens/CaptainChooseScreen';
+import TeamsOverviewScreen from '../Screens/TeamsOverviewScreen';
 
 const MainRoot = () => {
   const Tab = createBottomTabNavigator();
@@ -29,6 +31,8 @@ const MainRoot = () => {
         <Stack.Screen name="TeamList" component={TeamList} />
         <Stack.Screen name="Tournament" component={TournamentScreen} />
         <Stack.Screen name="CreateTeam" component={CreateTeamScreen} />
+        <Stack.Screen name="CaptainChoose" component={CaptainChooseScreen} />
+        <Stack.Screen name="TeamsOverview" component={TeamsOverviewScreen} />
       </Stack.Navigator>
     );
   };
