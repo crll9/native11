@@ -16,12 +16,10 @@ import {useNavigation} from '@react-navigation/native';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
-const GameCard = ({name}) => {
-  //console.log(name);
-  const team1 = name.substr(0, 3);
-  const team2 = name.substr(7);
-
-  console.log(team1, team2);
+const GameCard = ({match}) => {
+  console.log({match});
+  const team1 = '1';
+  const team2 = '2';
 
   const navigation = useNavigation();
   return (

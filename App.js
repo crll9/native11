@@ -7,30 +7,20 @@
  */
 
 import React from 'react';
-import {
-  NavigationContainer,
-  DefaultTheme,
-  DarkTheme,
-} from '@react-navigation/native';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {StyleSheet} from 'react-native';
 import withThemeAndSafeArea from './src/components/HigherOrder/withThemeAndSafeArea';
 import MainRoot from './src/navigation/MainRoot';
-import HomeScreen from './src//Screens/HomeScreen';
-import theme from './src/Styles/theme';
+import store from './src/redux/storeConfig/store';
+import {Provider} from 'react-redux';
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <MainRoot />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <MainRoot />
+      </NavigationContainer>
+    </Provider>
   );
 };
 

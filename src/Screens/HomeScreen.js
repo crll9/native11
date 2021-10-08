@@ -10,7 +10,7 @@ import {Shadow} from 'react-native-neomorph-shadows';
 import ImageSlider from '../components/Carousel/ImageSlider';
 import {connect} from 'react-redux';
 import {fetchAllMatches} from '../redux/actions/matchesActions';
-import {data} from '../redux/actions/mockData';
+import {ActivityIndicator} from 'react-native';
 
 const dummyData = [
   {image: 'https://pbs.twimg.com/media/CoNd16dWgAA38e6.jpg', id: '1'},
@@ -26,12 +26,12 @@ const dummyData = [
   },
 ];
 
-const HomeScreen = ({loading1, matches1, fetchAllMatches}) => {
+const HomeScreen = ({loading, matches, fetchAllMatches}) => {
   const [selectedTab, setSelectedTab] = useState(0);
+
   useEffect(() => {
     fetchAllMatches();
   }, []);
-  // console.log(matches1, loading1);
 
   const gameData = [
     {name: 'Football'},
@@ -45,7 +45,7 @@ const HomeScreen = ({loading1, matches1, fetchAllMatches}) => {
       <ImageSlider items={dummyData} />
       <View style={[commonStyles.rowAlignCenter, {marginVertical: sizing.x16}]}>
         <ScrollView
-          horizontal={true}
+          horizontal
           style={{marginHorizontal: sizing.x16}}
           showsHorizontalScrollIndicator={false}>
           {gameData.map(({name}, i) => {
@@ -66,15 +66,26 @@ const HomeScreen = ({loading1, matches1, fetchAllMatches}) => {
           })}
         </ScrollView>
       </View>
-      {matches.map(({short_name}) => {
-        return <GameCard name={short_name} />;
-      })}
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          color={colors.white}
+          style={{
+            alignSelf: 'center',
+            marginVertical: sizing.x16,
+          }}
+        />
+      ) : (
+        matches.map(match => {
+          return <GameCard match={match} key={match._id} />;
+        })
+      )}
     </ScrollView>
   );
 };
 
 const mapStateToProps = ({matches}) => ({
-  matches: matches.matches,
+  matches: matches.matches || [],
   loading: matches.loading,
 });
 
