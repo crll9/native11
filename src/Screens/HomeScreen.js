@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, TouchableOpacity, ScrollView} from 'react-native';
 import {Text} from 'react-native-elements';
 import Header from '../components/Header/Header';
@@ -8,6 +8,9 @@ import {colors} from '../Styles/colors';
 import GameCard from '../components/Card/GameCard';
 import {Shadow} from 'react-native-neomorph-shadows';
 import ImageSlider from '../components/Carousel/ImageSlider';
+import {connect} from 'react-redux';
+import {fetchAllMatches} from '../redux/actions/matchesActions';
+import {data} from '../redux/actions/mockData';
 
 const dummyData = [
   {image: 'https://pbs.twimg.com/media/CoNd16dWgAA38e6.jpg', id: '1'},
@@ -23,8 +26,13 @@ const dummyData = [
   },
 ];
 
-const HomeScreen = () => {
+const HomeScreen = ({loading1, matches1, fetchAllMatches}) => {
   const [selectedTab, setSelectedTab] = useState(0);
+  useEffect(() => {
+    fetchAllMatches();
+  }, []);
+  // console.log(matches1, loading1);
+
   const gameData = [
     {name: 'Football'},
     {name: 'Cricket'},
@@ -58,15 +66,19 @@ const HomeScreen = () => {
           })}
         </ScrollView>
       </View>
-
-      <GameCard />
-      <GameCard />
-      <GameCard />
+      {matches.map(({short_name}) => {
+        return <GameCard name={short_name} />;
+      })}
     </ScrollView>
   );
 };
 
-export default HomeScreen;
+const mapStateToProps = ({matches}) => ({
+  matches: matches.matches,
+  loading: matches.loading,
+});
+
+export default connect(mapStateToProps, {fetchAllMatches})(HomeScreen);
 
 const styles = StyleSheet.create({
   buttonGroup: {

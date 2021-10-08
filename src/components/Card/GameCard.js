@@ -16,7 +16,13 @@ import {useNavigation} from '@react-navigation/native';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
-const GameCard = () => {
+const GameCard = ({name}) => {
+  //console.log(name);
+  const team1 = name.substr(0, 3);
+  const team2 = name.substr(7);
+
+  console.log(team1, team2);
+
   const navigation = useNavigation();
   return (
     <TouchableOpacity
@@ -44,18 +50,18 @@ const GameCard = () => {
           ]}>
           <Image
             style={styles.logo}
-            source={require('../../assets/images/DummyTeam.jpg')}
+            source={require('../../assets/images/FinalDummyImage.png')}
           />
           <Text style={{paddingRight: sizing.x8}}>VS</Text>
           <Image
             style={styles.logo}
-            source={require('../../assets/images/DummyTeam.jpg')}
+            source={require('../../assets/images/FinalDummyImage.png')}
           />
           <View>
             <View style={commonStyles.rowAlignCenterJustifyBetween}>
-              <Text style={styles.teamName}>GER</Text>
+              <Text style={styles.teamName}>{team1}</Text>
               <Text style={{color: colors.primary}}>vs</Text>
-              <Text style={styles.teamName}>ENG</Text>
+              <Text style={styles.teamName}>{team2}</Text>
             </View>
             <View style={commonStyles.rowAlignCenterJustifyBetween}>
               {['00', '14', '32'].map((item, i) => (
