@@ -7,8 +7,7 @@ const API_URL =
 
 const getDate = () => {
   const date = new Date();
-  //   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-  return '2021-08-2';
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 };
 
 export const fetchAllMatches = () => async dispatch => {
