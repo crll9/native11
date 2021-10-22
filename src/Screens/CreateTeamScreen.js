@@ -1,194 +1,222 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
-  TouchableOpacity,
   ScrollView,
   Dimensions,
   Image,
+  FlatList,
 } from 'react-native';
-import {
-  Text,
-  Icon,
-  LinearProgress,
-  Divider,
-  Button,
-} from 'react-native-elements';
-import Header from '../components/Header/Header';
+import {Text, Icon, Button} from 'react-native-elements';
 import commonStyles from '../Styles/commonStyles';
 import {sizing} from '../Styles/theme';
 import {colors} from '../Styles/colors';
-import GameCard from '../components/Card/GameCard';
 import {Shadow, Neomorph} from 'react-native-neomorph-shadows';
 import Typography from '../Styles/Typography';
 import TeamHeader from '../components/Header/TeamHeader';
 import {useNavigation} from '@react-navigation/native';
+import {getFantasyData} from '../redux/actions/createFantasyTeamActions';
+import {connect} from 'react-redux';
+import Loader from '../components/Shared/Loader';
+import {TouchableOpacity} from 'react-native';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
 const dummyButton = [
-  {name: 'GK', value: '1'},
-  {name: 'DEF', value: '3'},
-  {name: 'MID', value: '2'},
-  {name: 'FOR', value: '5'},
+  {name: 'GK', value: 0, fullName: 'goalkeeper', min: 1, max: 1},
+  {name: 'DEF', value: 0, fullName: 'defender', min: 3, max: 5},
+  {name: 'MID', value: 0, fullName: 'midfielder', min: 3, max: 5},
+  {name: 'FOR', value: '0', fullName: 'striker', min: 1, max: 3},
 ];
 
-const mockPlayers = [
-  {name: 'David Villa', team: 'SPA', points: '35.8', credits: '9.0'},
-  {name: 'David Villa', team: 'SPA', points: '35.8', credits: '8.0'},
-  {name: 'David Villa', team: 'SPA', points: '35.8', credits: '7.0'},
-];
+const CreateTeamScreen = ({getFantasyData, loading, players}) => {
+  console.log({loading, players});
+  const [selectedType, setSelectedType] = useState('goalkeeper');
 
-const CreateTeamScreen = () => {
-  const navigation = useNavigation();
+  useEffect(() => {
+    // getFantasyData();
+  }, []);
+
   return (
-    <ScrollView style={{backgroundColor: colors.backgroundColor}}>
+    <>
       <TeamHeader />
-      <View style={{marginTop: sizing.x8}} />
-      <View style={commonStyles.centerInFlex1}>
-        <Shadow inner style={styles.teamSelectOverview}>
-          <Text style={styles.shadowHeading}>
-            You may only select 7 players from each team
-          </Text>
+      {loading ? (
+        <Loader />
+      ) : (
+        <ScrollView
+          key="upper"
+          contentContainerStyle={{alignItems: 'center'}}
+          style={{backgroundColor: colors.backgroundColor}}>
+          <View style={{marginTop: sizing.x8}} />
+
+          <Shadow inner style={styles.teamSelectOverview}>
+            <Text style={styles.shadowHeading}>
+              You may only select 7 players from each team
+            </Text>
+            <View
+              style={[
+                commonStyles.rowAlignCenterJustifyBetween,
+                styles.container,
+              ]}>
+              <View>
+                <Text style={styles.subtitle}>Players</Text>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={{fontWeight: 'bold', fontSize: sizing.x16}}>
+                    11/
+                  </Text>
+                  <Text style={[styles.subtitle, {paddingTop: sizing.x2}]}>
+                    11
+                  </Text>
+                </View>
+              </View>
+              <View style={commonStyles.rowAlignCenterJustifyBetween}>
+                <Image
+                  style={styles.logo}
+                  source={require('../assets/images/DummyTeam.jpg')}
+                />
+                <View>
+                  <Text style={{fontWeight: 'bold', fontSize: sizing.x16}}>
+                    SPA
+                  </Text>
+                  <Text>5</Text>
+                </View>
+              </View>
+              <View style={styles.slashBar}>
+                <Text
+                  style={{
+                    color: colors.subtitleText,
+                    fontSize: sizing.x40,
+                  }}>
+                  /
+                </Text>
+              </View>
+              <View style={commonStyles.rowAlignCenterJustifyBetween}>
+                <View>
+                  <Text style={{fontWeight: 'bold', fontSize: sizing.x16}}>
+                    SPA
+                  </Text>
+                  <Text>5</Text>
+                </View>
+                <Image
+                  style={styles.logo}
+                  source={require('../assets/images/DummyTeam.jpg')}
+                />
+              </View>
+              <View>
+                <Text style={styles.subtitle}>Credits Left</Text>
+                <Text
+                  style={{
+                    marginLeft: sizing.x48,
+                    fontWeight: 'bold',
+                    fontSize: sizing.x16,
+                  }}>
+                  4.0
+                </Text>
+              </View>
+            </View>
+            <View style={commonStyles.rowAlignCenterJustifyBetween}>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(item => {
+                return (
+                  <Neomorph key={item} style={styles.neomorphTile}></Neomorph>
+                );
+              })}
+            </View>
+          </Shadow>
+
           <View
             style={[
               commonStyles.rowAlignCenterJustifyBetween,
-              styles.container,
+              {width: CARD_WIDTH},
             ]}>
-            <View>
-              <Text style={styles.subtitle}>Players</Text>
-              <View style={{flexDirection: 'row'}}>
-                <Text style={{fontWeight: 'bold', fontSize: sizing.x16}}>
-                  11/
-                </Text>
-                <Text style={[styles.subtitle, {paddingTop: sizing.x2}]}>
-                  11
-                </Text>
-              </View>
-            </View>
-            <View style={commonStyles.rowAlignCenterJustifyBetween}>
-              <Image
-                style={styles.logo}
-                source={require('../assets/images/DummyTeam.jpg')}
-              />
-              <View>
-                <Text style={{fontWeight: 'bold', fontSize: sizing.x16}}>
-                  SPA
-                </Text>
-                <Text>5</Text>
-              </View>
-            </View>
-            <View style={styles.slashBar}>
-              <Text
-                style={{
-                  color: colors.subtitleText,
-                  fontSize: sizing.x40,
-                }}>
-                /
-              </Text>
-            </View>
-            <View style={commonStyles.rowAlignCenterJustifyBetween}>
-              <View>
-                <Text style={{fontWeight: 'bold', fontSize: sizing.x16}}>
-                  SPA
-                </Text>
-                <Text>5</Text>
-              </View>
-              <Image
-                style={styles.logo}
-                source={require('../assets/images/DummyTeam.jpg')}
-              />
-            </View>
-            <View>
-              <Text style={styles.subtitle}>Credits Left</Text>
-              <Text
-                style={{
-                  marginLeft: sizing.x48,
-                  fontWeight: 'bold',
-                  fontSize: sizing.x16,
-                }}>
-                4.0
-              </Text>
-            </View>
-          </View>
-          <View style={commonStyles.rowAlignCenterJustifyBetween}>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(item => {
+            {dummyButton.map(({name, value, fullName}) => {
+              // can vary the color of the buttons here
+              const backgroundColor =
+                fullName === selectedType
+                  ? colors.backgroundColor
+                  : colors.secondaryColor;
+
               return (
-                <Neomorph key={item} style={styles.neomorphTile}></Neomorph>
+                <TouchableOpacity
+                  disabled={selectedType === fullName}
+                  onPress={() => setSelectedType(fullName)}>
+                  <Neomorph
+                    key={name}
+                    style={[styles.neomorphButton, {backgroundColor}]}>
+                    <Text>{name} (1)</Text>
+                  </Neomorph>
+                </TouchableOpacity>
               );
             })}
           </View>
-        </Shadow>
-      </View>
 
-      <View
-        style={[
-          commonStyles.rowAlignCenterJustifyBetween,
-          {marginHorizontal: sizing.x16},
-        ]}>
-        {dummyButton.map(({name, value}) => {
-          // can vary the color of the buttons here
-          return (
-            <Neomorph key={name} style={styles.neomorphButton}>
-              <Text>{name} (1)</Text>
-            </Neomorph>
-          );
-        })}
-      </View>
-
-      <View style={commonStyles.centerInFlex1}>
-        <Shadow inner style={styles.teamTable}>
-          <Text style={styles.shadowHeading}>
-            You may only select 3 forwards
-          </Text>
-          <View
-            style={[
-              commonStyles.rowAlignCenterJustifyBetween,
-              styles.leaderboardTab,
-            ]}>
-            <Text>Players</Text>
-            <Text style={{paddingLeft: sizing.x32}}>Points</Text>
-            <Text style={{paddingRight: sizing.x24}}>Credits</Text>
-          </View>
-          {mockPlayers.map(({name, team, points, credits}) => {
-            return (
-              <View
-                key={credits}
-                style={[
-                  commonStyles.rowAlignCenterJustifyBetween,
-                  styles.rowContainer,
-                ]}>
-                <View style={commonStyles.rowAlignCenterJustifyBetween}>
-                  <Image
-                    style={styles.logo}
-                    source={require('../assets/images/DummyTeam.jpg')}
-                  />
-                  <View>
-                    <Text style={{fontWeight: 'bold'}}>{name}</Text>
-                    <Text style={{color: colors.primary, fontWeight: 'bold'}}>
-                      {team}
-                    </Text>
+          <Shadow inner style={styles.teamTable}>
+            <Text style={styles.shadowHeading}>
+              You may only select 3 forwards
+            </Text>
+            <View style={styles.leaderboardTab}>
+              <Text style={{flex: 3}}>Players</Text>
+              <Text style={styles.centerInText}> Points</Text>
+              <Text style={styles.centerInText}>Credits</Text>
+            </View>
+            <FlatList
+              data={players.filter(item => item.role === selectedType)}
+              nestedScrollEnabled
+              keyExtractor={item => item.key}
+              renderItem={({item: {credits, name, team, role}}) => (
+                <View style={styles.rowContainer}>
+                  <View style={[commonStyles.rowAlignCenter, {flex: 3}]}>
+                    <Image
+                      style={styles.logo}
+                      source={require('../assets/images/DummyTeam.jpg')}
+                    />
+                    <View style={{marginLeft: sizing.x8}}>
+                      <Text style={{fontWeight: 'bold'}}>{name}</Text>
+                      <Text style={{color: colors.primary, fontWeight: 'bold'}}>
+                        {team}
+                        {role}
+                      </Text>
+                    </View>
                   </View>
+
+                  {/* <View style={{flex: 1}}>
+                      <Text style={[styles.subtitle]}>{points}</Text> */}
+                  <Text style={[styles.centerInText, styles.points]}>
+                    {credits}
+                  </Text>
+
+                  <Icon
+                    name="pluscircle"
+                    containerStyle={[styles.centerInText, {elevation: 2}]}
+                    onPress={() => {}}
+                    size={21}
+                    solid
+                    type="ant-design"
+                  />
                 </View>
-                <Text style={[styles.subtitle]}>{points}</Text>
-                <Text style={{paddingLeft: sizing.x24}}>{credits}</Text>
-                <Icon name="plus" size={21} solid type="font-awesome-5" />
-              </View>
-            );
-          })}
-          <Button
-            title="Create Team"
-            buttonStyle={{backgroundColor: colors.secondaryColor}}
-            onPress={() => navigation.navigate('CreateTeam')}
-            containerStyle={{marginTop: 'auto'}}
-          />
-        </Shadow>
-      </View>
-    </ScrollView>
+              )}
+            />
+          </Shadow>
+
+          <View style={{height: 60}} />
+        </ScrollView>
+      )}
+      <Button
+        title="Continue"
+        onPress={() => {}}
+        buttonStyle={commonStyles.bottomBtn}
+        titleStyle={{fontSize: 14, fontWeight: '800'}}
+        containerStyle={commonStyles.absolutePositionedBtn}
+      />
+    </>
   );
 };
 
-export default CreateTeamScreen;
+const mapStateToProps = ({createTeam: {loading, players}}) => ({
+  loading,
+  players,
+});
+
+export default connect(mapStateToProps, {getFantasyData})(CreateTeamScreen);
 
 const styles = StyleSheet.create({
   neomorphTile: {
@@ -202,19 +230,20 @@ const styles = StyleSheet.create({
     ...commonStyles.alignItemsCenter,
   },
   teamSelectOverview: {
-    marginVertical: sizing.x24,
+    marginVertical: sizing.x12,
+    marginBottom: sizing.x24,
     shadowRadius: 12,
     borderRadius: 16,
     backgroundColor: colors.backgroundColor,
     width: CARD_WIDTH,
-    height: 175,
+    height: 170,
     padding: sizing.x12,
   },
   logo: {
-    width: sizing.x40,
-    height: sizing.x40,
+    width: 36,
+    height: 36,
     resizeMode: 'contain',
-    marginHorizontal: '1.5%',
+    borderRadius: 18,
   },
   container: {
     marginVertical: sizing.x12,
@@ -226,17 +255,18 @@ const styles = StyleSheet.create({
   },
   slashBar: {},
   neomorphButton: {
-    marginVertical: sizing.x12,
-    shadowRadius: 8.2,
+    ...commonStyles.alignItemsCenter,
+    shadowRadius: 4,
     borderRadius: 16,
+    marginBottom: 12,
     backgroundColor: colors.secondaryColor,
     width: 80,
     height: 48,
-    padding: sizing.x16,
-    ...commonStyles.alignItemsCenter,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   teamTable: {
-    marginVertical: sizing.x24,
+    marginVertical: sizing.x12,
     shadowRadius: 12,
     borderRadius: 16,
     backgroundColor: colors.backgroundColor,
@@ -250,16 +280,30 @@ const styles = StyleSheet.create({
     fontSize: sizing.x12,
     color: colors.subtitleText,
     textAlign: 'center',
-    paddingVertical: sizing.x2,
   },
   leaderboardTab: {
     backgroundColor: colors.black,
     marginHorizontal: -sizing.x12,
-    paddingHorizontal: sizing.x24,
-    height: sizing.x56,
-    marginVertical: sizing.x12,
+    paddingHorizontal: sizing.x12,
+    height: 40,
+    marginTop: sizing.x12,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   rowContainer: {
-    marginVertical: sizing.x16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomColor: 'rgba(255,255,255,.1)',
+    borderBottomWidth: 1,
+    paddingVertical: sizing.x8,
+  },
+  centerInText: {
+    flex: 1,
+    textAlign: 'center',
+  },
+  points: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: colors.white,
   },
 });

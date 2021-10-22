@@ -77,14 +77,14 @@ const MatchContestScreen = ({loading, matchDetails, pools}) => {
         </ScrollView>
       )}
       <Button
-        title="New Team"
+        title="Create A New Team"
         onPress={() => navigation.navigate('CreateTeam')}
         buttonStyle={{
           backgroundColor: colors.secondaryColor,
-          paddingVertical: 12,
+          paddingVertical: 14,
           borderRadius: 14,
         }}
-        titleStyle={{fontSize: 16, fontWeight: '800'}}
+        titleStyle={{fontSize: 14, fontWeight: '800'}}
         containerStyle={commonStyles.absolutePositionedBtn}
       />
     </View>

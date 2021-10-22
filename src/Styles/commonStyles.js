@@ -53,6 +53,11 @@ const commonStyles = StyleSheet.create({
     left: 16,
     width: width - 32,
   },
+  bottomBtn: {
+    backgroundColor: colors.secondaryColor,
+    paddingVertical: 14,
+    borderRadius: 14,
+  },
 });
 
 export default commonStyles;
