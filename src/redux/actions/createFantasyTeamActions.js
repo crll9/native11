@@ -1,4 +1,5 @@
 import axios from 'axios';
+import SimpleToast from 'react-native-simple-toast';
 import {CREATE_FANTASY} from '../types';
 
 const API_URL =
@@ -36,4 +37,19 @@ export const getFantasyData =
 
 export const saveSelectedPlayers = team => dispatch => {
   dispatch({type: CREATE_FANTASY.COMPLETE_SELECTING_ELEVEN, payload: team});
+};
+
+export const saveFantasyTeam = playerTeam => async (dispatch, getState) => {
+  try {
+    const data = {
+      poolId: '2',
+      userId: '5cdad1d0',
+      matchId: '1292816723979931659',
+      playerTeam,
+    };
+    const response = await axios.post(`${API_URL}/fantasy/createTeam`, data);
+    SimpleToast.show('Team saved successfully');
+  } catch (error) {
+    console.log(error.message);
+  }
 };

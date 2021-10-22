@@ -9,13 +9,13 @@ import BackAction from '../Shared/BackAction';
 import ReaminingTime from '../Shared/ReaminingTime';
 import {connect} from 'react-redux';
 
-const TeamHeader = ({short_name, start_date}) => {
+const TeamHeader = ({short_name, start_date, popToEnd}) => {
   const [team1, team2] = short_name.split('vs');
   return (
     <ElHeader
       leftComponent={
         <View style={commonStyles.rowAlignCenter}>
-          <BackAction />
+          <BackAction popToEnd={popToEnd} />
           <View>
             <View style={{flexDirection: 'row'}}>
               <Text style={styles.teamName}>{team1}</Text>

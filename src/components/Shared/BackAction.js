@@ -5,21 +5,33 @@ import {StyleSheet, Text, View} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {colors} from '../../Styles/colors';
 
-const BackAction = () => {
+const BackAction = ({popToEnd}) => {
   const navigation = useNavigation();
   return Platform.OS === 'ios' ? (
     <Icon
       name="chevron-back"
       containerStyle={styles.iconContainer}
       color={colors.white}
-      onPress={() => navigation.goBack()}
+      onPress={() => {
+        if (popToEnd) {
+          navigation.navigate('HomeScreen');
+        } else {
+          navigation.goBack();
+        }
+      }}
       type="ionicon"
     />
   ) : (
     <Icon
       name="arrowleft"
       color={colors.white}
-      onPress={() => navigation.goBack()}
+      onPress={() => {
+        if (popToEnd) {
+          navigation.navigate('HomeScreen');
+        } else {
+          navigation.goBack();
+        }
+      }}
       containerStyle={styles.iconContainer}
       type="ant-design"
     />

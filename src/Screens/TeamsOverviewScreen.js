@@ -24,7 +24,7 @@ const CARD_WIDTH = Dimensions.get('window').width - 32;
 const TeamsOverviewScreen = () => {
   return (
     <ScrollView style={{backgroundColor: colors.backgroundColor}}>
-      <TeamHeader />
+      <TeamHeader popToEnd />
       <View style={{marginTop: sizing.x8}} />
 
       <TeamOverview />
