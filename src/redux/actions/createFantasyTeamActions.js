@@ -20,11 +20,20 @@ export const getFantasyData =
           team: teamArray[0].players?.includes(item.player_key)
             ? teamArray[0].name
             : teamArray[1].name,
+          isCaptain: false,
+          isViceCaptain: false,
         };
       });
-      dispatch({type: CREATE_FANTASY.FETCH_PLAYERS, payload: playerData});
+      dispatch({
+        type: CREATE_FANTASY.FETCH_PLAYERS,
+        payload: {players: playerData, teams: teamArray},
+      });
     } catch (error) {
       console.log(error.message);
       dispatch({type: CREATE_FANTASY.FETCH_FAILED_PLAYERS});
     }
   };
+
+export const saveSelectedPlayers = team => dispatch => {
+  dispatch({type: CREATE_FANTASY.COMPLETE_SELECTING_ELEVEN, payload: team});
+};

@@ -15,27 +15,279 @@ import {Shadow, Neomorph} from 'react-native-neomorph-shadows';
 import Typography from '../Styles/Typography';
 import TeamHeader from '../components/Header/TeamHeader';
 import {useNavigation} from '@react-navigation/native';
-import {getFantasyData} from '../redux/actions/createFantasyTeamActions';
+import {
+  getFantasyData,
+  saveSelectedPlayers,
+} from '../redux/actions/createFantasyTeamActions';
 import {connect} from 'react-redux';
 import Loader from '../components/Shared/Loader';
 import {TouchableOpacity} from 'react-native';
+import Toast from 'react-native-simple-toast';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
-const dummyButton = [
-  {name: 'GK', value: 0, fullName: 'goalkeeper', min: 1, max: 1},
-  {name: 'DEF', value: 0, fullName: 'defender', min: 3, max: 5},
-  {name: 'MID', value: 0, fullName: 'midfielder', min: 3, max: 5},
-  {name: 'FOR', value: '0', fullName: 'striker', min: 1, max: 3},
+const initialState = [
+  {name: 'GK', fullName: 'goalkeeper'},
+  {name: 'DEF', fullName: 'defender'},
+  {name: 'MID', fullName: 'midfielder'},
+  {name: 'FOR', fullName: 'striker'},
 ];
 
-const CreateTeamScreen = ({getFantasyData, loading, players}) => {
-  console.log({loading, players});
+const FANTASY_RULES = {
+  striker: {
+    min: 1,
+    max: 3,
+  },
+  maxFromTeam: 7,
+  defender: {
+    min: 3,
+    max: 5,
+  },
+  goalkeeper: {
+    min: 1,
+    max: 1,
+  },
+  midfielder: {
+    min: 3,
+    max: 5,
+  },
+};
+
+const getAddPlayerError = (playersMap, playerType) => {
+  const remainingPlayer =
+    11 -
+    playersMap.midfielder -
+    playersMap.defender -
+    playersMap.goalkeeper -
+    playersMap.striker;
+
+  const requiredMid =
+    FANTASY_RULES.midfielder.min - playersMap.midfielder < 0
+      ? 0
+      : FANTASY_RULES.midfielder.min - playersMap.midfielder;
+
+  const requiredDef =
+    FANTASY_RULES.defender.min - playersMap.defender < 0
+      ? 0
+      : FANTASY_RULES.defender.min - playersMap.defender;
+
+  const requiredGK =
+    FANTASY_RULES.goalkeeper.min - playersMap.goalkeeper < 0
+      ? 0
+      : FANTASY_RULES.goalkeeper.min - playersMap.goalkeeper;
+
+  const requiredStriker =
+    FANTASY_RULES.striker.min - playersMap.striker < 0
+      ? 0
+      : FANTASY_RULES.striker.min - playersMap.striker;
+
+  const requiredRemainingPlayer =
+    requiredMid + requiredDef + requiredStriker + requiredGK;
+
+  if (
+    playersMap.midfielder === FANTASY_RULES.midfielder.max &&
+    playerType === 'midfielder'
+  ) {
+    return {
+      msg: `Team can have maximum of ${FANTASY_RULES.midfielder.max} midfielder`,
+      toast: true,
+    };
+  }
+  if (
+    playersMap.defender === FANTASY_RULES.defender.max &&
+    playerType === 'defender'
+  ) {
+    return {
+      msg: `Team can have maximum of ${FANTASY_RULES.defender.max} defender`,
+      toast: true,
+    };
+  }
+  if (
+    playersMap.goalkeeper === FANTASY_RULES.goalkeeper.max &&
+    playerType === 'goalkeeper'
+  ) {
+    return {
+      msg: `Team can have maximum of ${FANTASY_RULES.goalkeeper.max} goalkeeper`,
+      toast: true,
+    };
+  }
+  if (
+    playersMap.striker === FANTASY_RULES.striker.max &&
+    playerType === 'striker'
+  ) {
+    return {
+      msg: `Team can have maximum of ${FANTASY_RULES.wicketkeeper.max} striker`,
+      toast: true,
+    };
+  }
+
+  if (remainingPlayer === requiredRemainingPlayer) {
+    let playerTypeOfRemaining = [];
+    if (requiredStriker) {
+      playerTypeOfRemaining.push('striker');
+    }
+    if (requiredMid) {
+      playerTypeOfRemaining.push('midfielder');
+    }
+    if (requiredDef) {
+      playerTypeOfRemaining.push('defender');
+    }
+    if (requiredGK) {
+      playerTypeOfRemaining.push('goalkeeper');
+    }
+
+    let proceed = playerTypeOfRemaining.find(i => i === playerType);
+
+    if (proceed) {
+      return null;
+    }
+    const playersToAdd = playerTypeOfRemaining[0];
+    let toast = '';
+    if (playersToAdd === 'midfielder') {
+      toast = `You need to ${requiredMid} more midfielder`;
+    } else if (playersToAdd === 'striker') {
+      toast = 'You need a striker';
+    } else if (playersToAdd === 'defender') {
+      toast = `You need to ${requiredDef} more defender`;
+    }
+
+    return {
+      msg: toast,
+      toast: true,
+    };
+  }
+
+  return null;
+};
+
+const CreateTeamScreen = ({
+  getFantasyData,
+  loading,
+  players,
+  saveSelectedPlayers,
+  teams: [team1, team2],
+}) => {
   const [selectedType, setSelectedType] = useState('goalkeeper');
+  const [credits, setCredits] = useState(100.0);
+  const [selectedPlayers, setSelectedPlayers] = useState([]);
+  const [playersMap, setPlayersMap] = useState({
+    goalkeeper: 0,
+    defender: 0,
+    midfielder: 0,
+    striker: 0,
+  });
+  const [teamPlayerCount, setTeamPlayerCount] = useState({
+    team1: 0,
+    team2: 0,
+  });
+  const navigation = useNavigation();
 
   useEffect(() => {
-    // getFantasyData();
+    getFantasyData();
   }, []);
+
+  const addPlayer = (item, playerType) => {
+    setTeamPlayerCount({
+      team1:
+        item.team === team1.name
+          ? teamPlayerCount.team1 + 1
+          : teamPlayerCount.team1,
+      team2:
+        item.team === team2.name
+          ? teamPlayerCount.team2 + 1
+          : teamPlayerCount.team2,
+    });
+    setCredits(+(credits - item.credits).toFixed(2));
+    setSelectedPlayers([...selectedPlayers, item]);
+    setPlayersMap({
+      ...playersMap,
+      [item.key]: item,
+      [playerType]: playersMap[playerType] + 1,
+    });
+  };
+
+  const removePlayer = (item, playerType) => {
+    setTeamPlayerCount({
+      team1:
+        item.team === team1.name
+          ? teamPlayerCount.team1 - 1
+          : teamPlayerCount.team1,
+      team2:
+        item.team === team2.name
+          ? teamPlayerCount.team2 - 1
+          : teamPlayerCount.team2,
+    });
+
+    const newPlayersMap = playersMap;
+    delete newPlayersMap[item.key];
+    setPlayersMap({
+      ...newPlayersMap,
+      [playerType]: playersMap[playerType] - 1,
+    });
+    setCredits(+(credits + item.credits).toFixed(2));
+    setSelectedPlayers(selectedPlayers.filter(i => i.key !== item.key));
+  };
+
+  const handleFantasyPlayerPress = item => {
+    const alreadyAdded = playersMap[item.key];
+    const playerType = item.role;
+    if (alreadyAdded) {
+      removePlayer(item, playerType);
+      return;
+    }
+    if (selectedPlayers.length === 11) {
+      return;
+    }
+    if (item.credits > credits) {
+      Toast.show('Not enough credit to add this player.');
+      return;
+    }
+    if (
+      (teamPlayerCount.team1 === 7 && item.team === team1.name) ||
+      (teamPlayerCount.team2 === 7 && item.team === team2.name)
+    ) {
+      Toast.show('Maximum 7 players from each team');
+      return;
+    }
+    const error = getAddPlayerError(playersMap, playerType);
+    if (error) {
+      if (error.toast) {
+        Toast.show(error.msg);
+      }
+
+      return;
+    }
+    addPlayer(item, playerType);
+  };
+
+  const renderFantasyListItemIcon = item => {
+    const alreadyAdded = playersMap[item.key];
+    const iconType = alreadyAdded ? 'entypo' : 'ionicon';
+    const iconName = alreadyAdded ? 'circle-with-cross' : 'ios-add-circle';
+    const iconColor = alreadyAdded ? colors.danger : colors.white;
+
+    return (
+      <Icon
+        type={iconType}
+        containerStyle={[styles.centerInText, {elevation: 2, marginLeft: 0}]}
+        onPress={() => {
+          handleFantasyPlayerPress(item);
+        }}
+        name={iconName}
+        color={iconColor}
+        size={24}
+      />
+    );
+  };
+
+  const navigateToCaptainAndVc = () => {
+    if (selectedPlayers.length !== 11) {
+      Toast.show('Select 11 players to continue!');
+      return;
+    }
+    saveSelectedPlayers(selectedPlayers);
+    navigation.navigate('CaptainChoose');
+  };
 
   return (
     <>
@@ -53,71 +305,65 @@ const CreateTeamScreen = ({getFantasyData, loading, players}) => {
             <Text style={styles.shadowHeading}>
               You may only select 7 players from each team
             </Text>
-            <View
-              style={[
-                commonStyles.rowAlignCenterJustifyBetween,
-                styles.container,
-              ]}>
-              <View>
-                <Text style={styles.subtitle}>Players</Text>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={{fontWeight: 'bold', fontSize: sizing.x16}}>
-                    11/
-                  </Text>
-                  <Text style={[styles.subtitle, {paddingTop: sizing.x2}]}>
-                    11
-                  </Text>
+            <View style={styles.container}>
+              <View style={styles.cardHalf}>
+                <View style={styles.cardInside}>
+                  <Text style={styles.subtitle}>Players</Text>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text style={styles.teamName}>
+                      {selectedPlayers.length}/
+                    </Text>
+                    <Text style={[styles.subtitle, {paddingTop: sizing.x2}]}>
+                      11
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.teamContainer}>
+                  <Image
+                    style={styles.teamLogo}
+                    source={require('../assets/images/DummyTeam.jpg')}
+                  />
+                  <View style={{alignItems: 'center'}}>
+                    <Text style={styles.teamName}>{team1.name}</Text>
+                    <Text>{teamPlayerCount.team1}</Text>
+                  </View>
                 </View>
               </View>
-              <View style={commonStyles.rowAlignCenterJustifyBetween}>
-                <Image
-                  style={styles.logo}
-                  source={require('../assets/images/DummyTeam.jpg')}
-                />
-                <View>
-                  <Text style={{fontWeight: 'bold', fontSize: sizing.x16}}>
-                    SPA
-                  </Text>
-                  <Text>5</Text>
+              <Text
+                style={{
+                  color: colors.subtitleText,
+                  fontSize: sizing.x40,
+                }}>
+                /
+              </Text>
+              <View style={styles.cardHalf}>
+                <View style={styles.teamContainer}>
+                  <View style={{alignItems: 'center'}}>
+                    <Text style={styles.teamName}>{team2.name}</Text>
+                    <Text>{teamPlayerCount.team2}</Text>
+                  </View>
+                  <Image
+                    style={styles.teamLogo}
+                    source={require('../assets/images/DummyTeam.jpg')}
+                  />
                 </View>
-              </View>
-              <View style={styles.slashBar}>
-                <Text
-                  style={{
-                    color: colors.subtitleText,
-                    fontSize: sizing.x40,
-                  }}>
-                  /
-                </Text>
-              </View>
-              <View style={commonStyles.rowAlignCenterJustifyBetween}>
-                <View>
-                  <Text style={{fontWeight: 'bold', fontSize: sizing.x16}}>
-                    SPA
-                  </Text>
-                  <Text>5</Text>
+                <View style={{alignItems: 'flex-end', ...styles.cardInside}}>
+                  <Text style={styles.subtitle}>Credits</Text>
+                  <Text>{credits}</Text>
                 </View>
-                <Image
-                  style={styles.logo}
-                  source={require('../assets/images/DummyTeam.jpg')}
-                />
-              </View>
-              <View>
-                <Text style={styles.subtitle}>Credits Left</Text>
-                <Text
-                  style={{
-                    marginLeft: sizing.x48,
-                    fontWeight: 'bold',
-                    fontSize: sizing.x16,
-                  }}>
-                  4.0
-                </Text>
               </View>
             </View>
             <View style={commonStyles.rowAlignCenterJustifyBetween}>
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(item => {
+                const backgroundColor =
+                  selectedPlayers.length >= item
+                    ? colors.secondaryColor
+                    : colors.backgroundColor;
                 return (
-                  <Neomorph key={item} style={styles.neomorphTile}></Neomorph>
+                  <Neomorph
+                    key={item.toString()}
+                    style={[styles.neomorphTile, {backgroundColor}]}
+                  />
                 );
               })}
             </View>
@@ -128,7 +374,7 @@ const CreateTeamScreen = ({getFantasyData, loading, players}) => {
               commonStyles.rowAlignCenterJustifyBetween,
               {width: CARD_WIDTH},
             ]}>
-            {dummyButton.map(({name, value, fullName}) => {
+            {initialState.map(({name, value, fullName}) => {
               // can vary the color of the buttons here
               const backgroundColor =
                 fullName === selectedType
@@ -137,12 +383,15 @@ const CreateTeamScreen = ({getFantasyData, loading, players}) => {
 
               return (
                 <TouchableOpacity
+                  key={name}
                   disabled={selectedType === fullName}
                   onPress={() => setSelectedType(fullName)}>
                   <Neomorph
                     key={name}
                     style={[styles.neomorphButton, {backgroundColor}]}>
-                    <Text>{name} (1)</Text>
+                    <Text>
+                      {name} ({playersMap[fullName]})
+                    </Text>
                   </Neomorph>
                 </TouchableOpacity>
               );
@@ -154,46 +403,61 @@ const CreateTeamScreen = ({getFantasyData, loading, players}) => {
               You may only select 3 forwards
             </Text>
             <View style={styles.leaderboardTab}>
-              <Text style={{flex: 3}}>Players</Text>
-              <Text style={styles.centerInText}> Points</Text>
-              <Text style={styles.centerInText}>Credits</Text>
+              <Text style={{flex: 7}}>Players</Text>
+              <Text
+                adjustsFontSizeToFit
+                numberOfLines={1}
+                style={styles.centerInText}>
+                Points
+              </Text>
+              <Text
+                adjustsFontSizeToFit
+                numberOfLines={1}
+                style={styles.centerInText}>
+                Credits
+              </Text>
+              <Text
+                adjustsFontSizeToFit
+                numberOfLines={1}
+                style={styles.centerInText}></Text>
             </View>
             <FlatList
               data={players.filter(item => item.role === selectedType)}
               nestedScrollEnabled
               keyExtractor={item => item.key}
-              renderItem={({item: {credits, name, team, role}}) => (
-                <View style={styles.rowContainer}>
-                  <View style={[commonStyles.rowAlignCenter, {flex: 3}]}>
-                    <Image
-                      style={styles.logo}
-                      source={require('../assets/images/DummyTeam.jpg')}
-                    />
-                    <View style={{marginLeft: sizing.x8}}>
-                      <Text style={{fontWeight: 'bold'}}>{name}</Text>
-                      <Text style={{color: colors.primary, fontWeight: 'bold'}}>
-                        {team}
-                        {role}
-                      </Text>
+              renderItem={({item}) => {
+                const {credits, name, team, role} = item;
+                return (
+                  <View style={styles.rowContainer}>
+                    <View style={[commonStyles.rowAlignCenter, {flex: 7}]}>
+                      <Image
+                        style={styles.logo}
+                        source={require('../assets/images/DummyTeam.jpg')}
+                      />
+                      <View style={{marginLeft: sizing.x8}}>
+                        <Text style={{fontWeight: 'bold'}}>{name}</Text>
+                        <Text
+                          style={{
+                            color:
+                              team === team1.name
+                                ? colors.primary
+                                : colors.secondaryColor,
+                            fontWeight: 'bold',
+                          }}>
+                          {team}
+                        </Text>
+                      </View>
                     </View>
-                  </View>
-
-                  {/* <View style={{flex: 1}}>
+                    <Text style={styles.centerInText}>----</Text>
+                    {/* <View style={{flex: 1}}>
                       <Text style={[styles.subtitle]}>{points}</Text> */}
-                  <Text style={[styles.centerInText, styles.points]}>
-                    {credits}
-                  </Text>
-
-                  <Icon
-                    name="pluscircle"
-                    containerStyle={[styles.centerInText, {elevation: 2}]}
-                    onPress={() => {}}
-                    size={21}
-                    solid
-                    type="ant-design"
-                  />
-                </View>
-              )}
+                    <Text style={[styles.centerInText, styles.points]}>
+                      {credits}
+                    </Text>
+                    {renderFantasyListItemIcon(item)}
+                  </View>
+                );
+              }}
             />
           </Shadow>
 
@@ -202,7 +466,7 @@ const CreateTeamScreen = ({getFantasyData, loading, players}) => {
       )}
       <Button
         title="Continue"
-        onPress={() => {}}
+        onPress={navigateToCaptainAndVc}
         buttonStyle={commonStyles.bottomBtn}
         titleStyle={{fontSize: 14, fontWeight: '800'}}
         containerStyle={commonStyles.absolutePositionedBtn}
@@ -211,21 +475,23 @@ const CreateTeamScreen = ({getFantasyData, loading, players}) => {
   );
 };
 
-const mapStateToProps = ({createTeam: {loading, players}}) => ({
+const mapStateToProps = ({createTeam: {loading, players, teams}}) => ({
   loading,
   players,
+  teams,
 });
 
-export default connect(mapStateToProps, {getFantasyData})(CreateTeamScreen);
+export default connect(mapStateToProps, {getFantasyData, saveSelectedPlayers})(
+  CreateTeamScreen,
+);
 
 const styles = StyleSheet.create({
   neomorphTile: {
-    marginVertical: sizing.x12,
-    shadowRadius: 6,
+    shadowRadius: 2,
     borderRadius: 6,
     backgroundColor: colors.secondaryColor,
-    width: 25,
-    height: 25,
+    width: 22,
+    height: 22,
     padding: sizing.x12,
     ...commonStyles.alignItemsCenter,
   },
@@ -236,7 +502,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: colors.backgroundColor,
     width: CARD_WIDTH,
-    height: 170,
+    height: 150,
     padding: sizing.x12,
   },
   logo: {
@@ -248,20 +514,20 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: sizing.x12,
     marginHorizontal: sizing.x4,
+    flexDirection: 'row',
   },
   subtitle: {
     color: colors.subtitleText,
     fontSize: sizing.x12,
   },
-  slashBar: {},
   neomorphButton: {
     ...commonStyles.alignItemsCenter,
-    shadowRadius: 4,
-    borderRadius: 16,
+    shadowRadius: 2,
+    borderRadius: 10,
     marginBottom: 12,
     backgroundColor: colors.secondaryColor,
-    width: 80,
-    height: 48,
+    width: 76,
+    height: 44,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -298,7 +564,7 @@ const styles = StyleSheet.create({
     paddingVertical: sizing.x8,
   },
   centerInText: {
-    flex: 1,
+    flex: 2,
     textAlign: 'center',
   },
   points: {
@@ -306,4 +572,26 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.white,
   },
+  teamLogo: {
+    height: 32,
+    width: 32,
+    borderRadius: 16,
+  },
+  teamContainer: {
+    flexDirection: 'row',
+    width: 88,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    flex: 1,
+  },
+  cardHalf: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  cardInside: {
+    width: 60,
+  },
+  teamName: {fontWeight: 'bold', fontSize: 14},
 });
