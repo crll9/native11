@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  Dimensions,
-} from 'react-native';
+import {StyleSheet, View, ScrollView, Dimensions} from 'react-native';
 import {
   Text,
   Icon,
@@ -55,125 +49,136 @@ const ContestDetailsScreen = ({pool}) => {
   const navigation = useNavigation();
   const {members, membersRequired, price} = pool;
   return (
-    <ScrollView style={{backgroundColor: colors.backgroundColor}}>
-      <TeamHeader />
-      <View style={{marginTop: sizing.x8}} />
-      <View style={[commonStyles.centerInFlex1]}>
-        <Shadow inner style={styles.shadowStyle}>
-          <View
-            style={[
-              commonStyles.rowAlignCenterJustifyBetween,
-              styles.container,
-            ]}>
-            <Text style={styles.subtitle}>PRIZE POOL</Text>
-            <Text style={styles.subtitle}>{members.length} ENTRIES</Text>
-          </View>
-
-          <View
-            style={[
-              commonStyles.rowAlignCenterJustifyBetween,
-              styles.container,
-              {marginBottom: sizing.x12},
-            ]}>
-            <View style={[commonStyles.rowAlignCenter, styles.container]}>
-              <Text
-                style={[
-                  Typography.h3Style,
-                  {
-                    fontWeight: 'bold',
-                    fontSize: sizing.x24,
-                    color: 'white',
-                    marginRight: sizing.x4,
-                  },
-                ]}>
-                50,000
-              </Text>
-              <Text
-                style={[
-                  Typography.h3Style,
-                  {
-                    fontWeight: 'bold',
-                    fontSize: sizing.x12,
-                    color: 'white',
-                    paddingTop: sizing.x4,
-                  },
-                ]}>
-                $CRLL
-              </Text>
-            </View>
+    <View style={{flex: 1, backgroundColor: colors.backgroundColor}}>
+      <ScrollView style={{flex: 1}}>
+        <TeamHeader />
+        <View style={{marginTop: sizing.x8}} />
+        <View style={[commonStyles.centerInFlex1]}>
+          <Shadow inner style={styles.shadowStyle}>
             <View
               style={[
                 commonStyles.rowAlignCenterJustifyBetween,
-                {paddingHorizontal: sizing.x4},
+                styles.container,
               ]}>
-              <Icon name="trophy" size={27} type="evilicon" color="#FFD700" />
-              <Text style={{marginHorizontal: sizing.x4}}>1st Prize</Text>
-              <Text style={[Typography.h3Style, {color: colors.primary}]}>
-                5,000
-              </Text>
+              <Text style={styles.subtitle}>PRIZE POOL</Text>
+              <Text style={styles.subtitle}>{members.length} ENTRIES</Text>
             </View>
-          </View>
-          <LinearProgress
-            color="primary"
-            value={
-              members.length ? members.length / membersRequired : members.length
-            }
-            variant="determinate"
-          />
-          <View
-            style={[
-              commonStyles.rowAlignCenterJustifyBetween,
-              styles.container,
-            ]}>
-            <Text style={[Typography.h3Style, {color: colors.secondaryColor}]}>
-              {members?.length} Teams
-            </Text>
-            <Text>{membersRequired} Teams</Text>
-          </View>
-        </Shadow>
-      </View>
 
-      <View style={commonStyles.centerInFlex1}>
-        <Shadow inner style={styles.teamListContainer}>
-          <Text style={[Typography.h2Style, {color: colors.white}]}>
-            Leaderboard
-          </Text>
-
-          <View
-            style={[
-              commonStyles.rowAlignCenterJustifyBetween,
-              styles.leaderboardTab,
-            ]}>
-            <Text>Team Name</Text>
-            <Text>Points</Text>
-            <Text>Rank</Text>
-          </View>
-
-          {mockData.map(({id, name, points, rank}) => {
-            return (
-              <View key={id} style={styles.teamRow}>
-                <View
+            <View
+              style={[
+                commonStyles.rowAlignCenterJustifyBetween,
+                styles.container,
+                {marginBottom: sizing.x12},
+              ]}>
+              <View style={[commonStyles.rowAlignCenter, styles.container]}>
+                <Text
                   style={[
-                    commonStyles.rowAlignCenterJustifyBetween,
-                    {marginHorizontal: sizing.x4, marginVertical: sizing.x8},
+                    Typography.h3Style,
+                    {
+                      fontWeight: 'bold',
+                      fontSize: sizing.x24,
+                      color: 'white',
+                      marginRight: sizing.x4,
+                    },
                   ]}>
-                  <Text style={{color: colors.subtitleText}}>{name}</Text>
-                  <Text style={{color: colors.subtitleText}}>{points}</Text>
-                  <Text style={{color: colors.subtitleText}}>{rank}</Text>
-                </View>
-                <Divider />
+                  50,000
+                </Text>
+                <Text
+                  style={[
+                    Typography.h3Style,
+                    {
+                      fontWeight: 'bold',
+                      fontSize: sizing.x12,
+                      color: 'white',
+                      paddingTop: sizing.x4,
+                    },
+                  ]}>
+                  $CRLL
+                </Text>
               </View>
-            );
-          })}
-          <Button
-            title="Create Team"
-            onPress={() => navigation.navigate('CreateTeam')}
-            buttonStyle={{backgroundColor: colors.secondaryColor}}
-            containerStyle={{marginTop: 'auto'}}
-          />
-        </Shadow>
-      </View>
-    </ScrollView>
+              <View
+                style={[
+                  commonStyles.rowAlignCenterJustifyBetween,
+                  {paddingHorizontal: sizing.x4},
+                ]}>
+                <Icon name="trophy" size={27} type="evilicon" color="#FFD700" />
+                <Text style={{marginHorizontal: sizing.x4}}>1st Prize</Text>
+                <Text style={[Typography.h3Style, {color: colors.primary}]}>
+                  5,000
+                </Text>
+              </View>
+            </View>
+            <LinearProgress
+              color="primary"
+              value={
+                members.length
+                  ? members.length / membersRequired
+                  : members.length
+              }
+              variant="determinate"
+            />
+            <View
+              style={[
+                commonStyles.rowAlignCenterJustifyBetween,
+                styles.container,
+              ]}>
+              <Text
+                style={[Typography.h3Style, {color: colors.secondaryColor}]}>
+                {members?.length} Teams
+              </Text>
+              <Text>{membersRequired} Teams</Text>
+            </View>
+          </Shadow>
+        </View>
+
+        <View style={commonStyles.centerInFlex1}>
+          <Shadow inner style={styles.teamListContainer}>
+            <Text style={[Typography.h2Style, {color: colors.white}]}>
+              Leaderboard
+            </Text>
+
+            <View
+              style={[
+                commonStyles.rowAlignCenterJustifyBetween,
+                styles.leaderboardTab,
+              ]}>
+              <Text>Team Name</Text>
+              <Text>Points</Text>
+              <Text>Rank</Text>
+            </View>
+
+            {mockData.map(({id, name, points, rank}) => {
+              return (
+                <View key={id} style={styles.teamRow}>
+                  <View
+                    style={[
+                      commonStyles.rowAlignCenterJustifyBetween,
+                      {marginHorizontal: sizing.x4, marginVertical: sizing.x8},
+                    ]}>
+                    <Text style={{color: colors.subtitleText}}>{name}</Text>
+                    <Text style={{color: colors.subtitleText}}>{points}</Text>
+                    <Text style={{color: colors.subtitleText}}>{rank}</Text>
+                  </View>
+                  <Divider />
+                </View>
+              );
+            })}
+          </Shadow>
+        </View>
+        <View style={{height: 60}} />
+      </ScrollView>
+      <Button
+        title="New Team"
+        onPress={() => navigation.navigate('CreateTeam')}
+        buttonStyle={{
+          backgroundColor: colors.secondaryColor,
+          paddingVertical: 12,
+          borderRadius: 14,
+        }}
+        titleStyle={{fontSize: 16, fontWeight: '800'}}
+        containerStyle={commonStyles.absolutePositionedBtn}
+      />
+    </View>
   );
 };
 

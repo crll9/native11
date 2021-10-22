@@ -1,8 +1,9 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import {colors} from './colors';
 import {sizing} from './theme';
 
 export const LOGO_SIZE = 100;
+const {width} = Dimensions.get('window');
 
 const commonStyles = StyleSheet.create({
   centerInFlex1: {
@@ -45,6 +46,12 @@ const commonStyles = StyleSheet.create({
   logo: {
     height: 64,
     width: 64,
+  },
+  absolutePositionedBtn: {
+    position: 'absolute',
+    bottom: 16,
+    left: 16,
+    width: width - 32,
   },
 });
 

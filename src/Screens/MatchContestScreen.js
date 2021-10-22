@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, ScrollView, Dimensions, Image} from 'react-native';
-import {Text, Icon} from 'react-native-elements';
+import {Text, Icon, Button} from 'react-native-elements';
 import commonStyles from '../Styles/commonStyles';
 import {sizing} from '../Styles/theme';
 import {colors} from '../Styles/colors';
@@ -10,19 +10,21 @@ import TeamHeader from '../components/Header/TeamHeader';
 import ContestCard from '../components/Card/ContestCard';
 import {connect} from 'react-redux';
 import {ActivityIndicator} from 'react-native';
+import {useNavigation} from '@react-navigation/core';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
 const MatchContestScreen = ({loading, matchDetails, pools}) => {
+  const navigation = useNavigation();
   return (
-    <ScrollView style={{backgroundColor: colors.backgroundColor}}>
+    <View style={{flex: 1, backgroundColor: colors.backgroundColor, flex: 1}}>
       <TeamHeader />
       {loading ? (
         <View style={styles.loader}>
           <ActivityIndicator color={colors.primary} />
         </View>
       ) : (
-        <>
+        <ScrollView>
           <View style={{marginTop: sizing.x8}} />
           <View style={[commonStyles.centerInFlex1]}>
             <Neomorph style={styles.allContestShadow}>
@@ -71,9 +73,21 @@ const MatchContestScreen = ({loading, matchDetails, pools}) => {
           {pools.map(pool => (
             <ContestCard key={pool._id} pool={pool} />
           ))}
-        </>
+          <View style={{height: 60}} />
+        </ScrollView>
       )}
-    </ScrollView>
+      <Button
+        title="New Team"
+        onPress={() => navigation.navigate('CreateTeam')}
+        buttonStyle={{
+          backgroundColor: colors.secondaryColor,
+          paddingVertical: 12,
+          borderRadius: 14,
+        }}
+        titleStyle={{fontSize: 16, fontWeight: '800'}}
+        containerStyle={commonStyles.absolutePositionedBtn}
+      />
+    </View>
   );
 };
 
