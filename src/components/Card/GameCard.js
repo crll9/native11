@@ -14,17 +14,26 @@ import Typography from '../../Styles/Typography';
 import {Shadow} from 'react-native-neomorph-shadows';
 import {useNavigation} from '@react-navigation/native';
 import ReaminingTime from '../Shared/ReaminingTime';
+import {setMatchDetail} from '../../redux/actions/matchDetailsAction';
+import {connect} from 'react-redux';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
-const GameCard = ({match: {short_name, start_date, tournament}}) => {
+const GameCard = ({
+  match: {short_name, start_date, tournament, _id},
+  setMatchDetail,
+}) => {
   const [team1, team2] = short_name.split('vs');
-
   const navigation = useNavigation();
+  const handleOnPress = () => {
+    setMatchDetail(_id);
+    navigation.navigate('TeamList');
+  };
+
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      onPress={() => navigation.navigate('TeamList')}
+      onPress={handleOnPress}
       style={[commonStyles.alignItemsCenter, {marginBottom: sizing.x12}]}>
       <Shadow inner style={styles.neomorphContainer}>
         <View style={[commonStyles.rowAlignCenterJustifyBetween]}>
@@ -63,8 +72,8 @@ const GameCard = ({match: {short_name, start_date, tournament}}) => {
     </TouchableOpacity>
   );
 };
-
-export default GameCard;
+const mapStateToProps = () => ({});
+export default connect(mapStateToProps, {setMatchDetail})(GameCard);
 
 const styles = StyleSheet.create({
   container: {},

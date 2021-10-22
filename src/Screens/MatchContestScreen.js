@@ -1,14 +1,6 @@
-import React, {useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  Dimensions,
-  Image,
-} from 'react-native';
+import React from 'react';
+import {StyleSheet, View, ScrollView, Dimensions, Image} from 'react-native';
 import {Text, Icon} from 'react-native-elements';
-import Header from '../components/Header/Header';
 import commonStyles from '../Styles/commonStyles';
 import {sizing} from '../Styles/theme';
 import {colors} from '../Styles/colors';
@@ -16,66 +8,85 @@ import {Neomorph} from 'react-native-neomorph-shadows';
 import Typography from '../Styles/Typography';
 import TeamHeader from '../components/Header/TeamHeader';
 import ContestCard from '../components/Card/ContestCard';
+import {connect} from 'react-redux';
+import {ActivityIndicator} from 'react-native';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
-const TeamList = () => {
+const MatchContestScreen = ({loading, matchDetails, pools}) => {
   return (
     <ScrollView style={{backgroundColor: colors.backgroundColor}}>
       <TeamHeader />
-      <View style={{marginTop: sizing.x8}} />
-      <View style={[commonStyles.centerInFlex1]}>
-        <Neomorph style={styles.allContestShadow}>
-          <View style={commonStyles.rowAlignCenterJustifyBetween}>
-            <View style={commonStyles.rowAlignCenterJustifyBetween}>
-              <Image
-                style={styles.logo}
-                source={require('../assets/images/DummyTeam.jpg')}
-              />
-              <Text style={{fontWeight: 'bold', paddingRight: sizing.x4}}>
-                View All Contests
+      {loading ? (
+        <View style={styles.loader}>
+          <ActivityIndicator color={colors.primary} />
+        </View>
+      ) : (
+        <>
+          <View style={{marginTop: sizing.x8}} />
+          <View style={[commonStyles.centerInFlex1]}>
+            <Neomorph style={styles.allContestShadow}>
+              <View style={commonStyles.rowAlignCenterJustifyBetween}>
+                <View style={commonStyles.rowAlignCenterJustifyBetween}>
+                  <Image
+                    style={styles.logo}
+                    source={require('../assets/images/DummyTeam.jpg')}
+                  />
+                  <Text style={{fontWeight: 'bold', paddingRight: sizing.x4}}>
+                    View All Contests
+                  </Text>
+                  <Text style={{color: colors.primary, fontWeight: 'bold'}}>
+                    (98)
+                  </Text>
+                </View>
+                <Icon
+                  name="arrow-right-bold"
+                  size={20}
+                  type="material-community"
+                  color={colors.primary}
+                />
+              </View>
+            </Neomorph>
+          </View>
+          <View style={styles.contentBox}>
+            <Image
+              style={styles.logo2}
+              source={require('../assets/images/DummyTeam.jpg')}
+            />
+            <View>
+              <Text
+                style={{
+                  ...Typography.h3Style,
+                  color: colors.secondaryColor,
+                  marginVertical: sizing.x2,
+                }}>
+                Everybody Wins
               </Text>
-              <Text style={{color: colors.primary, fontWeight: 'bold'}}>
-                (98)
+              <Text style={{color: colors.subtitleText}}>
+                Low Investment Higher Returns
               </Text>
             </View>
-            <Icon
-              name="arrow-right-bold"
-              size={20}
-              type="material-community"
-              color={colors.primary}
-            />
           </View>
-        </Neomorph>
-      </View>
-      <View style={styles.contentBox}>
-        <Image
-          style={styles.logo2}
-          source={require('../assets/images/DummyTeam.jpg')}
-        />
-        <View>
-          <Text
-            style={{
-              ...Typography.h3Style,
-              color: colors.secondaryColor,
-              marginVertical: sizing.x2,
-            }}>
-            Everybody Wins
-          </Text>
-          <Text style={{color: colors.subtitleText}}>
-            Low Investment Higher Returns
-          </Text>
-        </View>
-      </View>
 
-      <ContestCard price={5} />
-      <ContestCard price={10} />
-      <ContestCard price={15} />
+          {pools.map(pool => (
+            <ContestCard key={pool._id} pool={pool} />
+          ))}
+        </>
+      )}
     </ScrollView>
   );
 };
 
-export default TeamList;
+const mapStateToProps = ({
+  matchDetails: {loading, matchDetails},
+  matches: {pools},
+}) => ({
+  loading,
+  matchDetails,
+  pools,
+});
+
+export default connect(mapStateToProps, {})(MatchContestScreen);
 
 const styles = StyleSheet.create({
   teamName: {
@@ -121,5 +132,9 @@ const styles = StyleSheet.create({
     marginVertical: sizing.x8,
     flexDirection: 'row',
     marginHorizontal: sizing.x24,
+  },
+  loader: {
+    height: 120,
+    justifyContent: 'center',
   },
 });

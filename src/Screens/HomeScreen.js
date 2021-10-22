@@ -9,7 +9,7 @@ import GameCard from '../components/Card/GameCard';
 import {Shadow} from 'react-native-neomorph-shadows';
 import ImageSlider from '../components/Carousel/ImageSlider';
 import {connect} from 'react-redux';
-import {fetchAllMatches} from '../redux/actions/matchesActions';
+import {fetchAllMatches, fetchPools} from '../redux/actions/matchesActions';
 import {ActivityIndicator} from 'react-native';
 
 const dummyData = [
@@ -26,11 +26,12 @@ const dummyData = [
   },
 ];
 
-const HomeScreen = ({loading, matches, fetchAllMatches}) => {
+const HomeScreen = ({loading, matches, fetchAllMatches, fetchPools}) => {
   const [selectedTab, setSelectedTab] = useState(0);
 
   useEffect(() => {
     fetchAllMatches();
+    fetchPools();
   }, []);
 
   const gameData = [
@@ -90,7 +91,9 @@ const mapStateToProps = ({matches}) => ({
   loading: matches.loading,
 });
 
-export default connect(mapStateToProps, {fetchAllMatches})(HomeScreen);
+export default connect(mapStateToProps, {fetchAllMatches, fetchPools})(
+  HomeScreen,
+);
 
 const styles = StyleSheet.create({
   buttonGroup: {

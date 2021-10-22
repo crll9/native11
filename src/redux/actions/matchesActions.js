@@ -25,3 +25,13 @@ export const fetchAllMatches = () => async dispatch => {
     dispatch({type: MATCHES.FETCH_FAILED});
   }
 };
+
+export const fetchPools = () => async dispatch => {
+  try {
+    const res = await axios.get(`${API_URL}/users/getpools`);
+    const pools = res.data?.data;
+    dispatch({type: MATCHES.FETCH_POOLS, payload: pools});
+  } catch (error) {
+    console.log(error.message);
+  }
+};

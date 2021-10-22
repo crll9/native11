@@ -13,14 +13,23 @@ import {sizing} from '../../Styles/theme';
 import Typography from '../../Styles/Typography';
 import {Shadow, Neomorph} from 'react-native-neomorph-shadows';
 import {useNavigation} from '@react-navigation/native';
+import {setSelectedContest} from '../../redux/actions/matchDetailsAction';
+import {connect} from 'react-redux';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
-const ContestCard = ({price}) => {
+const ContestCard = ({
+  pool: {price, membersRequired, members, _id},
+  setSelectedContest,
+}) => {
   const navigation = useNavigation();
+  const handleCardPress = () => {
+    navigation.navigate('Tournament');
+    setSelectedContest(_id);
+  };
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('Tournament')}
+      onPress={handleCardPress}
       activeOpacity={0.8}
       style={[commonStyles.alignItemsCenter, {marginVertical: sizing.x16}]}>
       <Shadow inner style={styles.neomorphContainer}>
@@ -82,10 +91,16 @@ const ContestCard = ({price}) => {
 
         <View
           style={[commonStyles.rowAlignCenterJustifyBetween, styles.container]}>
-          <Text>2198 Teams</Text>
-          <Text>5250 Teams</Text>
+          <Text>{members?.length} Teams</Text>
+          <Text>{membersRequired} Teams</Text>
         </View>
-        <LinearProgress color="primary" value={0.5} variant="determinate" />
+        <LinearProgress
+          color="primary"
+          value={
+            members.length ? members.length / membersRequired : members.length
+          }
+          variant="determinate"
+        />
         <Shadow inner style={styles.bottomShadow}>
           <View style={commonStyles.rowAlignCenterJustifyBetween}>
             <View style={[commonStyles.rowAlignCenterJustifyBetween]}>
@@ -102,7 +117,7 @@ const ContestCard = ({price}) => {
               <Text style={{color: colors.primary}}>1200</Text>
             </View>
             <View style={{marginLeft: sizing.x24}}>
-              <Text style={styles.subtitle}>12 Entries</Text>
+              <Text style={styles.subtitle}>{members.length} Entries</Text>
             </View>
           </View>
         </Shadow>
@@ -111,7 +126,9 @@ const ContestCard = ({price}) => {
   );
 };
 
-export default ContestCard;
+const mapStateToProps = state => ({});
+
+export default connect(mapStateToProps, {setSelectedContest})(ContestCard);
 
 const styles = StyleSheet.create({
   neomorphContainer: {

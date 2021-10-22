@@ -20,6 +20,7 @@ import {Shadow} from 'react-native-neomorph-shadows';
 import Typography from '../Styles/Typography';
 import TeamHeader from '../components/Header/TeamHeader';
 import {useNavigation} from '@react-navigation/native';
+import {connect} from 'react-redux';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
@@ -50,8 +51,9 @@ const mockData = [
   },
 ];
 
-const TournamentScreen = () => {
+const ContestDetailsScreen = ({pool}) => {
   const navigation = useNavigation();
+  const {members, membersRequired, price} = pool;
   return (
     <ScrollView style={{backgroundColor: colors.backgroundColor}}>
       <TeamHeader />
@@ -64,7 +66,7 @@ const TournamentScreen = () => {
               styles.container,
             ]}>
             <Text style={styles.subtitle}>PRIZE POOL</Text>
-            <Text style={styles.subtitle}>12ENTRIES</Text>
+            <Text style={styles.subtitle}>{members.length} ENTRIES</Text>
           </View>
 
           <View
@@ -111,16 +113,22 @@ const TournamentScreen = () => {
               </Text>
             </View>
           </View>
-          <LinearProgress color="primary" value={0.5} variant="determinate" />
+          <LinearProgress
+            color="primary"
+            value={
+              members.length ? members.length / membersRequired : members.length
+            }
+            variant="determinate"
+          />
           <View
             style={[
               commonStyles.rowAlignCenterJustifyBetween,
               styles.container,
             ]}>
             <Text style={[Typography.h3Style, {color: colors.secondaryColor}]}>
-              2198 Teams
+              {members?.length} Teams
             </Text>
-            <Text>5250 Teams</Text>
+            <Text>{membersRequired} Teams</Text>
           </View>
         </Shadow>
       </View>
@@ -160,6 +168,7 @@ const TournamentScreen = () => {
           <Button
             title="Create Team"
             onPress={() => navigation.navigate('CreateTeam')}
+            buttonStyle={{backgroundColor: colors.secondaryColor}}
             containerStyle={{marginTop: 'auto'}}
           />
         </Shadow>
@@ -168,7 +177,11 @@ const TournamentScreen = () => {
   );
 };
 
-export default TournamentScreen;
+const mapStateToProps = ({matchDetails: {selectedPricePool}}) => ({
+  pool: selectedPricePool,
+});
+
+export default connect(mapStateToProps, {})(ContestDetailsScreen);
 
 const styles = StyleSheet.create({
   shadowStyle: {

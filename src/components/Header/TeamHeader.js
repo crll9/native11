@@ -7,11 +7,9 @@ import commonStyles from '../../Styles/commonStyles';
 import WalletBalance from '../Wallet/WalletBalance';
 import BackAction from '../Shared/BackAction';
 import ReaminingTime from '../Shared/ReaminingTime';
+import {connect} from 'react-redux';
 
-const TeamHeader = ({
-  short_name = 'RAY vs GCF',
-  start_date = {gmt: '2021-08-29T12:00:00.000Z'},
-}) => {
+const TeamHeader = ({short_name, start_date}) => {
   const [team1, team2] = short_name.split('vs');
   return (
     <ElHeader
@@ -41,7 +39,12 @@ const TeamHeader = ({
   );
 };
 
-export default TeamHeader;
+const mapStateToProps = ({matchDetails: {matchDetails}}) => ({
+  short_name: matchDetails?.short_name || '',
+  start_date: matchDetails?.start_date || {gmt: '2021-08-29T12:00:00.000Z'},
+});
+
+export default connect(mapStateToProps)(TeamHeader);
 
 const styles = StyleSheet.create({
   teamName: {

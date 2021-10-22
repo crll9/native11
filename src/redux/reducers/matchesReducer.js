@@ -3,6 +3,7 @@ import {MATCHES} from '../types';
 const initialState = {
   loading: true,
   matches: [],
+  pools: [],
 };
 
 const matchesReducer = (state = initialState, action) => {
@@ -24,6 +25,11 @@ const matchesReducer = (state = initialState, action) => {
         ...state,
         matches: [],
         loading: false,
+      };
+    case MATCHES.FETCH_POOLS:
+      return {
+        ...state,
+        pools: payload,
       };
     default: {
       return state;
