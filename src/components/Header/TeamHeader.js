@@ -1,35 +1,42 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {Header as ElHeader, Text} from 'react-native-elements';
 import Typography from '../../Styles/Typography';
 import {colors} from '../../Styles/colors';
 import commonStyles from '../../Styles/commonStyles';
-import {sizing} from '../../Styles/theme';
-import {Shadow} from 'react-native-neomorph-shadows';
 import WalletBalance from '../Wallet/WalletBalance';
+import BackAction from '../Shared/BackAction';
+import ReaminingTime from '../Shared/ReaminingTime';
 
-const TeamHeader = () => {
+const TeamHeader = ({
+  short_name = 'RAY vs GCF',
+  start_date = {gmt: '2021-08-29T12:00:00.000Z'},
+}) => {
+  const [team1, team2] = short_name.split('vs');
   return (
     <ElHeader
       leftComponent={
-        <View>
-          <View style={commonStyles.rowAlignCenterJustifyBetween}>
-            <Text style={styles.teamName}>GER</Text>
-            <Text style={{color: colors.primary}}>vs</Text>
-            <Text style={styles.teamName}>ENG</Text>
-          </View>
-          <View style={commonStyles.rowAlignCenterJustifyBetween}>
-            {['00', '14', '32'].map((item, i) => (
-              <Shadow inner key={i.toString()} style={styles.timer}>
-                <Text style={styles.timerText}>{item}</Text>
-              </Shadow>
-            ))}
+        <View style={commonStyles.rowAlignCenter}>
+          <BackAction />
+          <View>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={styles.teamName}>{team1}</Text>
+              <Text style={{color: colors.primary, marginHorizontal: 12}}>
+                vs
+              </Text>
+              <Text style={styles.teamName}>{team2}</Text>
+            </View>
+            <ReaminingTime sm start_date={start_date} />
           </View>
         </View>
       }
-      rightComponent={() => <WalletBalance />}
+      rightComponent={() => (
+        <View style={styles.walletContainer}>
+          <WalletBalance />
+        </View>
+      )}
       backgroundColor={colors.backgroundColor}
-      containerStyle={{elevation: 3, borderBottomWidth: 0}}
+      containerStyle={{elevation: 5, borderBottomWidth: 0}}
     />
   );
 };
@@ -38,22 +45,13 @@ export default TeamHeader;
 
 const styles = StyleSheet.create({
   teamName: {
-    margin: sizing.x4,
-    ...Typography.h3Style,
+    fontSize: Typography.fontSizes.x15,
     color: colors.white,
     fontWeight: 'bold',
+    marginHorizontal: 2,
   },
-  timer: {
-    height: 28,
-    width: 28,
+  walletContainer: {
+    height: 56,
     justifyContent: 'center',
-    alignItems: 'center',
-    shadowRadius: 2.5,
-    borderRadius: 4,
-    marginVertical: 3,
-  },
-  timerText: {
-    color: colors.secondaryColor,
-    fontSize: 16,
   },
 });

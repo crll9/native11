@@ -13,35 +13,9 @@ import {sizing} from '../../Styles/theme';
 import Typography from '../../Styles/Typography';
 import {Shadow} from 'react-native-neomorph-shadows';
 import {useNavigation} from '@react-navigation/native';
-import {
-  differenceInDays,
-  differenceInHours,
-  differenceInMinutes,
-} from 'date-fns';
+import ReaminingTime from '../Shared/ReaminingTime';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
-
-const getTimeDifference = _date => {
-  const date = new Date(_date);
-  const currentDate = Date.now();
-
-  const days = Math.abs(differenceInDays(date, currentDate));
-  const hours = Math.abs(differenceInHours(date, currentDate));
-  const mins = Math.abs(differenceInMinutes(date, currentDate));
-
-  const resArray = [];
-  if (days > 0) {
-    resArray.push(`${days}d `);
-  }
-  if (hours > 0) {
-    resArray.push(`${hours % 24}h `);
-  }
-  if (mins > 0) {
-    resArray.push(`${mins % 60}m`);
-  }
-
-  return resArray;
-};
 
 const GameCard = ({match: {short_name, start_date, tournament}}) => {
   const [team1, team2] = short_name.split('vs');
@@ -82,18 +56,7 @@ const GameCard = ({match: {short_name, start_date, tournament}}) => {
               <Text style={{color: colors.primary}}>vs</Text>
               <Text style={styles.teamName}>{team2}</Text>
             </View>
-            <View style={commonStyles.rowAlignCenterJustifyBetween}>
-              {getTimeDifference(start_date.gmt).map((item, i) => (
-                <Shadow inner key={i.toString()} style={styles.timer}>
-                  <Text
-                    numberOfLines={1}
-                    adjustsFontSizeToFit
-                    style={styles.timerText}>
-                    {item}
-                  </Text>
-                </Shadow>
-              ))}
-            </View>
+            <ReaminingTime start_date={start_date} />
           </View>
         </View>
       </Shadow>
@@ -119,15 +82,7 @@ const styles = StyleSheet.create({
     height: 138,
     padding: 10,
   },
-  timer: {
-    height: 28,
-    width: 32,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowRadius: 2.5,
-    borderRadius: 4,
-    marginVertical: 3,
-  },
+
   rowContainer: {
     marginVertical: sizing.x4,
     height: 88,
@@ -136,9 +91,5 @@ const styles = StyleSheet.create({
     margin: sizing.x4,
     ...Typography.h1Style,
     color: colors.white,
-  },
-  timerText: {
-    color: colors.secondaryColor,
-    fontSize: 14,
   },
 });

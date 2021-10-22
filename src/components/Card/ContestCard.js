@@ -85,7 +85,7 @@ const ContestCard = ({price}) => {
           <Text>2198 Teams</Text>
           <Text>5250 Teams</Text>
         </View>
-        <LinearProgress color="primary" value />
+        <LinearProgress color="primary" value={0.5} variant="determinate" />
         <Shadow inner style={styles.bottomShadow}>
           <View style={commonStyles.rowAlignCenterJustifyBetween}>
             <View style={[commonStyles.rowAlignCenterJustifyBetween]}>

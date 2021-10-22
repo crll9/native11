@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {
   MyWalletScreen,
   HomeScreen,
@@ -10,33 +10,19 @@ import {
 } from '../Screens';
 import {colors} from '../Styles/colors';
 import Typography from '../Styles/Typography';
-import {sizing} from '../Styles/theme';
 import {Icon, Text} from 'react-native-elements';
 import {Shadow} from 'react-native-neomorph-shadows';
 import TeamList from '../Screens/TeamList';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
 import TournamentScreen from '../Screens/TournamentScreen';
 import CreateTeamScreen from '../Screens/CreateTeamScreen';
 import CaptainChooseScreen from '../Screens/CaptainChooseScreen';
 import TeamsOverviewScreen from '../Screens/TeamsOverviewScreen';
 
-const MainRoot = () => {
-  const Tab = createBottomTabNavigator();
-  const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
-  const HomeStack = () => {
-    return (
-      <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
-        <Stack.Screen name="TeamList" component={TeamList} />
-        <Stack.Screen name="Tournament" component={TournamentScreen} />
-        <Stack.Screen name="CreateTeam" component={CreateTeamScreen} />
-        <Stack.Screen name="CaptainChoose" component={CaptainChooseScreen} />
-        <Stack.Screen name="TeamsOverview" component={TeamsOverviewScreen} />
-      </Stack.Navigator>
-    );
-  };
-
+const TabScreen = () => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -57,7 +43,7 @@ const MainRoot = () => {
       }}>
       <Tab.Screen
         name="Home"
-        component={HomeStack}
+        component={HomeScreen}
         options={{
           headerShown: false,
           tabBarShowLabel: false,
@@ -158,6 +144,19 @@ const MainRoot = () => {
         component={MoreScreen}
       />
     </Tab.Navigator>
+  );
+};
+
+const MainRoot = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="HomeScreen" component={TabScreen} />
+      <Stack.Screen name="TeamList" component={TeamList} />
+      <Stack.Screen name="Tournament" component={TournamentScreen} />
+      <Stack.Screen name="CreateTeam" component={CreateTeamScreen} />
+      <Stack.Screen name="CaptainChoose" component={CaptainChooseScreen} />
+      <Stack.Screen name="TeamsOverview" component={TeamsOverviewScreen} />
+    </Stack.Navigator>
   );
 };
 

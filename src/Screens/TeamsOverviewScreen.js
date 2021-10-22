@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {
-	StyleSheet,
-	View,
-	TouchableOpacity,
-	ScrollView,
-	Dimensions,
-	Image,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  Dimensions,
+  Image,
 } from 'react-native';
 import {Text, Icon, LinearProgress, Divider} from 'react-native-elements';
 import Header from '../components/Header/Header';
@@ -22,15 +22,15 @@ import TeamOverview from '../components/Card/TeamOverview';
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
 const TeamsOverviewScreen = () => {
-	return (
-		<ScrollView style={{backgroundColor: colors.backgroundColor}}>
-			<TeamHeader />
-			<View style={{marginTop: sizing.x8}} />
+  return (
+    <ScrollView style={{backgroundColor: colors.backgroundColor}}>
+      <TeamHeader />
+      <View style={{marginTop: sizing.x8}} />
 
-			<TeamOverview />
-			<TeamOverview />
-		</ScrollView>
-	);
+      <TeamOverview />
+      <TeamOverview />
+    </ScrollView>
+  );
 };
 
 export default TeamsOverviewScreen;

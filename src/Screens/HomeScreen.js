@@ -53,6 +53,7 @@ const HomeScreen = ({loading, matches, fetchAllMatches}) => {
             return (
               <TouchableOpacity
                 activeOpacity={0.8}
+                disabled
                 style={{marginRight: sizing.x8}}
                 onPress={() => setSelectedTab(i)}
                 key={name}>
