@@ -12,9 +12,9 @@ import {colors} from '../Styles/colors';
 import Typography from '../Styles/Typography';
 import {Icon, Text} from 'react-native-elements';
 import {Shadow} from 'react-native-neomorph-shadows';
-import TeamList from '../Screens/TeamList';
+import TeamList from '../Screens/MatchContestScreen';
 
-import TournamentScreen from '../Screens/TournamentScreen';
+import TournamentScreen from '../Screens/ContestDetailsScreen';
 import CreateTeamScreen from '../Screens/CreateTeamScreen';
 import CaptainChooseScreen from '../Screens/CaptainChooseScreen';
 import TeamsOverviewScreen from '../Screens/TeamsOverviewScreen';
