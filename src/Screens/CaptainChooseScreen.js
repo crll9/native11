@@ -115,7 +115,7 @@ const CaptainChooseScreen = ({selectedPlayers, saveFantasyTeam}) => {
                 ? colors.secondaryColor
                 : colors.backgroundColor;
               const viceCaptainBg = isViceCaptain
-                ? colors.secondaryColor
+                ? colors.primary
                 : colors.backgroundColor;
 
               const captainText = isCaptain
@@ -151,10 +151,10 @@ const CaptainChooseScreen = ({selectedPlayers, saveFantasyTeam}) => {
                       activeOpacity={0.7}
                       onPress={() => makeCaptain(key)}>
                       <Neomorph
-                        style={[
-                          styles.captainSelectBtn,
-                          {backgroundColor: captainBg},
-                        ]}>
+                        style={{
+                          ...styles.captainSelectBtn,
+                          backgroundColor: captainBg,
+                        }}>
                         <Text style={[styles.subtitle, {color: captainText}]}>
                           C
                         </Text>
@@ -167,10 +167,10 @@ const CaptainChooseScreen = ({selectedPlayers, saveFantasyTeam}) => {
                       activeOpacity={0.7}
                       onPress={() => makeViceCaptain(key)}>
                       <Neomorph
-                        style={[
-                          styles.captainSelectBtn,
-                          {backgroundColor: viceCaptainBg},
-                        ]}>
+                        style={{
+                          ...styles.captainSelectBtn,
+                          backgroundColor: viceCaptainBg,
+                        }}>
                         <Text
                           style={[styles.subtitle, {color: viceCaptainText}]}>
                           VC

@@ -264,7 +264,7 @@ const CreateTeamScreen = ({
     const alreadyAdded = playersMap[item.key];
     const iconType = alreadyAdded ? 'entypo' : 'ionicon';
     const iconName = alreadyAdded ? 'circle-with-cross' : 'ios-add-circle';
-    const iconColor = alreadyAdded ? colors.danger : colors.white;
+    const iconColor = alreadyAdded ? colors.danger : colors.secondaryColor;
 
     return (
       <Icon
@@ -362,7 +362,7 @@ const CreateTeamScreen = ({
                 return (
                   <Neomorph
                     key={item.toString()}
-                    style={[styles.neomorphTile, {backgroundColor}]}
+                    style={{...styles.neomorphTile, backgroundColor}}
                   />
                 );
               })}
@@ -388,7 +388,7 @@ const CreateTeamScreen = ({
                   onPress={() => setSelectedType(fullName)}>
                   <Neomorph
                     key={name}
-                    style={[styles.neomorphButton, {backgroundColor}]}>
+                    style={{...styles.neomorphButton, backgroundColor}}>
                     <Text>
                       {name} ({playersMap[fullName]})
                     </Text>

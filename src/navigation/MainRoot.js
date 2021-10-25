@@ -52,7 +52,7 @@ const TabScreen = () => {
             const shadowRadius = focused ? 6 : 0;
 
             return (
-              <Shadow inner style={[styles.tabBarItem, {shadowRadius}]}>
+              <Shadow inner style={{...styles.tabBarItem, shadowRadius}}>
                 <Icon name="home" type="material-community" color={color} />
                 <Text
                   numberOfLines={1}
@@ -72,7 +72,7 @@ const TabScreen = () => {
             const color = focused ? colors.secondaryColor : colors.subtitleText;
             const shadowRadius = focused ? 6 : 0;
             return (
-              <Shadow inner style={[styles.tabBarItem, {shadowRadius}]}>
+              <Shadow inner style={{...styles.tabBarItem, shadowRadius}}>
                 <Icon
                   name="checkerboard"
                   size={22}
@@ -98,7 +98,7 @@ const TabScreen = () => {
             const color = focused ? colors.secondaryColor : colors.subtitleText;
             const shadowRadius = focused ? 6 : 0;
             return (
-              <Shadow inner style={[styles.tabBarItem, {shadowRadius}]}>
+              <Shadow inner style={{...styles.tabBarItem, shadowRadius}}>
                 <Icon
                   name="wallet"
                   size={22}
@@ -124,7 +124,7 @@ const TabScreen = () => {
             const color = focused ? colors.secondaryColor : colors.subtitleText;
             const shadowRadius = focused ? 6 : 0;
             return (
-              <Shadow inner style={[styles.tabBarItem, {shadowRadius}]}>
+              <Shadow inner style={{...styles.tabBarItem, shadowRadius}}>
                 <Icon
                   name="dots-three-vertical"
                   size={22}

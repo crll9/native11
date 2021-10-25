@@ -58,7 +58,7 @@ const HomeScreen = ({loading, matches, fetchAllMatches, fetchPools}) => {
                 style={{marginRight: sizing.x8}}
                 onPress={() => setSelectedTab(i)}
                 key={name}>
-                <Shadow inner style={[styles.buttonGroup, {shadowRadius}]}>
+                <Shadow inner style={{...styles.buttonGroup, shadowRadius}}>
                   <Text numberOfLines={1} style={{fontSize: 16}}>
                     {name}
                   </Text>

@@ -26,7 +26,7 @@ const MatchContestScreen = ({loading, matchDetails, pools}) => {
       ) : (
         <ScrollView>
           <View style={{marginTop: sizing.x8}} />
-          <View style={[commonStyles.centerInFlex1]}>
+          <View style={commonStyles.centerInFlex1}>
             <Neomorph style={styles.allContestShadow}>
               <View style={commonStyles.rowAlignCenterJustifyBetween}>
                 <View style={commonStyles.rowAlignCenterJustifyBetween}>

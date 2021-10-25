@@ -31,7 +31,7 @@ const ContestCard = ({
     <TouchableOpacity
       onPress={handleCardPress}
       activeOpacity={0.8}
-      style={[commonStyles.alignItemsCenter, {marginVertical: sizing.x16}]}>
+      style={[commonStyles.alignItemsCenter, {marginVertical: sizing.x12}]}>
       <Shadow inner style={styles.neomorphContainer}>
         <View
           style={[commonStyles.rowAlignCenterJustifyBetween, styles.container]}>
@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
     width: CARD_WIDTH,
     height: 225,
     padding: sizing.x12,
+    paddingBottom: 0,
   },
   subtitle: {
     color: colors.subtitleText,
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
     padding: sizing.x12,
     ...commonStyles.rowAlignCenterJustifyBetween,
     marginLeft: -sizing.x12,
-    marginTop: sizing.x16,
+    marginTop: 'auto',
     //  borderTopLeftRadius: 0,
   },
 });

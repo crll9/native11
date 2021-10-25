@@ -8,11 +8,13 @@
 
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, LogBox} from 'react-native';
 import withThemeAndSafeArea from './src/components/HigherOrder/withThemeAndSafeArea';
 import MainRoot from './src/navigation/MainRoot';
 import store from './src/redux/storeConfig/store';
 import {Provider} from 'react-redux';
+
+LogBox.ignoreLogs(['NativeUIManager.getConstantsForViewManager']);
 
 const App = () => {
   return (
