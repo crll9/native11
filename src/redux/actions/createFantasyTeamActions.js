@@ -14,8 +14,8 @@ export const placeBet =
       } = getState();
       const body = {
         poolId: selectedPricePool.key,
-        matchId: '1434783939121254405',
-        // matchId: matchDetails.key,
+        // matchId: '1434783939121254405',
+        matchId: matchDetails.key,
         FteamId,
         userId: '5cdad1d0',
       };
@@ -31,35 +31,35 @@ export const placeBet =
     }
   };
 
-export const getFantasyData =
-  (id = '1434783939121254405') =>
-  async dispatch => {
-    dispatch({type: CREATE_FANTASY.LOADING_PLAYERS});
-    try {
-      const response = await axios.get(`${API_URL}/fantasy/fancredit/${id}`);
-      const {fantacy, players, team} = response.data.data[0];
-      let teamArray = Object.values(team);
-      const playerData = fantacy?.credits.map(item => {
-        delete item.prev_points;
-        return {
-          ...item,
-          ...players[item.player_key],
-          team: teamArray[0].players?.includes(item.player_key)
-            ? teamArray[0].name
-            : teamArray[1].name,
-          isCaptain: false,
-          isViceCaptain: false,
-        };
-      });
-      dispatch({
-        type: CREATE_FANTASY.FETCH_PLAYERS,
-        payload: {players: playerData, teams: teamArray},
-      });
-    } catch (error) {
-      console.log(error.message);
-      dispatch({type: CREATE_FANTASY.FETCH_FAILED_PLAYERS});
-    }
-  };
+export const getFantasyData = id => async dispatch => {
+  dispatch({type: CREATE_FANTASY.LOADING_PLAYERS});
+  try {
+    const response = await axios.get(`${API_URL}/fantasy/fancredit/${id}`);
+    const {fantacy, players, team} = response.data.data[0];
+    console.log({team});
+    let teamArray = Object.values(team);
+    const playerData = fantacy?.credits.map(item => {
+      delete item.prev_points;
+      return {
+        ...item,
+        ...players[item.player_key],
+        team: teamArray[0].players?.includes(item.player_key)
+          ? teamArray[0].name
+          : teamArray[1].name,
+        isCaptain: false,
+        isViceCaptain: false,
+      };
+    });
+
+    dispatch({
+      type: CREATE_FANTASY.FETCH_PLAYERS,
+      payload: {players: playerData, teams: teamArray},
+    });
+  } catch (error) {
+    console.log(error.response.data);
+    dispatch({type: CREATE_FANTASY.FETCH_FAILED_PLAYERS});
+  }
+};
 
 export const saveSelectedPlayers = team => dispatch => {
   dispatch({type: CREATE_FANTASY.COMPLETE_SELECTING_ELEVEN, payload: team});
@@ -73,8 +73,8 @@ export const saveFantasyTeam = playerTeam => async (dispatch, getState) => {
     const data = {
       poolId: '2',
       userId: '5cdad1d0',
-      // matchId: matchDetails.key,
-      matchId: '1434783939121254405',
+      matchId: matchDetails.key,
+      // matchId: '1434783939121254405',
       playerTeam,
     };
 
@@ -89,10 +89,15 @@ export const saveFantasyTeam = playerTeam => async (dispatch, getState) => {
   }
 };
 
-export const fetchUserFantasyTeams = () => async dispatch => {
+export const fetchUserFantasyTeams = () => async (dispatch, getState) => {
+  const {
+    matchDetails: {
+      matchDetails: {key},
+    },
+  } = getState();
   try {
     const response = await axios.get(
-      `${API_URL}/fantasy/userFantacyTeam/5cdad1d0/1434783939121254405`,
+      `${API_URL}/fantasy/userFantacyTeam/5cdad1d0/${key}`,
     );
     const teamsOBJ = response.data.data;
     console.log(teamsOBJ);

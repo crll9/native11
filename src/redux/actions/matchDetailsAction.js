@@ -8,6 +8,7 @@ export const setMatchDetail = id => (dispatch, getState) => {
       matches: {matches},
     } = getState();
     const payload = matches.find(item => item._id === id);
+
     // const contestDetails = await axios.get()
     dispatch({type: MATCH_DETAILS.FETCH_SUCCESS, payload});
   } catch (error) {

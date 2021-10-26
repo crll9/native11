@@ -20,14 +20,14 @@ import {connect} from 'react-redux';
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
 const GameCard = ({
-  match: {short_name, start_date, tournament, _id},
+  match: {short_name, start_date, tournament, _id, key},
   setMatchDetail,
 }) => {
   const [team1, team2] = short_name.split('vs');
   const navigation = useNavigation();
   const handleOnPress = () => {
     setMatchDetail(_id);
-    navigation.navigate('TeamList');
+    navigation.navigate('TeamList', {key});
   };
 
   return (

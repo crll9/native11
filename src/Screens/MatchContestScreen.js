@@ -20,10 +20,13 @@ const MatchContestScreen = ({
   matchDetails,
   pools,
   fetchUserFantasyTeams,
+  route: {
+    params: {key},
+  },
 }) => {
   const navigation = useNavigation();
   useEffect(() => {
-    fetchUserFantasyTeams();
+    fetchUserFantasyTeams(key);
   }, [fetchUserFantasyTeams]);
   return (
     <View style={{flex: 1, backgroundColor: colors.backgroundColor, flex: 1}}>
@@ -87,7 +90,7 @@ const MatchContestScreen = ({
       )}
       <Button
         title="Create A New Team"
-        onPress={() => navigation.navigate('CreateTeam')}
+        onPress={() => navigation.navigate('CreateTeam', {key})}
         buttonStyle={{
           backgroundColor: colors.secondaryColor,
           paddingVertical: 14,

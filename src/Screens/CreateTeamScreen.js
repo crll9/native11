@@ -6,6 +6,7 @@ import {
   Dimensions,
   Image,
   FlatList,
+  LogBox,
 } from 'react-native';
 import {Text, Icon, Button} from 'react-native-elements';
 import commonStyles from '../Styles/commonStyles';
@@ -25,6 +26,8 @@ import {TouchableOpacity} from 'react-native';
 import Toast from 'react-native-simple-toast';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
+
+LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain']);
 
 const initialState = [
   {name: 'GK', fullName: 'goalkeeper'},
@@ -166,6 +169,9 @@ const CreateTeamScreen = ({
   players,
   saveSelectedPlayers,
   teams: [team1, team2],
+  route: {
+    params: {key},
+  },
 }) => {
   const [selectedType, setSelectedType] = useState('goalkeeper');
   const [credits, setCredits] = useState(100.0);
@@ -183,7 +189,7 @@ const CreateTeamScreen = ({
   const navigation = useNavigation();
 
   useEffect(() => {
-    getFantasyData();
+    getFantasyData(key);
   }, []);
 
   const addPlayer = (item, playerType) => {
