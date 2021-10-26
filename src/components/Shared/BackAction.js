@@ -14,7 +14,7 @@ const BackAction = ({popToEnd}) => {
       color={colors.white}
       onPress={() => {
         if (popToEnd) {
-          navigation.navigate('HomeScreen');
+          navigation.navigate('TeamList');
         } else {
           navigation.goBack();
         }
@@ -27,7 +27,7 @@ const BackAction = ({popToEnd}) => {
       color={colors.white}
       onPress={() => {
         if (popToEnd) {
-          navigation.navigate('HomeScreen');
+          navigation.navigate('TeamList');
         } else {
           navigation.goBack();
         }

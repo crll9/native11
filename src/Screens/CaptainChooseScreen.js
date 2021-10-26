@@ -25,7 +25,13 @@ const {height} = Dimensions.get('window');
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
-const CaptainChooseScreen = ({selectedPlayers, saveFantasyTeam}) => {
+const CaptainChooseScreen = ({
+  selectedPlayers,
+  saveFantasyTeam,
+  route: {
+    params: {onComplete},
+  },
+}) => {
   const [players, setPlayers] = useState(selectedPlayers);
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
@@ -46,6 +52,7 @@ const CaptainChooseScreen = ({selectedPlayers, saveFantasyTeam}) => {
     }
     setLoading(true);
     await saveFantasyTeam(players);
+    onComplete();
     setLoading(false);
     navigation.navigate('TeamsOverview');
   };

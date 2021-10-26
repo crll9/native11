@@ -14,7 +14,10 @@ import MainRoot from './src/navigation/MainRoot';
 import store from './src/redux/storeConfig/store';
 import {Provider} from 'react-redux';
 
-LogBox.ignoreLogs(['NativeUIManager.getConstantsForViewManager']);
+LogBox.ignoreLogs([
+  'NativeUIManager.getConstantsForViewManager',
+  'VirtualizedLists should never be nested inside plain ScrollViews',
+]);
 
 const App = () => {
   return (

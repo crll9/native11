@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, View, ScrollView, Dimensions, Image} from 'react-native';
 import {Text, Icon, Button} from 'react-native-elements';
 import commonStyles from '../Styles/commonStyles';
@@ -11,11 +11,20 @@ import ContestCard from '../components/Card/ContestCard';
 import {connect} from 'react-redux';
 import {ActivityIndicator} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
+import {fetchUserFantasyTeams} from '../redux/actions/createFantasyTeamActions';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
-const MatchContestScreen = ({loading, matchDetails, pools}) => {
+const MatchContestScreen = ({
+  loading,
+  matchDetails,
+  pools,
+  fetchUserFantasyTeams,
+}) => {
   const navigation = useNavigation();
+  useEffect(() => {
+    fetchUserFantasyTeams();
+  }, [fetchUserFantasyTeams]);
   return (
     <View style={{flex: 1, backgroundColor: colors.backgroundColor, flex: 1}}>
       <TeamHeader />
@@ -100,7 +109,9 @@ const mapStateToProps = ({
   pools,
 });
 
-export default connect(mapStateToProps, {})(MatchContestScreen);
+export default connect(mapStateToProps, {fetchUserFantasyTeams})(
+  MatchContestScreen,
+);
 
 const styles = StyleSheet.create({
   teamName: {

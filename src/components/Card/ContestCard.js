@@ -27,6 +27,10 @@ const ContestCard = ({
     navigation.navigate('Tournament');
     setSelectedContest(_id);
   };
+  const navigateToTeamList = () => {
+    setSelectedContest(_id);
+    navigation.navigate('TeamsOverview');
+  };
   return (
     <TouchableOpacity
       onPress={handleCardPress}
@@ -70,23 +74,25 @@ const ContestCard = ({
               $CRLL
             </Text>
           </View>
-          <Neomorph style={styles.valueContainer}>
-            <Text
-              style={{
-                color: colors.secondaryColor,
-                fontSize: Typography.fontSizes.x18,
-              }}>
-              {`${price} `}
-            </Text>
-            <Text
-              style={{
-                color: colors.secondaryColor,
-                fontSize: Typography.fontSizes.x13,
-                marginTop: 2,
-              }}>
-              $CRLL
-            </Text>
-          </Neomorph>
+          <TouchableOpacity activeOpacity={0.8} onPress={navigateToTeamList}>
+            <Neomorph style={styles.valueContainer}>
+              <Text
+                style={{
+                  color: colors.secondaryColor,
+                  fontSize: Typography.fontSizes.x18,
+                }}>
+                {`${price} `}
+              </Text>
+              <Text
+                style={{
+                  color: colors.secondaryColor,
+                  fontSize: Typography.fontSizes.x13,
+                  marginTop: 2,
+                }}>
+                $CRLL
+              </Text>
+            </Neomorph>
+          </TouchableOpacity>
         </View>
 
         <View

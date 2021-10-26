@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {
   StyleSheet,
   View,
@@ -6,27 +6,66 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import {
-  Icon,
-  Text,
-  LinearProgress,
-  CheckBox,
-  Divider,
-} from 'react-native-elements';
+import {Icon, Text, CheckBox, Divider} from 'react-native-elements';
 import {colors} from '../../Styles/colors';
 import commonStyles from '../../Styles/commonStyles';
 import {sizing} from '../../Styles/theme';
-import Typography from '../../Styles/Typography';
-import {Shadow, Neomorph} from 'react-native-neomorph-shadows';
-import {useNavigation} from '@react-navigation/native';
+import {Shadow} from 'react-native-neomorph-shadows';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
-const TeamOverview = () => {
+const getPlayerCount = (players = []) => {
+  let count = {
+    GK: 0,
+    FOR: 0,
+    MID: 0,
+    DEF: 0,
+  };
+  let cAndVC = {C: {}, VC: {}};
+  players.forEach(player => {
+    if (player.isCaptain) {
+      cAndVC.C = player;
+    }
+    if (player.isViceCaptain) {
+      cAndVC.VC = player;
+    }
+    switch (player.role) {
+      case 'goalkeeper':
+        count.GK = count.GK + 1;
+        break;
+      case 'defender':
+        count.DEF = count.DEF + 1;
+        break;
+      case 'striker':
+        count.FOR = count.FOR + 1;
+        break;
+      case 'midfielder':
+        count.MID = count.MID + 1;
+        break;
+
+      default:
+        break;
+    }
+  });
+
+  return [count, cAndVC];
+};
+
+const TeamOverview = ({selected, onPress = () => {}, team = {}}) => {
+  const {key, playerTeam, match} = team;
+  const [playerCount, {C, VC}] = useMemo(
+    () => getPlayerCount(playerTeam),
+    [key],
+  );
+
   return (
     <TouchableOpacity
-      style={[commonStyles.centerInFlex1, {marginVertical: sizing.x16}]}>
-      <Shadow inner style={styles.shadowContainer}>
+      activeOpacity={0.8}
+      onPress={onPress}
+      style={{marginVertical: sizing.x12}}>
+      <Shadow
+        inner
+        style={{...styles.shadowContainer, borderWidth: selected ? 1 : 0}}>
         <View
           style={[
             commonStyles.rowAlignCenterJustifyBetween,
@@ -34,8 +73,10 @@ const TeamOverview = () => {
           ]}>
           <View style={commonStyles.rowAlignCenterJustifyBetween}>
             <CheckBox
-              uncheckedColor="#027ff0"
+              uncheckedColor={colors.secondaryColor}
+              checkedColor={colors.secondaryColor}
               containerStyle={styles.checkbox}
+              checked={selected}
             />
             <Text style={styles.subtitle}>TEAM 1</Text>
           </View>
@@ -83,30 +124,30 @@ const TeamOverview = () => {
               style={styles.logo}
               source={require('../../assets/images/DummyTeam.jpg')}
             />
-            <Text style={styles.subtitle2}>David Villa</Text>
+            <Text style={styles.subtitle2}>{C.name}</Text>
           </View>
           <View style={styles.playerContainer}>
             <Image
               style={styles.logo}
               source={require('../../assets/images/DummyTeam.jpg')}
             />
-            <Text style={styles.subtitle2}>Jose Antonio</Text>
+            <Text style={styles.subtitle2}>{VC.name}</Text>
           </View>
           <View style={commonStyles.rowAlignCenterJustifyBetween}>
-            <View style={[styles.playerContainer, styles.teamContainer2]}>
+            <View style={styles.teamPlayer}>
               <Text style={{fontWeight: 'bold', fontSize: sizing.x12}}>
-                SPA
+                {Object.keys(match)[0]}
               </Text>
-              <Text style={styles.points}>5</Text>
+              <Text style={styles.points}>{match[Object.keys(match)[0]]}</Text>
             </View>
             <View>
               <Text>VS</Text>
             </View>
-            <View style={[styles.playerContainer, styles.teamContainer2]}>
+            <View style={styles.teamPlayer}>
               <Text style={{fontWeight: 'bold', fontSize: sizing.x12}}>
-                BRA
+                {Object.keys(match)[1]}
               </Text>
-              <Text style={styles.points}>6</Text>
+              <Text style={styles.points}>{match[Object.keys(match)[1]]}</Text>
             </View>
           </View>
         </View>
@@ -117,10 +158,11 @@ const TeamOverview = () => {
             commonStyles.rowAlignCenterJustifyBetween,
             styles.teamContainer,
           ]}>
-          <Text style={styles.points2}>GK (1)</Text>
-          <Text style={styles.points2}>DEF (4)</Text>
-          <Text style={styles.points2}>MID (4)</Text>
-          <Text style={styles.points2}>FOR (2)</Text>
+          {Object.keys(playerCount).map(item => (
+            <Text
+              key={item}
+              style={styles.points2}>{`${item} (${playerCount[item]})`}</Text>
+          ))}
         </View>
       </Shadow>
     </TouchableOpacity>
@@ -137,7 +179,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: colors.backgroundColor,
     width: CARD_WIDTH,
-    height: 215,
+    height: 202,
     padding: sizing.x12,
   },
   subtitle: {
@@ -146,7 +188,7 @@ const styles = StyleSheet.create({
     //  marginLeft: sizing.x4,
   },
   subtitle2: {
-    color: colors.subtitleText,
+    color: colors.white,
     fontSize: sizing.x12,
     marginTop: sizing.x4,
   },
@@ -157,8 +199,8 @@ const styles = StyleSheet.create({
     marginVertical: sizing.x8,
   },
   logo: {
-    width: sizing.x48,
-    height: sizing.x48,
+    width: 40,
+    height: 40,
     resizeMode: 'contain',
     //marginHorizontal: '1.5%',
   },
@@ -167,10 +209,9 @@ const styles = StyleSheet.create({
   },
   playerContainer: {
     alignItems: 'center',
+    position: 'relative',
   },
-  teamContainer2: {
-    marginHorizontal: sizing.x8,
-  },
+
   points: {
     fontWeight: 'bold',
     fontSize: sizing.x16,
@@ -178,5 +219,9 @@ const styles = StyleSheet.create({
   points2: {
     fontWeight: 'bold',
     fontSize: 14,
+  },
+  teamPlayer: {
+    width: 60,
+    alignItems: 'center',
   },
 });

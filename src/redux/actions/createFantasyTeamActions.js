@@ -5,6 +5,32 @@ import {CREATE_FANTASY} from '../types';
 const API_URL =
   'http://backend-env.eba-tvmadbz2.ap-south-1.elasticbeanstalk.com';
 
+export const placeBet =
+  (FteamId, onComplete = () => {}) =>
+  async (dispatch, getState) => {
+    try {
+      const {
+        matchDetails: {matchDetails, selectedPricePool},
+      } = getState();
+      const body = {
+        poolId: selectedPricePool.key,
+        matchId: '1434783939121254405',
+        // matchId: matchDetails.key,
+        FteamId,
+        userId: '5cdad1d0',
+      };
+      console.log(body);
+      const response = await axios.post(`${API_URL}/bet/placebet`, body);
+      console.log(response.data);
+      onComplete(true);
+      SimpleToast.show('Joined successfully');
+    } catch (error) {
+      console.log(error.response);
+      onComplete(false);
+      SimpleToast.show('Failed to join contest!');
+    }
+  };
+
 export const getFantasyData =
   (id = '1434783939121254405') =>
   async dispatch => {
@@ -40,15 +66,39 @@ export const saveSelectedPlayers = team => dispatch => {
 };
 
 export const saveFantasyTeam = playerTeam => async (dispatch, getState) => {
+  const {
+    matchDetails: {matchDetails, selectedPricePool},
+  } = getState();
   try {
     const data = {
       poolId: '2',
       userId: '5cdad1d0',
-      matchId: '1292816723979931659',
+      // matchId: matchDetails.key,
+      matchId: '1434783939121254405',
       playerTeam,
     };
+
     const response = await axios.post(`${API_URL}/fantasy/createTeam`, data);
     SimpleToast.show('Team saved successfully');
+    const createdTeam = response.data.data;
+
+    dispatch({type: CREATE_FANTASY.CREATED_FANTASY_TEAM, payload: createdTeam});
+    saveSelectedPlayers([])(dispatch);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const fetchUserFantasyTeams = () => async dispatch => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/fantasy/userFantacyTeam/5cdad1d0/1434783939121254405`,
+    );
+    const teamsOBJ = response.data.data;
+    console.log(teamsOBJ);
+    delete teamsOBJ.userTeamCount;
+    const teams = Object.values(teamsOBJ);
+    dispatch({type: CREATE_FANTASY.FETCH_CREATED_TEAMS, payload: teams});
   } catch (error) {
     console.log(error.message);
   }

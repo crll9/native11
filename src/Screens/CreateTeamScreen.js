@@ -280,13 +280,27 @@ const CreateTeamScreen = ({
     );
   };
 
+  const resetState = () => {
+    setPlayersMap({
+      goalkeeper: 0,
+      defender: 0,
+      midfielder: 0,
+      striker: 0,
+    });
+    setTeamPlayerCount({team1: 0, team2: 0});
+    setSelectedPlayers([]);
+  };
+
   const navigateToCaptainAndVc = () => {
     if (selectedPlayers.length !== 11) {
       Toast.show('Select 11 players to continue!');
       return;
     }
     saveSelectedPlayers(selectedPlayers);
-    navigation.navigate('CaptainChoose');
+
+    navigation.navigate('CaptainChoose', {
+      onComplete: () => resetState(),
+    });
   };
 
   return (
