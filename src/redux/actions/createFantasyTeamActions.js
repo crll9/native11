@@ -31,21 +31,27 @@ export const placeBet =
     }
   };
 
-export const getFantasyData = id => async dispatch => {
+export const getFantasyData = () => async (dispatch, getState) => {
+  const {
+    matchDetails: {
+      matchDetails: {key},
+    },
+  } = getState();
   dispatch({type: CREATE_FANTASY.LOADING_PLAYERS});
   try {
-    const response = await axios.get(`${API_URL}/fantasy/fancredit/${id}`);
+    const response = await axios.get(`${API_URL}/fantasy/fancredit/${key}`);
     const {fantacy, players, team} = response.data.data[0];
-    console.log({team});
+
     let teamArray = Object.values(team);
+
     const playerData = fantacy?.credits.map(item => {
       delete item.prev_points;
       return {
         ...item,
         ...players[item.player_key],
         team: teamArray[0].players?.includes(item.player_key)
-          ? teamArray[0].name
-          : teamArray[1].name,
+          ? teamArray[0].code
+          : teamArray[1].code,
         isCaptain: false,
         isViceCaptain: false,
       };
@@ -61,33 +67,59 @@ export const getFantasyData = id => async dispatch => {
   }
 };
 
-export const saveSelectedPlayers = team => dispatch => {
-  dispatch({type: CREATE_FANTASY.COMPLETE_SELECTING_ELEVEN, payload: team});
+export const saveSelectedPlayers = (players, members) => dispatch => {
+  dispatch({
+    type: CREATE_FANTASY.COMPLETE_SELECTING_ELEVEN,
+    payload: {players, members},
+  });
 };
 
-export const saveFantasyTeam = playerTeam => async (dispatch, getState) => {
-  const {
-    matchDetails: {matchDetails, selectedPricePool},
-  } = getState();
-  try {
-    const data = {
-      poolId: '2',
-      userId: '5cdad1d0',
-      matchId: matchDetails.key,
-      // matchId: '1434783939121254405',
-      playerTeam,
-    };
+export const saveFantasyTeam =
+  (playerTeam, match, onComplete = () => {}) =>
+  async (dispatch, getState) => {
+    try {
+      const {
+        matchDetails: {matchDetails, selectedPricePool},
+        createTeam: {createdTeams},
+      } = getState();
+      const data = {
+        poolId: '2',
+        userId: '5cdad1d0',
+        matchId: matchDetails.key,
+        // matchId: '1434783939121254405',
+        playerTeam,
+        teamName: `team-${!createdTeams?.length ? 1 : createdTeams.length + 1}`,
+        match,
+      };
 
-    const response = await axios.post(`${API_URL}/fantasy/createTeam`, data);
-    SimpleToast.show('Team saved successfully');
-    const createdTeam = response.data.data;
+      let sameCreated = false;
+      for (let i = 0; i < createdTeams.length; i++) {
+        const team = createdTeams[i];
+        if (JSON.stringify(team.playerTeam) === JSON.stringify(playerTeam)) {
+          sameCreated = true;
+          break;
+        }
+      }
 
-    dispatch({type: CREATE_FANTASY.CREATED_FANTASY_TEAM, payload: createdTeam});
-    saveSelectedPlayers([])(dispatch);
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+      if (sameCreated) {
+        SimpleToast.show('Can not create two same teams!');
+        return;
+      }
+
+      const response = await axios.post(`${API_URL}/fantasy/createTeam`, data);
+      SimpleToast.show('Team saved successfully');
+      const payload = response.data.data;
+      dispatch({
+        type: CREATE_FANTASY.CREATED_FANTASY_TEAM,
+        payload,
+      });
+      saveSelectedPlayers([], {})(dispatch);
+      onComplete(true);
+    } catch (error) {
+      console.log(error.message);
+      onComplete(false);
+    }
+  };
 
 export const fetchUserFantasyTeams = () => async (dispatch, getState) => {
   const {

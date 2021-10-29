@@ -119,7 +119,7 @@ const getAddPlayerError = (playersMap, playerType) => {
     playerType === 'striker'
   ) {
     return {
-      msg: `Team can have maximum of ${FANTASY_RULES.wicketkeeper.max} striker`,
+      msg: `Team can have maximum of ${FANTASY_RULES.striker.max} striker`,
       toast: true,
     };
   }
@@ -169,9 +169,6 @@ const CreateTeamScreen = ({
   players,
   saveSelectedPlayers,
   teams: [team1, team2],
-  route: {
-    params: {key},
-  },
 }) => {
   const [selectedType, setSelectedType] = useState('goalkeeper');
   const [credits, setCredits] = useState(100.0);
@@ -189,17 +186,17 @@ const CreateTeamScreen = ({
   const navigation = useNavigation();
 
   useEffect(() => {
-    getFantasyData(key);
+    getFantasyData();
   }, []);
 
   const addPlayer = (item, playerType) => {
     setTeamPlayerCount({
       team1:
-        item.team === team1.name
+        item.team === team1.code
           ? teamPlayerCount.team1 + 1
           : teamPlayerCount.team1,
       team2:
-        item.team === team2.name
+        item.team === team2.code
           ? teamPlayerCount.team2 + 1
           : teamPlayerCount.team2,
     });
@@ -215,11 +212,11 @@ const CreateTeamScreen = ({
   const removePlayer = (item, playerType) => {
     setTeamPlayerCount({
       team1:
-        item.team === team1.name
+        item.team === team1.code
           ? teamPlayerCount.team1 - 1
           : teamPlayerCount.team1,
       team2:
-        item.team === team2.name
+        item.team === team2.code
           ? teamPlayerCount.team2 - 1
           : teamPlayerCount.team2,
     });
@@ -249,8 +246,8 @@ const CreateTeamScreen = ({
       return;
     }
     if (
-      (teamPlayerCount.team1 === 7 && item.team === team1.name) ||
-      (teamPlayerCount.team2 === 7 && item.team === team2.name)
+      (teamPlayerCount.team1 === 7 && item.team === team1.code) ||
+      (teamPlayerCount.team2 === 7 && item.team === team2.code)
     ) {
       Toast.show('Maximum 7 players from each team');
       return;
@@ -302,7 +299,10 @@ const CreateTeamScreen = ({
       Toast.show('Select 11 players to continue!');
       return;
     }
-    saveSelectedPlayers(selectedPlayers);
+    saveSelectedPlayers(selectedPlayers, {
+      [team1.code]: teamPlayerCount.team1,
+      [team2.code]: teamPlayerCount.team2,
+    });
 
     navigation.navigate('CaptainChoose', {
       onComplete: () => resetState(),
@@ -343,8 +343,13 @@ const CreateTeamScreen = ({
                     style={styles.teamLogo}
                     source={require('../assets/images/DummyTeam.jpg')}
                   />
-                  <View style={{alignItems: 'center'}}>
-                    <Text style={styles.teamName}>{team1.name}</Text>
+                  <View style={styles.teamContainerInner}>
+                    <Text
+                      adjustsFontSizeToFit
+                      numberOfLines={1}
+                      style={styles.teamName}>
+                      {team1.code}
+                    </Text>
                     <Text>{teamPlayerCount.team1}</Text>
                   </View>
                 </View>
@@ -353,13 +358,19 @@ const CreateTeamScreen = ({
                 style={{
                   color: colors.subtitleText,
                   fontSize: sizing.x40,
+                  marginRight: sizing.x8,
                 }}>
                 /
               </Text>
               <View style={styles.cardHalf}>
                 <View style={styles.teamContainer}>
-                  <View style={{alignItems: 'center'}}>
-                    <Text style={styles.teamName}>{team2.name}</Text>
+                  <View style={styles.teamContainerInner}>
+                    <Text
+                      adjustsFontSizeToFit
+                      numberOfLines={1}
+                      style={styles.teamName}>
+                      {team2.code}
+                    </Text>
                     <Text>{teamPlayerCount.team2}</Text>
                   </View>
                   <Image
@@ -459,7 +470,7 @@ const CreateTeamScreen = ({
                         <Text
                           style={{
                             color:
-                              team === team1.name
+                              team === team1.code
                                 ? colors.primary
                                 : colors.secondaryColor,
                             fontWeight: 'bold',
@@ -613,5 +624,9 @@ const styles = StyleSheet.create({
   cardInside: {
     width: 60,
   },
-  teamName: {fontWeight: 'bold', fontSize: 14},
+  teamName: {fontWeight: 'bold', fontSize: 13},
+  teamContainerInner: {
+    alignItems: 'center',
+    width: 72,
+  },
 });

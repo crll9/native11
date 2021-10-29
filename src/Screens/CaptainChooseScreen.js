@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -28,6 +28,7 @@ const CARD_WIDTH = Dimensions.get('window').width - 32;
 const CaptainChooseScreen = ({
   selectedPlayers,
   saveFantasyTeam,
+  selectedMembers,
   route: {
     params: {onComplete},
   },
@@ -35,6 +36,10 @@ const CaptainChooseScreen = ({
   const [players, setPlayers] = useState(selectedPlayers);
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+  const playerArray = useMemo(() => {
+    return Object.keys({...selectedMembers});
+  }, [selectedMembers]);
+
   const saveTeam = async () => {
     let CSelected = false;
     let VCSelected = false;
@@ -51,10 +56,13 @@ const CaptainChooseScreen = ({
       return;
     }
     setLoading(true);
-    await saveFantasyTeam(players);
+    await saveFantasyTeam(players, selectedMembers, success => {
+      if (success) {
+        navigation.navigate('TeamsOverview');
+      }
+    });
     onComplete();
     setLoading(false);
-    navigation.navigate('TeamsOverview');
   };
 
   const makeCaptain = key => {
@@ -131,6 +139,10 @@ const CaptainChooseScreen = ({
               const viceCaptainText = isViceCaptain
                 ? colors.white
                 : colors.subtitleText;
+              const color =
+                team === playerArray[0]
+                  ? colors.primary
+                  : colors.secondaryColor;
 
               return (
                 <View key={key} style={styles.rowContainer}>
@@ -141,7 +153,11 @@ const CaptainChooseScreen = ({
                     />
                     <View>
                       <Text style={{fontWeight: 'bold'}}>{name}</Text>
-                      <Text style={{color: colors.primary, fontWeight: 'bold'}}>
+                      <Text
+                        style={{
+                          color,
+                          fontWeight: 'bold',
+                        }}>
                         {team}
                       </Text>
                     </View>
@@ -204,8 +220,9 @@ const CaptainChooseScreen = ({
   );
 };
 
-const mapStateToProps = ({createTeam: {selectedPlayers}}) => ({
+const mapStateToProps = ({createTeam: {selectedPlayers, selectedMembers}}) => ({
   selectedPlayers,
+  selectedMembers,
 });
 
 export default connect(mapStateToProps, {saveFantasyTeam})(CaptainChooseScreen);

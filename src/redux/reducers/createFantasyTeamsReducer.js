@@ -5,6 +5,7 @@ const initialState = {
   loading: true,
   teams: [],
   selectedPlayers: [],
+  selectedMembers: {},
   createdTeams: [],
 };
 
@@ -17,7 +18,11 @@ export default (state = initialState, {type, payload}) => {
     case CREATE_FANTASY.LOADING_PLAYERS:
       return {...state, loading: true};
     case CREATE_FANTASY.COMPLETE_SELECTING_ELEVEN:
-      return {...state, selectedPlayers: payload};
+      return {
+        ...state,
+        selectedPlayers: payload.players,
+        selectedMembers: payload.members,
+      };
     case CREATE_FANTASY.FETCH_CREATED_TEAMS:
       return {...state, createdTeams: payload};
     case CREATE_FANTASY.CREATED_FANTASY_TEAM:

@@ -61,14 +61,16 @@ const TeamsOverviewScreen = ({teams, placeBet}) => {
           ))}
         </ScrollView>
       )}
-      <Button
-        title="Join Contest"
-        onPress={joinContest}
-        loading={loading}
-        buttonStyle={commonStyles.bottomBtn}
-        titleStyle={{fontSize: 14, fontWeight: '800'}}
-        containerStyle={commonStyles.absolutePositionedBtn}
-      />
+      {teams.length > 0 && (
+        <Button
+          title="Join Contest"
+          onPress={joinContest}
+          loading={loading}
+          buttonStyle={commonStyles.bottomBtn}
+          titleStyle={{fontSize: 14, fontWeight: '800'}}
+          containerStyle={commonStyles.absolutePositionedBtn}
+        />
+      )}
     </>
   );
 };
