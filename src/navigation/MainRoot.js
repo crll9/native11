@@ -18,6 +18,10 @@ import TournamentScreen from '../Screens/ContestDetailsScreen';
 import CreateTeamScreen from '../Screens/CreateTeamScreen';
 import CaptainChooseScreen from '../Screens/CaptainChooseScreen';
 import TeamsOverviewScreen from '../Screens/TeamsOverviewScreen';
+import LoginScreen from '../Screens/LoginScreen';
+import {connect} from 'react-redux';
+import Splash from '../components/Shared/Splash';
+import RegisterScreen from '../Screens/RegisterScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -147,15 +151,30 @@ const TabScreen = () => {
   );
 };
 
-const MainRoot = () => {
+const authRoutes = [
+  {name: 'LoginScreen', component: LoginScreen},
+  {name: 'RegisterScreen', component: RegisterScreen},
+];
+
+const mainRoutes = [
+  {name: 'HomeScreen', component: TabScreen},
+  {name: 'TeamList', component: TeamList},
+  {name: 'Tournament', component: TournamentScreen},
+  {name: 'CreateTeam', component: CreateTeamScreen},
+  {name: 'CaptainChoose', component: CaptainChooseScreen},
+  {name: 'TeamsOverview', component: TeamsOverviewScreen},
+];
+
+const MainRoot = ({user, loading}) => {
+  const routes = user ? mainRoutes : authRoutes;
+  if (loading && !user) {
+    return <Splash />;
+  }
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="HomeScreen" component={TabScreen} />
-      <Stack.Screen name="TeamList" component={TeamList} />
-      <Stack.Screen name="Tournament" component={TournamentScreen} />
-      <Stack.Screen name="CreateTeam" component={CreateTeamScreen} />
-      <Stack.Screen name="CaptainChoose" component={CaptainChooseScreen} />
-      <Stack.Screen name="TeamsOverview" component={TeamsOverviewScreen} />
+      {routes.map(({name, component}) => (
+        <Stack.Screen key={name} name={name} component={component} />
+      ))}
     </Stack.Navigator>
   );
 };
@@ -174,4 +193,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainRoot;
+const mapStateToProps = ({auth: {user, loading}}) => ({
+  user,
+  loading,
+});
+
+export default connect(mapStateToProps, {})(MainRoot);
