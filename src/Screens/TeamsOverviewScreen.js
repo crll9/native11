@@ -9,12 +9,15 @@ import commonStyles from '../Styles/commonStyles';
 import {Button, Text} from 'react-native-elements';
 import {useNavigation} from '@react-navigation/core';
 import {placeBet} from '../redux/actions/createFantasyTeamActions';
+import TeamPreview from '../components/Shared/TeamPreview';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
 const TeamsOverviewScreen = ({teams, placeBet}) => {
   const navigation = useNavigation();
+  const [modalVisibility, setModalVisibility] = useState(false);
   const [selectedTeamIndex, setSelectedTeamIndex] = useState(0);
+  const [selectedTeam, setSelectedTeam] = useState(null);
   const [loading, setLoading] = useState(false);
   const joinContest = async () => {
     setLoading(true);
@@ -27,6 +30,12 @@ const TeamsOverviewScreen = ({teams, placeBet}) => {
     };
     await placeBet(key, onComplete);
   };
+
+  const onTeamPreview = team => {
+    setSelectedTeam(team);
+    setModalVisibility(true);
+  };
+
   return (
     <>
       <TeamHeader popToEnd />
@@ -57,8 +66,10 @@ const TeamsOverviewScreen = ({teams, placeBet}) => {
               onPress={() => setSelectedTeamIndex(i)}
               selected={selectedTeamIndex === i}
               team={team}
+              onPreview={onTeamPreview}
             />
           ))}
+          <View style={{height: 60}} />
         </ScrollView>
       )}
       {teams.length > 0 && (
@@ -71,6 +82,11 @@ const TeamsOverviewScreen = ({teams, placeBet}) => {
           containerStyle={commonStyles.absolutePositionedBtn}
         />
       )}
+      <TeamPreview
+        visibility={modalVisibility}
+        setVisibility={setModalVisibility}
+        team={selectedTeam}
+      />
     </>
   );
 };

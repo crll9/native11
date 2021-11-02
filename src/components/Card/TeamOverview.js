@@ -51,7 +51,12 @@ const getPlayerCount = (players = []) => {
   return [count, cAndVC];
 };
 
-const TeamOverview = ({selected, onPress = () => {}, team = {}}) => {
+const TeamOverview = ({
+  selected,
+  onPress = () => {},
+  team = {},
+  onPreview = () => {},
+}) => {
   const {key, playerTeam, match} = team;
   const [playerCount, {C, VC}] = useMemo(
     () => getPlayerCount(playerTeam),
@@ -81,38 +86,26 @@ const TeamOverview = ({selected, onPress = () => {}, team = {}}) => {
             <Text style={styles.subtitle}>TEAM 1</Text>
           </View>
           <View style={commonStyles.rowAlignCenterJustifyBetween}>
-            <Icon
-              name="copy"
-              size={20}
-              type="feather"
-              color={colors.subtitleText}
-            />
+            <Icon name="copy" size={20} type="feather" color={colors.light} />
             <Text style={[styles.subtitle, {marginLeft: sizing.x4}]}>
               Clone
             </Text>
           </View>
           <View style={commonStyles.rowAlignCenterJustifyBetween}>
-            <Icon
-              name="edit-2"
-              size={20}
-              type="feather"
-              color={colors.subtitleText}
-            />
+            <Icon name="edit-2" size={20} type="feather" color={colors.light} />
             <Text style={[styles.subtitle, {marginLeft: sizing.x4}]}>Edit</Text>
           </View>
-          <View style={commonStyles.rowAlignCenterJustifyBetween}>
-            <Icon
-              name="copy"
-              size={20}
-              type="feather"
-              color={colors.subtitleText}
-            />
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => onPreview(team)}
+            style={commonStyles.rowAlignCenterJustifyBetween}>
+            <Icon name="copy" size={20} type="feather" color={colors.light} />
             <Text style={[styles.subtitle, {marginLeft: sizing.x4}]}>
               Preview
             </Text>
-          </View>
+          </TouchableOpacity>
         </View>
-        <Divider color={colors.subtitleText} style={styles.divider} />
+        <Divider color={colors.light} style={styles.divider} />
 
         <View
           style={[
@@ -135,28 +128,25 @@ const TeamOverview = ({selected, onPress = () => {}, team = {}}) => {
           </View>
           <View style={commonStyles.rowAlignCenterJustifyBetween}>
             <View style={styles.teamPlayer}>
-              <Text style={{fontWeight: 'bold', fontSize: sizing.x12}}>
-                {Object.keys(match)[0]}
-              </Text>
+              <Text style={styles.points}>{Object.keys(match)[0]}</Text>
               <Text style={styles.points}>{match[Object.keys(match)[0]]}</Text>
             </View>
             <View>
               <Text>VS</Text>
             </View>
             <View style={styles.teamPlayer}>
-              <Text style={{fontWeight: 'bold', fontSize: sizing.x12}}>
-                {Object.keys(match)[1]}
-              </Text>
+              <Text style={styles.points}>{Object.keys(match)[1]}</Text>
               <Text style={styles.points}>{match[Object.keys(match)[1]]}</Text>
             </View>
           </View>
         </View>
 
-        <Divider color={colors.subtitleText} style={styles.divider} />
+        <Divider color={colors.light} style={styles.divider} />
         <View
           style={[
             commonStyles.rowAlignCenterJustifyBetween,
             styles.teamContainer,
+            {marginTop: 'auto'},
           ]}>
           {Object.keys(playerCount).map(item => (
             <Text
@@ -179,11 +169,11 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: colors.backgroundColor,
     width: CARD_WIDTH,
-    height: 202,
+    height: 200,
     padding: sizing.x12,
   },
   subtitle: {
-    color: colors.subtitleText,
+    color: colors.light,
     fontSize: sizing.x12,
     //  marginLeft: sizing.x4,
   },

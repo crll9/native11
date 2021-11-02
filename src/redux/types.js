@@ -20,3 +20,10 @@ export const CREATE_FANTASY = {
   FETCH_CREATED_TEAMS: 'fetch-created_teams',
   CREATED_FANTASY_TEAM: 'CREATED_FANTASY_TEAM',
 };
+
+export const USER = {
+  LOADING_START: 'user-loading',
+  FETCH_SUCCESS: 'user-fetch-success',
+  FETCH_FAILED: 'user-failed',
+  LOGOUT: 'logout',
+};

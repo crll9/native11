@@ -13,14 +13,12 @@ const getDate = () => {
 export const fetchAllMatches = () => async dispatch => {
   dispatch({type: MATCHES.LOADING_START});
 
-  const response = await axios.get(
-    `${API_URL}/match/todaysmatches/${getDate()}`,
-  );
+  const response = await axios.get(`${API_URL}/match/todaysmatches/`);
 
   const matches = response.data.data.allMatches;
-  console.log(matches.length);
+
   try {
-    dispatch({type: MATCHES.FETCH_SUCCESS, payload: data.data.allMatches});
+    dispatch({type: MATCHES.FETCH_SUCCESS, payload: matches});
   } catch (error) {
     dispatch({type: MATCHES.FETCH_FAILED});
   }

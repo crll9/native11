@@ -82,6 +82,7 @@ export const saveFantasyTeam =
         matchDetails: {matchDetails, selectedPricePool},
         createTeam: {createdTeams},
       } = getState();
+
       const data = {
         poolId: '2',
         userId: '5cdad1d0',
@@ -89,7 +90,10 @@ export const saveFantasyTeam =
         // matchId: '1434783939121254405',
         playerTeam,
         teamName: `team-${!createdTeams?.length ? 1 : createdTeams.length + 1}`,
-        match,
+        match: {
+          ...match,
+          matchId: matchDetails.key,
+        },
       };
 
       let sameCreated = false;
@@ -132,11 +136,11 @@ export const fetchUserFantasyTeams = () => async (dispatch, getState) => {
       `${API_URL}/fantasy/userFantacyTeam/5cdad1d0/${key}`,
     );
     const teamsOBJ = response.data.data;
-    console.log(teamsOBJ);
     delete teamsOBJ.userTeamCount;
     const teams = Object.values(teamsOBJ);
     dispatch({type: CREATE_FANTASY.FETCH_CREATED_TEAMS, payload: teams});
   } catch (error) {
-    console.log(error.message);
+    dispatch({type: CREATE_FANTASY.FETCH_CREATED_TEAMS, payload: []});
+    console.log(error.response?.data);
   }
 };
