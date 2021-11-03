@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useLayoutEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -22,6 +22,7 @@ import LoginScreen from '../Screens/LoginScreen';
 import {connect} from 'react-redux';
 import Splash from '../components/Shared/Splash';
 import RegisterScreen from '../Screens/RegisterScreen';
+import {getUser} from '../redux/actions/authActions';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -165,7 +166,10 @@ const mainRoutes = [
   {name: 'TeamsOverview', component: TeamsOverviewScreen},
 ];
 
-const MainRoot = ({user, loading}) => {
+const MainRoot = ({user, loading, getUser}) => {
+  useLayoutEffect(() => {
+    getUser();
+  }, [getUser]);
   const routes = user ? mainRoutes : authRoutes;
   if (loading && !user) {
     return <Splash />;
@@ -198,4 +202,4 @@ const mapStateToProps = ({auth: {user, loading}}) => ({
   loading,
 });
 
-export default connect(mapStateToProps, {})(MainRoot);
+export default connect(mapStateToProps, {getUser})(MainRoot);
