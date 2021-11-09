@@ -152,6 +152,8 @@ const getAddPlayerError = (playersMap, playerType) => {
       toast = 'You need a striker';
     } else if (playersToAdd === 'defender') {
       toast = `You need to ${requiredDef} more defender`;
+    } else if (playersToAdd === 'goalkeeper') {
+      toast = 'You need to a goalkeeper';
     }
 
     return {
@@ -161,6 +163,13 @@ const getAddPlayerError = (playersMap, playerType) => {
   }
 
   return null;
+};
+
+const suggestPlayerCount = playerType => {
+  if (playerType !== 'goalkeeper') {
+    return `${FANTASY_RULES[playerType].min} - ${FANTASY_RULES[playerType].max}`;
+  }
+  return '1';
 };
 
 const CreateTeamScreen = ({
@@ -431,7 +440,7 @@ const CreateTeamScreen = ({
 
           <Shadow inner style={styles.teamTable}>
             <Text style={styles.shadowHeading}>
-              You may only select 3 forwards
+              You may select {suggestPlayerCount(selectedType)} {selectedType}
             </Text>
             <View style={styles.leaderboardTab}>
               <Text style={{flex: 7}}>Players</Text>

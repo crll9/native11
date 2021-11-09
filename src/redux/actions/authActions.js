@@ -8,6 +8,7 @@ const API_URL =
 
 export const logOut = () => async dispatch => {
   try {
+    await AsyncStorage.removeItem('user');
     dispatch({type: USER.LOGOUT});
   } catch (error) {
     console.log(error);
@@ -24,14 +25,21 @@ export const login =
         },
       });
       const user = res.data.data;
+
       await AsyncStorage.setItem('user', JSON.stringify(user));
-      dispatch({type: USER.FETCH_SUCCESS, payload: user});
       onComplete(true);
+      dispatch({type: USER.FETCH_SUCCESS, payload: user});
     } catch (error) {
       dispatch({type: USER.FETCH_FAILED});
       const msg = error.response?.data?.message || error.message;
-      console.log(msg);
-      SimpleToast.show(msg);
+
+      if (msg === 'Invalid Credentials') {
+        const {email, password} = data;
+        register({walletId: email, password}, success => onComplete(success))(
+          dispatch,
+        );
+      }
+      // SimpleToast.show(msg);
     }
   };
 export const getUser = () => async dispatch => {
@@ -56,12 +64,16 @@ export const register =
       });
       const user = res.data.data;
       await AsyncStorage.setItem('user', JSON.stringify(user));
-      dispatch({type: USER.FETCH_SUCCESS, payload: user});
       onComplete(true);
+      dispatch({type: USER.FETCH_SUCCESS, payload: user});
     } catch (error) {
       dispatch({type: USER.FETCH_FAILED});
       const msg = error.response?.data?.message || error.message;
       console.log(msg);
+      if (msg === 'User Already Exist. Please Login') {
+        SimpleToast.show("Wallet id and password don't match");
+        return;
+      }
       SimpleToast.show(msg);
     }
   };

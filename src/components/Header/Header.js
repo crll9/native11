@@ -5,17 +5,31 @@ import Typography from '../../Styles/Typography';
 import {colors} from '../../Styles/colors';
 import commonStyles from '../../Styles/commonStyles';
 import WalletBalance from '../Wallet/WalletBalance';
+import {connect} from 'react-redux';
+import {logOut} from '../../redux/actions/authActions';
+import {Alert} from 'react-native';
 
-const Header = () => {
+const Header = ({logOut}) => {
+  const handleLogout = () => {
+    Alert.alert('Warning', 'Are you sure to logout!', [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+      },
+      {text: 'Logout', onPress: () => logOut()},
+    ]);
+  };
   return (
     <ElHeader
       leftComponent={() => (
-        <Image
-          source={{
-            uri: 'https://iconape.com/wp-content/png_logo_vector/avatar-11.png',
-          }}
-          style={{width: 44, height: 44}}
-        />
+        <TouchableOpacity activeOpacity={0.7} onPress={() => handleLogout()}>
+          <Image
+            source={{
+              uri: 'https://iconape.com/wp-content/png_logo_vector/avatar-11.png',
+            }}
+            style={{width: 44, height: 44}}
+          />
+        </TouchableOpacity>
       )}
       centerComponent={() => (
         <Image
@@ -34,7 +48,9 @@ const Header = () => {
   );
 };
 
-export default Header;
+const mapStateToProps = () => ({});
+
+export default connect(mapStateToProps, {logOut})(Header);
 
 const styles = StyleSheet.create({
   title: {

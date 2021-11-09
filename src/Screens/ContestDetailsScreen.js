@@ -16,46 +16,26 @@ import TeamHeader from '../components/Header/TeamHeader';
 import {useNavigation} from '@react-navigation/native';
 import {connect} from 'react-redux';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const API_URL =
   'http://backend-env.eba-tvmadbz2.ap-south-1.elasticbeanstalk.com';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
-const mockData = [
-  {
-    id: '1',
-    name: 'Shubhendus Eleven',
-    points: '0.0',
-    rank: '#1',
-  },
-  {
-    id: '2',
-    name: 'Shubhendus Eleven',
-    points: '0.0',
-    rank: '#2',
-  },
-  {
-    id: '3',
-    name: 'Shubhendus Eleven',
-    points: '0.0',
-    rank: '#3',
-  },
-  {
-    id: '4',
-    name: 'Shubhendus Eleven',
-    points: '0.0',
-    rank: '#4',
-  },
-];
-
 const getLeaderBoardData = async (
   matchId = '1292816723979931659',
   poolId = '2',
 ) => {
   try {
+    const user = await AsyncStorage.getItem('user');
     const response = await axios.get(
       `${API_URL}/bet/getleaderboard/${matchId}/${poolId}`,
+      {
+        headers: {
+          Authorization: user.token,
+        },
+      },
     );
     return response.data?.data?.leaderBoard?.members;
   } catch (error) {

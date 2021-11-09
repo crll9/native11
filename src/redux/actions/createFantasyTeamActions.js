@@ -1,6 +1,7 @@
 import axios from 'axios';
 import SimpleToast from 'react-native-simple-toast';
 import {CREATE_FANTASY} from '../types';
+import {getAuthHeaders} from './matchesActions';
 
 const API_URL =
   'http://backend-env.eba-tvmadbz2.ap-south-1.elasticbeanstalk.com';
@@ -11,17 +12,23 @@ export const placeBet =
     try {
       const {
         matchDetails: {matchDetails, selectedPricePool},
+        auth: {
+          user: {userId},
+        },
       } = getState();
       const body = {
         poolId: selectedPricePool.key,
         // matchId: '1434783939121254405',
         matchId: matchDetails.key,
         FteamId,
-        userId: '5cdad1d0',
+        userId,
       };
-      console.log(body);
-      const response = await axios.post(`${API_URL}/bet/placebet`, body);
-      console.log(response.data);
+
+      await axios.post(
+        `${API_URL}/bet/placebet`,
+        body,
+        getAuthHeaders(getState()),
+      );
       onComplete(true);
       SimpleToast.show('Joined successfully');
     } catch (error) {
@@ -39,8 +46,13 @@ export const getFantasyData = () => async (dispatch, getState) => {
   } = getState();
   dispatch({type: CREATE_FANTASY.LOADING_PLAYERS});
   try {
-    const response = await axios.get(`${API_URL}/fantasy/fancredit/${key}`);
-    const {fantacy, players, team} = response.data.data[0];
+    const response = await axios.get(
+      `${API_URL}/fantasy/fancredit/${key}`,
+      getAuthHeaders(getState()),
+    );
+
+    const {fantacy, players, team} =
+      response.data?.data?.[0] || response.data.data;
 
     let teamArray = Object.values(team);
 
@@ -62,7 +74,7 @@ export const getFantasyData = () => async (dispatch, getState) => {
       payload: {players: playerData, teams: teamArray},
     });
   } catch (error) {
-    console.log(error.response.data);
+    console.log(error.response?.data || error.message);
     dispatch({type: CREATE_FANTASY.FETCH_FAILED_PLAYERS});
   }
 };
@@ -81,11 +93,14 @@ export const saveFantasyTeam =
       const {
         matchDetails: {matchDetails, selectedPricePool},
         createTeam: {createdTeams},
+        auth: {
+          user: {userId},
+        },
       } = getState();
 
       const data = {
         poolId: '2',
-        userId: '5cdad1d0',
+        userId,
         matchId: matchDetails.key,
         // matchId: '1434783939121254405',
         playerTeam,
@@ -110,7 +125,11 @@ export const saveFantasyTeam =
         return;
       }
 
-      const response = await axios.post(`${API_URL}/fantasy/createTeam`, data);
+      const response = await axios.post(
+        `${API_URL}/fantasy/createTeam`,
+        data,
+        getAuthHeaders(getState()),
+      );
       SimpleToast.show('Team saved successfully');
       const payload = response.data.data;
       dispatch({
@@ -120,7 +139,9 @@ export const saveFantasyTeam =
       saveSelectedPlayers([], {})(dispatch);
       onComplete(true);
     } catch (error) {
-      console.log(error.message);
+      const msg = error.response?.data?.message || error.message;
+      console.log(msg);
+      SimpleToast.show(msg);
       onComplete(false);
     }
   };
@@ -130,10 +151,14 @@ export const fetchUserFantasyTeams = () => async (dispatch, getState) => {
     matchDetails: {
       matchDetails: {key},
     },
+    auth: {
+      user: {userId},
+    },
   } = getState();
   try {
     const response = await axios.get(
-      `${API_URL}/fantasy/userFantacyTeam/5cdad1d0/${key}`,
+      `${API_URL}/fantasy/userFantacyTeam/${userId}/${key}`,
+      getAuthHeaders(getState()),
     );
     const teamsOBJ = response.data.data;
     delete teamsOBJ.userTeamCount;

@@ -12,14 +12,14 @@ const authReducer = (state = initialState, action) => {
         ...state,
         loading: true,
       };
-    case USER.FETCH_FAILED:
-      return initialState;
+
     case USER.FETCH_SUCCESS:
       return {
         user: payload,
         loading: false,
       };
     case USER.LOGOUT:
+    case USER.FETCH_FAILED:
       return initialState;
     default: {
       return state;

@@ -24,10 +24,9 @@ const RegisterScreen = ({register}) => {
   const [loading, setLoading] = useState(false);
   const [walletId, setWalletId] = useState('');
   const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
 
   const handleRegister = async () => {
-    if (!walletId || !password || !email) {
+    if (!walletId || !password) {
       SimpleToast.show('All fields are required!');
       return;
     }
@@ -72,17 +71,6 @@ const RegisterScreen = ({register}) => {
       <View style={{height: sizing.x16}} />
       <Text style={authStyles.heading}>Register</Text>
 
-      <Text style={authStyles.label}>Email</Text>
-      <Neomorph inner style={authStyles.inputContainer}>
-        <TextInput
-          placeholder="user@email.com"
-          placeholderTextColor="rgba(255,255,255,.3)"
-          style={authStyles.input}
-          value={email}
-          onChangeText={setEmail}
-        />
-      </Neomorph>
-      <View style={{height: sizing.x16}} />
       <Text style={authStyles.label}>Wallet Id</Text>
       <Neomorph inner style={authStyles.inputContainer}>
         <TextInput
