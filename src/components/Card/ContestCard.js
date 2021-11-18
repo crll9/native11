@@ -19,14 +19,24 @@ import SimpleToast from 'react-native-simple-toast';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
+export const getPoolMembers = data => {
+  try {
+    const res = data.data.betsInPlace;
+    return res;
+  } catch (error) {
+    return 0;
+  }
+};
+
 const ContestCard = ({
-  pool: {price, membersRequired, members, _id},
+  pool: {price, membersRequired, members, _id, key, data},
   active,
   setSelectedContest,
+  matchKey,
 }) => {
   const navigation = useNavigation();
   const handleCardPress = () => {
-    navigation.navigate('Tournament');
+    navigation.navigate('Tournament', {matchKey, poolKey: key});
     setSelectedContest(_id);
   };
   const navigateToTeamList = () => {
@@ -103,14 +113,12 @@ const ContestCard = ({
 
         <View
           style={[commonStyles.rowAlignCenterJustifyBetween, styles.container]}>
-          <Text>{members?.length} Teams</Text>
+          <Text>{getPoolMembers(data)} Teams</Text>
           <Text>{membersRequired} Teams</Text>
         </View>
         <LinearProgress
           color="primary"
-          value={
-            members.length ? members.length / membersRequired : members.length
-          }
+          value={getPoolMembers(data) / membersRequired}
           variant="determinate"
         />
         <Shadow inner style={styles.bottomShadow}>

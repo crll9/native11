@@ -25,7 +25,7 @@ const MatchContestScreen = ({
   useEffect(() => {
     fetchUserFantasyTeams();
   }, [fetchUserFantasyTeams]);
-  console.log({pools});
+
   return (
     <View style={{flex: 1, backgroundColor: colors.backgroundColor, flex: 1}}>
       <TeamHeader />
@@ -81,7 +81,12 @@ const MatchContestScreen = ({
           </View>
 
           {pools.map(pool => (
-            <ContestCard active={pool.active} key={pool._id} pool={pool} />
+            <ContestCard
+              matchKey={matchDetails?.key}
+              active={pool.active}
+              key={pool._id}
+              pool={pool}
+            />
           ))}
           <View style={{height: 60}} />
         </ScrollView>

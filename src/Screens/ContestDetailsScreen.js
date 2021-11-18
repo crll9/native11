@@ -17,16 +17,14 @@ import {useNavigation} from '@react-navigation/native';
 import {connect} from 'react-redux';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getPoolMembers} from '../components/Card/ContestCard';
 
 const API_URL =
   'http://backend-env.eba-tvmadbz2.ap-south-1.elasticbeanstalk.com';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
-const getLeaderBoardData = async (
-  matchId = '1292816723979931659',
-  poolId = '2',
-) => {
+const getLeaderBoardData = async (matchId, poolId) => {
   try {
     const user = await AsyncStorage.getItem('user');
     const response = await axios.get(
@@ -44,13 +42,14 @@ const getLeaderBoardData = async (
   }
 };
 
-const ContestDetailsScreen = ({pool}) => {
+const ContestDetailsScreen = ({pool, route: {params}}) => {
   const navigation = useNavigation();
-  const {members, membersRequired, price} = pool;
+  const {members, membersRequired, price, data} = pool;
   const [poolMembers, setPoolMembers] = useState([]);
 
   const init = async () => {
-    const res = await getLeaderBoardData();
+    const res = await getLeaderBoardData(params?.matchKey, params?.poolKey);
+
     setPoolMembers(res);
   };
 
@@ -77,7 +76,7 @@ const ContestDetailsScreen = ({pool}) => {
               styles.container,
             ]}>
             <Text style={styles.subtitle}>PRIZE POOL</Text>
-            <Text style={styles.subtitle}>{members.length} ENTRIES</Text>
+            <Text style={styles.subtitle}>{getPoolMembers(data)} ENTRIES</Text>
           </View>
 
           <View
@@ -126,9 +125,7 @@ const ContestDetailsScreen = ({pool}) => {
           </View>
           <LinearProgress
             color="primary"
-            value={
-              members.length ? members.length / membersRequired : members.length
-            }
+            value={getPoolMembers(data) / pool.membersRequired}
             variant="determinate"
           />
           <View
@@ -137,7 +134,7 @@ const ContestDetailsScreen = ({pool}) => {
               styles.container,
             ]}>
             <Text style={[Typography.h3Style, {color: colors.secondaryColor}]}>
-              {members?.length} Teams
+              {getPoolMembers(data)} Teams
             </Text>
             <Text>{membersRequired} Teams</Text>
           </View>
@@ -158,18 +155,22 @@ const ContestDetailsScreen = ({pool}) => {
             <Text>Rank</Text>
           </View>
 
-          {poolMembers.map(({_id, name, points, rank}) => {
-            return (
-              <View key={_id} style={styles.teamRow}>
-                <View style={styles.leaderBoardItem}>
-                  <Text style={{color: colors.subtitleText}}>{'username'}</Text>
-                  <Text style={{color: colors.subtitleText}}></Text>
-                  <Text style={{color: colors.subtitleText}}>{'#1'}</Text>
+          {poolMembers.length > 0 ? (
+            poolMembers.map(({_id, name, points, rank, userId}) => {
+              return (
+                <View key={_id} style={styles.teamRow}>
+                  <View style={styles.leaderBoardItem}>
+                    <Text style={styles.poolText}>{userId}</Text>
+                    <Text style={styles.poolText}></Text>
+                    <Text style={styles.poolText}>{'#1'}</Text>
+                  </View>
+                  <Divider />
                 </View>
-                <Divider />
-              </View>
-            );
-          })}
+              );
+            })
+          ) : (
+            <Text style={styles.empty}>Be the first to join</Text>
+          )}
         </Shadow>
 
         <View style={{height: 60}} />
@@ -236,4 +237,10 @@ const styles = StyleSheet.create({
     ...commonStyles.rowAlignCenterJustifyBetween,
     marginBottom: 8,
   },
+  empty: {
+    textAlign: 'center',
+    marginTop: sizing.x32,
+    fontSize: 18,
+  },
+  poolText: {color: colors.white, fontSize: 15},
 });
