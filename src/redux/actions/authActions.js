@@ -3,7 +3,7 @@ import axios from 'axios';
 import SimpleToast from 'react-native-simple-toast';
 import {USER} from '../types';
 
-const API_URL =
+export const API_URL =
   'http://backend-env.eba-tvmadbz2.ap-south-1.elasticbeanstalk.com';
 
 export const logOut = () => async dispatch => {

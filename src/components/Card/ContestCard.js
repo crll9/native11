@@ -15,11 +15,13 @@ import {Shadow, Neomorph} from 'react-native-neomorph-shadows';
 import {useNavigation} from '@react-navigation/native';
 import {setSelectedContest} from '../../redux/actions/matchDetailsAction';
 import {connect} from 'react-redux';
+import SimpleToast from 'react-native-simple-toast';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
 const ContestCard = ({
   pool: {price, membersRequired, members, _id},
+  active,
   setSelectedContest,
 }) => {
   const navigation = useNavigation();
@@ -28,6 +30,10 @@ const ContestCard = ({
     setSelectedContest(_id);
   };
   const navigateToTeamList = () => {
+    if (!active) {
+      SimpleToast.show('Pool not active now!');
+      return;
+    }
     setSelectedContest(_id);
     navigation.navigate('TeamsOverview');
   };

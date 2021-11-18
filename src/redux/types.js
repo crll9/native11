@@ -3,6 +3,7 @@ export const MATCHES = {
   FETCH_SUCCESS: 'matches-details-fetch-success',
   FETCH_FAILED: 'matches-details-fetch-failed',
   FETCH_POOLS: 'fetch-pools',
+  UPDATE_POOLS: 'update_pools',
 };
 
 export const MATCH_DETAILS = {

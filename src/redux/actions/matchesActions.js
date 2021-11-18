@@ -1,5 +1,7 @@
 import axios from 'axios';
+import SimpleToast from 'react-native-simple-toast';
 import {MATCHES} from '../types';
+import {logOut} from './authActions';
 import {data} from './mockData';
 
 const API_URL =
@@ -32,9 +34,15 @@ export const fetchAllMatches = () => async (dispatch, getState) => {
     );
 
     const matches = response.data.data.allMatches;
+
     dispatch({type: MATCHES.FETCH_SUCCESS, payload: matches});
   } catch (error) {
-    const msg = error.response?.data?.message || error.message;
+    if (error.response.data === 'Invalid Token') {
+      SimpleToast.show('Session expired!');
+      logOut()(dispatch);
+      return;
+    }
+    const msg = error.response?.data || error.message;
     console.log(msg);
     dispatch({type: MATCHES.FETCH_FAILED});
   }

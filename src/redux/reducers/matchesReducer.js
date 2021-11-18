@@ -31,6 +31,11 @@ const matchesReducer = (state = initialState, action) => {
         ...state,
         pools: payload,
       };
+    case MATCHES.UPDATE_POOLS:
+      return {
+        ...state,
+        pools: payload,
+      };
     default: {
       return state;
     }
