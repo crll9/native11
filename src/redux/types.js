@@ -27,5 +27,7 @@ export const USER = {
   LOADING_START: 'user-loading',
   FETCH_SUCCESS: 'user-fetch-success',
   FETCH_FAILED: 'user-failed',
+  WALLET_DATA_FETCH_SUCCESS: 'wallet-fetch-success',
+  WALLET_DATA_FETCH_FAILED: 'wallet-failed',
   LOGOUT: 'logout',
 };

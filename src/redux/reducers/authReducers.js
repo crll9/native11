@@ -3,6 +3,8 @@ import {USER} from '../types';
 const initialState = {
   user: null,
   loading: false,
+  walletLoading: false,
+  walletData: null,
 };
 const authReducer = (state = initialState, action) => {
   const {type, payload} = action;
@@ -15,8 +17,22 @@ const authReducer = (state = initialState, action) => {
 
     case USER.FETCH_SUCCESS:
       return {
+        ...state,
         user: payload,
         loading: false,
+        walletLoading: true,
+      };
+    case USER.WALLET_DATA_FETCH_SUCCESS:
+      return {
+        ...state,
+        walletData: payload,
+        walletLoading: false,
+      };
+    case USER.WALLET_DATA_FETCH_FAILED:
+      return {
+        ...state,
+        walletData: payload,
+        walletLoading: false,
       };
     case USER.LOGOUT:
     case USER.FETCH_FAILED:

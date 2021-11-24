@@ -37,7 +37,7 @@ const getLeaderBoardData = async (matchId, poolId) => {
       },
     );
 
-    return response.data?.data?.leaderBoard?.members;
+    return response.data?.data?.leaderBoard?.teams;
   } catch (error) {
     console.log(error.message);
     return [];

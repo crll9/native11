@@ -15,6 +15,35 @@ export const logOut = () => async dispatch => {
   }
 };
 
+export const getWalletData = walletId => async dispatch => {
+  try {
+    const res = await axios.get(
+      `https://lcd.terra.dev/bank/balances/${walletId}`,
+    );
+
+    const item = res.data?.result?.find(item => item.denom === 'uusd') ||
+      res.data.results?.[0] || {
+        amount: 'not-added',
+      };
+    const payload = {
+      item,
+      all: res.data?.result,
+    };
+    dispatch({type: USER.WALLET_DATA_FETCH_SUCCESS, payload});
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: USER.WALLET_DATA_FETCH_FAILED,
+      payload: {
+        item: {
+          amount: 'not-found',
+        },
+        all: [],
+      },
+    });
+  }
+};
+
 export const login =
   (data, onComplete = () => {}) =>
   async dispatch => {
@@ -29,6 +58,7 @@ export const login =
       await AsyncStorage.setItem('user', JSON.stringify(user));
       onComplete(true);
       dispatch({type: USER.FETCH_SUCCESS, payload: user});
+      getWalletData(data.email)(dispatch);
     } catch (error) {
       dispatch({type: USER.FETCH_FAILED});
       const msg = error.response?.data?.message || error.message;
@@ -46,7 +76,10 @@ export const getUser = () => async dispatch => {
   dispatch({type: USER.LOADING_START});
   try {
     const user = await AsyncStorage.getItem('user');
+
     dispatch({type: USER.FETCH_SUCCESS, payload: JSON.parse(user)});
+
+    getWalletData(JSON.parse(user).terraWalletAdd)(dispatch);
   } catch (error) {
     console.log(error.message);
     dispatch({type: USER.FETCH_FAILED});
@@ -66,6 +99,7 @@ export const register =
       await AsyncStorage.setItem('user', JSON.stringify(user));
       onComplete(true);
       dispatch({type: USER.FETCH_SUCCESS, payload: user});
+      getWalletData(data.email)(dispatch);
     } catch (error) {
       dispatch({type: USER.FETCH_FAILED});
       const msg = error.response?.data?.message || error.message;
