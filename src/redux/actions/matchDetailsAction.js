@@ -2,7 +2,7 @@ import {MATCHES, MATCH_DETAILS} from '../types';
 import axios from 'axios';
 import {API_URL} from './authActions';
 
-const getPoolDetailsByKey = async (matchKey, poolKey) => {
+export const getPoolDetailsByKey = async (matchKey, poolKey) => {
   try {
     const res = await axios.get(
       `${API_URL}/users/isPoolActive/${matchKey}/${poolKey}`,

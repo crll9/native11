@@ -4,6 +4,7 @@ export const MATCHES = {
   FETCH_FAILED: 'matches-details-fetch-failed',
   FETCH_POOLS: 'fetch-pools',
   UPDATE_POOLS: 'update_pools',
+  UPDATE_SINGLE_POOL: 'update-single-pool',
 };
 
 export const MATCH_DETAILS = {

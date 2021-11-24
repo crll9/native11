@@ -1,6 +1,7 @@
 import axios from 'axios';
 import SimpleToast from 'react-native-simple-toast';
-import {CREATE_FANTASY} from '../types';
+import {CREATE_FANTASY, MATCHES} from '../types';
+import {getPoolDetailsByKey} from './matchDetailsAction';
 import {getAuthHeaders} from './matchesActions';
 
 const API_URL =
@@ -29,6 +30,14 @@ export const placeBet =
         body,
         getAuthHeaders(getState()),
       );
+      const poolData = await getPoolDetailsByKey(
+        matchDetails.key,
+        selectedPricePool.key,
+      );
+      dispatch({
+        type: MATCHES.UPDATE_SINGLE_POOL,
+        payload: {key: selectedPricePool.key, data: poolData},
+      });
       onComplete(true);
       SimpleToast.show('Joined successfully');
     } catch (error) {

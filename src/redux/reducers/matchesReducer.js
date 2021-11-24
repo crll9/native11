@@ -36,6 +36,19 @@ const matchesReducer = (state = initialState, action) => {
         ...state,
         pools: payload,
       };
+    case MATCHES.UPDATE_SINGLE_POOL:
+      return {
+        ...state,
+        pools: state.pools.map(item => {
+          if (item.key === payload.key) {
+            return {
+              ...item,
+              data: payload.data,
+            };
+          }
+          return item;
+        }),
+      };
     default: {
       return state;
     }

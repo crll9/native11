@@ -27,6 +27,7 @@ const CARD_WIDTH = Dimensions.get('window').width - 32;
 const getLeaderBoardData = async (matchId, poolId) => {
   try {
     const user = await AsyncStorage.getItem('user');
+
     const response = await axios.get(
       `${API_URL}/bet/getleaderboard/${matchId}/${poolId}`,
       {
@@ -35,6 +36,7 @@ const getLeaderBoardData = async (matchId, poolId) => {
         },
       },
     );
+
     return response.data?.data?.leaderBoard?.members;
   } catch (error) {
     console.log(error.message);
@@ -44,7 +46,7 @@ const getLeaderBoardData = async (matchId, poolId) => {
 
 const ContestDetailsScreen = ({pool, route: {params}}) => {
   const navigation = useNavigation();
-  const {members, membersRequired, price, data} = pool;
+  const {membersRequired, price, data} = pool;
   const [poolMembers, setPoolMembers] = useState([]);
 
   const init = async () => {
