@@ -12,7 +12,6 @@ const WalletBalance = ({walletData, walletLoading}) => {
   const [visibility, setVisibility] = useState(false);
 
   const handleModalOpen = () => {
-    console.log(walletData);
     if (all?.length > 0) {
       setVisibility(true);
     }
@@ -37,7 +36,9 @@ const WalletBalance = ({walletData, walletLoading}) => {
               numberOfLines={1}
               adjustsFontSizeToFit
               style={styles.deepText}>
-              {item['amount']}
+              {item['amount'] === 'not-found'
+                ? item['amount']
+                : +item['amount'] / 1000000}
             </Text>
           </TouchableOpacity>
         )}
@@ -52,13 +53,17 @@ const WalletBalance = ({walletData, walletLoading}) => {
         animationOutTiming={300}>
         <View
           style={{
-            backgroundColor: colors.white,
+            backgroundColor: colors.backgroundColor,
             padding: sizing.x16,
             borderRadius: sizing.x8,
           }}>
           <View style={styles.header}>
             <Text
-              style={{color: colors.dark, textAlign: 'center', fontSize: 16}}>
+              style={{
+                color: colors.white,
+                textAlign: 'center',
+                fontSize: 16,
+              }}>
               Wallet Balance
             </Text>
           </View>
@@ -66,9 +71,10 @@ const WalletBalance = ({walletData, walletLoading}) => {
             <View style={styles.row}>
               <Text
                 style={{
-                  color: colors.black,
+                  color: colors.white,
+                  fontSize: 16,
                 }}>
-                {item.denom}
+                {item.denom?.toUpperCase()}
               </Text>
               <Text
                 style={{
@@ -76,7 +82,7 @@ const WalletBalance = ({walletData, walletLoading}) => {
                   fontSize: 15,
                   fontWeight: '700',
                 }}>
-                {item.amount}
+                {+item.amount / 1000000}
               </Text>
             </View>
           ))}

@@ -1,3 +1,4 @@
+import AnimatedLottieView from 'lottie-react-native';
 import React from 'react';
 import {Dimensions} from 'react-native';
 import {Image, StyleSheet, Text, View} from 'react-native';
@@ -8,6 +9,15 @@ import commonStyles from '../../Styles/commonStyles';
 const {width} = Dimensions.get('window');
 
 const Splash = () => {
+  if (true) {
+    return (
+      <AnimatedLottieView
+        source={require('../../assets/splash.json')}
+        autoPlay
+        loop
+      />
+    );
+  }
   return (
     <View
       style={{

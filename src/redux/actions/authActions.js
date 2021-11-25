@@ -58,6 +58,7 @@ export const login =
       await AsyncStorage.setItem('user', JSON.stringify(user));
       onComplete(true);
       dispatch({type: USER.FETCH_SUCCESS, payload: user});
+
       getWalletData(data.email)(dispatch);
     } catch (error) {
       dispatch({type: USER.FETCH_FAILED});
@@ -99,7 +100,7 @@ export const register =
       await AsyncStorage.setItem('user', JSON.stringify(user));
       onComplete(true);
       dispatch({type: USER.FETCH_SUCCESS, payload: user});
-      getWalletData(data.email)(dispatch);
+      getWalletData(data.walletId)(dispatch);
     } catch (error) {
       dispatch({type: USER.FETCH_FAILED});
       const msg = error.response?.data?.message || error.message;
