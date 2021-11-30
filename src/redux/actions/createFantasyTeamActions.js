@@ -155,11 +155,8 @@ export const saveFantasyTeam =
     }
   };
 
-export const fetchUserFantasyTeams = () => async (dispatch, getState) => {
+export const fetchUserFantasyTeams = key => async (dispatch, getState) => {
   const {
-    matchDetails: {
-      matchDetails: {key},
-    },
     auth: {
       user: {userId},
     },

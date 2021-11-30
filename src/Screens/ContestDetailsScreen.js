@@ -114,7 +114,7 @@ const ContestDetailsScreen = ({pool, route: {params}, setSelectedContest}) => {
                     paddingTop: sizing.x4,
                   },
                 ]}>
-                $CRLL
+                $Fury
               </Text>
             </View>
             <View

@@ -20,11 +20,15 @@ const MatchContestScreen = ({
   matchDetails,
   pools,
   fetchUserFantasyTeams,
+  route: {params},
 }) => {
   const navigation = useNavigation();
+
   useEffect(() => {
-    fetchUserFantasyTeams();
-  }, [fetchUserFantasyTeams]);
+    if (params?.key) {
+      fetchUserFantasyTeams(params?.key);
+    }
+  }, [fetchUserFantasyTeams, params]);
 
   return (
     <View style={{flex: 1, backgroundColor: colors.backgroundColor, flex: 1}}>

@@ -87,7 +87,7 @@ const ContestCard = ({
                   paddingTop: sizing.x4,
                 },
               ]}>
-              $CRLL
+              $Fury
             </Text>
           </View>
           <TouchableOpacity activeOpacity={0.8} onPress={navigateToTeamList}>
@@ -105,7 +105,7 @@ const ContestCard = ({
                   fontSize: Typography.fontSizes.x13,
                   marginTop: 2,
                 }}>
-                $CRLL
+                $Fury
               </Text>
             </Neomorph>
           </TouchableOpacity>
