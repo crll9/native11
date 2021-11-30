@@ -18,6 +18,9 @@ import {connect} from 'react-redux';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getPoolMembers} from '../components/Card/ContestCard';
+import LinearGradient from 'react-native-linear-gradient';
+import {FlatList} from 'react-native';
+import {setSelectedContest} from '../redux/actions/matchDetailsAction';
 
 const API_URL =
   'http://backend-env.eba-tvmadbz2.ap-south-1.elasticbeanstalk.com';
@@ -44,9 +47,10 @@ const getLeaderBoardData = async (matchId, poolId) => {
   }
 };
 
-const ContestDetailsScreen = ({pool, route: {params}}) => {
+const ContestDetailsScreen = ({pool, route: {params}, setSelectedContest}) => {
   const navigation = useNavigation();
-  const {membersRequired, price, data} = pool;
+
+  const {membersRequired, price, data, _id} = pool;
   const [poolMembers, setPoolMembers] = useState([]);
 
   const init = async () => {
@@ -156,38 +160,57 @@ const ContestDetailsScreen = ({pool, route: {params}}) => {
             <Text>Points</Text>
             <Text>Rank</Text>
           </View>
-
-          {poolMembers.length > 0 ? (
-            poolMembers.map(({_id, name, points, rank, userId}) => {
-              return (
-                <View key={_id} style={styles.teamRow}>
-                  <View style={styles.leaderBoardItem}>
-                    <Text style={styles.poolText}>{userId}</Text>
-                    <Text style={styles.poolText}></Text>
-                    <Text style={styles.poolText}>{'#1'}</Text>
-                  </View>
-                  <Divider />
+          <FlatList
+            data={poolMembers}
+            nestedScrollEnabled
+            ListEmptyComponent={() => (
+              <Text style={styles.empty}>Be the first to join</Text>
+            )}
+            renderItem={({item: {_id, name, points, rank, userId}}) => (
+              <View key={_id} style={styles.teamRow}>
+                <View style={styles.leaderBoardItem}>
+                  <Text style={styles.poolText}>{userId}</Text>
+                  <Text style={styles.poolText}></Text>
+                  <Text style={styles.poolText}>{'#1'}</Text>
                 </View>
-              );
-            })
-          ) : (
-            <Text style={styles.empty}>Be the first to join</Text>
-          )}
+                <Divider />
+              </View>
+            )}
+          />
         </Shadow>
 
-        <View style={{height: 60}} />
+        <View style={{height: 80}} />
       </ScrollView>
-      <Button
-        title="Create A New Team"
-        onPress={() => navigation.navigate('CreateTeam')}
-        buttonStyle={{
-          backgroundColor: colors.secondaryColor,
-          paddingVertical: 14,
-          borderRadius: 14,
-        }}
-        titleStyle={{fontSize: 14, fontWeight: '800'}}
-        containerStyle={commonStyles.absolutePositionedBtn}
-      />
+      <LinearGradient
+        end={{x: 0, y: 0}}
+        start={{x: 0, y: 1}}
+        colors={[colors.backgroundColor, 'transparent']}
+        style={styles.btnContainer}>
+        <Button
+          title="Create Team"
+          onPress={() => navigation.navigate('CreateTeam')}
+          buttonStyle={{
+            backgroundColor: colors.secondaryColor,
+            padding: sizing.x12,
+            borderRadius: sizing.x8,
+          }}
+          containerStyle={{flex: 1, margin: sizing.x16, marginRight: sizing.x8}}
+          titleStyle={styles.title}
+        />
+        <Button
+          title="Join Contest"
+          onPress={() => {
+            setSelectedContest(_id);
+            navigation.navigate('TeamsOverview');
+          }}
+          containerStyle={{flex: 1, margin: sizing.x16, marginLeft: sizing.x8}}
+          buttonStyle={{
+            padding: sizing.x12,
+            borderRadius: sizing.x8,
+          }}
+          titleStyle={styles.title}
+        />
+      </LinearGradient>
     </View>
   );
 };
@@ -196,7 +219,9 @@ const mapStateToProps = ({matchDetails: {selectedPricePool}}) => ({
   pool: selectedPricePool,
 });
 
-export default connect(mapStateToProps, {})(ContestDetailsScreen);
+export default connect(mapStateToProps, {setSelectedContest})(
+  ContestDetailsScreen,
+);
 
 const styles = StyleSheet.create({
   shadowStyle: {
@@ -221,7 +246,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: colors.backgroundColor,
     width: CARD_WIDTH,
-    height: 480,
+    height: 440,
     padding: sizing.x12,
   },
   leaderboardTab: {
@@ -229,7 +254,7 @@ const styles = StyleSheet.create({
     marginHorizontal: -sizing.x12,
     paddingHorizontal: sizing.x12,
     height: 48,
-    marginVertical: sizing.x12,
+    marginTop: sizing.x12,
   },
   teamRow: {
     height: sizing.x32,
@@ -245,4 +270,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   poolText: {color: colors.white, fontSize: 15},
+  title: {fontSize: 14, fontWeight: '800', textTransform: 'uppercase'},
+  btnContainer: {
+    ...commonStyles.rowAlignCenter,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
 });
