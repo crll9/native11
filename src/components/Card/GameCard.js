@@ -52,6 +52,7 @@ const GameCard = ({match, setMatchDetail}) => {
             styles.rowContainer,
           ]}>
           <ImageBackground
+            resizeMode="contain"
             style={styles.logo}
             source={require('../../assets/images/team_logo.png')}>
             <View inner style={styles.logoTextContainer}>
@@ -66,6 +67,7 @@ const GameCard = ({match, setMatchDetail}) => {
             }}
           />
           <ImageBackground
+            resizeMode="contain"
             style={styles.logo}
             source={require('../../assets/images/team_logo.png')}>
             <View
