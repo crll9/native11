@@ -170,7 +170,7 @@ const MainRoot = ({user, loading, getUser}) => {
   useLayoutEffect(() => {
     getUser();
   }, [getUser]);
-  const routes = user ? mainRoutes : authRoutes;
+  const routes = authRoutes;
   if (loading && !user) {
     return <Splash />;
   }

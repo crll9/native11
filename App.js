@@ -8,7 +8,7 @@
 
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {StyleSheet, LogBox} from 'react-native';
+import {StyleSheet, LogBox, Text} from 'react-native';
 import withThemeAndSafeArea from './src/components/HigherOrder/withThemeAndSafeArea';
 import MainRoot from './src/navigation/MainRoot';
 import store from './src/redux/storeConfig/store';
@@ -22,6 +22,7 @@ LogBox.ignoreLogs([
 const App = () => {
   return (
     <Provider store={store}>
+      <Text>Hello</Text>
       <NavigationContainer>
         <MainRoot />
       </NavigationContainer>
