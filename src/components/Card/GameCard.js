@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  ImageBackground,
 } from 'react-native';
 import {Icon, Text} from 'react-native-elements';
 import {colors} from '../../Styles/colors';
@@ -19,12 +20,12 @@ import {connect} from 'react-redux';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
-const GameCard = ({
-  match: {short_name, start_date, tournament, _id, key},
-  setMatchDetail,
-}) => {
+const GameCard = ({match, setMatchDetail}) => {
+  const {short_name, start_date, tournament, _id, key} = match;
+
   const [team1, team2] = short_name.split('vs');
   const navigation = useNavigation();
+
   const handleOnPress = () => {
     setMatchDetail(_id);
     navigation.navigate('TeamList', {key});
@@ -50,15 +51,34 @@ const GameCard = ({
             commonStyles.rowAlignCenterJustifyAround,
             styles.rowContainer,
           ]}>
-          <Image
+          <ImageBackground
             style={styles.logo}
-            source={require('../../assets/images/country-flag.png')}
-          />
-          <Text style={{paddingRight: sizing.x8}}>VS</Text>
+            source={require('../../assets/images/team_logo.png')}>
+            <View inner style={styles.logoTextContainer}>
+              <Text style={styles.logoText}>{team1.slice(0, 2)}</Text>
+            </View>
+          </ImageBackground>
           <Image
-            style={styles.logo}
-            source={require('../../assets/images/country-flag.png')}
+            source={require('../../assets/images/va.png')}
+            style={{
+              maxWidth: 24,
+              resizeMode: 'contain',
+            }}
           />
+          <ImageBackground
+            style={styles.logo}
+            source={require('../../assets/images/team_logo.png')}>
+            <View
+              inner
+              style={[
+                styles.logoTextContainer,
+                {borderColor: colors.secondaryColor},
+              ]}>
+              <Text style={[styles.logoText, {color: colors.secondaryColor}]}>
+                {team2.slice(0, 3)}
+              </Text>
+            </View>
+          </ImageBackground>
           <View>
             <View style={commonStyles.rowAlignCenterJustifyBetween}>
               <Text style={styles.teamName}>{team1}</Text>
@@ -82,6 +102,8 @@ const styles = StyleSheet.create({
     height: sizing.x64,
     resizeMode: 'contain',
     borderRadius: sizing.x12,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   neomorphContainer: {
     shadowRadius: 12,
@@ -100,5 +122,23 @@ const styles = StyleSheet.create({
     margin: sizing.x4,
     ...Typography.h1Style,
     color: colors.white,
+  },
+
+  logoTextContainer: {
+    height: 30,
+    width: 30,
+    borderWidth: 2,
+    borderColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 15,
+    shadowRadius: 3,
+    backgroundColor: 'rgba(255,255,255,.6)',
+  },
+
+  logoText: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: colors.primary,
   },
 });
