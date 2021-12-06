@@ -3,6 +3,7 @@ import {Dimensions, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-elements';
 import {Shadow} from 'react-native-neomorph-shadows';
 import {connect} from 'react-redux';
+import Header from '../components/Header/Header';
 import {colors} from '../Styles/colors';
 import commonStyles from '../Styles/commonStyles';
 import {sizing} from '../Styles/theme';
@@ -11,18 +12,21 @@ const {width} = Dimensions.get('window');
 
 const MyWalletScreen = ({walletData}) => {
   return (
-    <View style={commonStyles.background}>
-      {walletData.all.map(item => (
-        <Shadow inner style={styles.neomorphContainer}>
-          <Text style={{fontSize: 18, textTransform: 'uppercase'}}>
-            {item.denom}
-          </Text>
-          <Text style={{fontSize: 16, color: colors.secondaryColor}}>
-            {item.amount}
-          </Text>
-        </Shadow>
-      ))}
-    </View>
+    <>
+      <Header />
+      <View style={commonStyles.background}>
+        {walletData.all.map(item => (
+          <Shadow inner style={styles.neomorphContainer}>
+            <Text style={{fontSize: 18, textTransform: 'uppercase'}}>
+              {item.denom}
+            </Text>
+            <Text style={{fontSize: 16, color: colors.secondaryColor}}>
+              {item.amount}
+            </Text>
+          </Shadow>
+        ))}
+      </View>
+    </>
   );
 };
 

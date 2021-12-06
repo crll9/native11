@@ -14,7 +14,7 @@ const commonStyles = StyleSheet.create({
   },
   background: {
     flex: 1,
-    backgroundColor: colors.light,
+    backgroundColor: colors.backgroundColor,
     padding: sizing.x16,
     paddingTop: sizing.x8,
   },

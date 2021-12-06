@@ -31,6 +31,7 @@ const TabScreen = () => {
   return (
     <Tab.Navigator
       screenOptions={{
+        headerShown: false,
         cardStyle: {backgroundColor: '#A9A9A9'},
         tabBarStyle: {
           backgroundColor: colors.backgroundColor,
@@ -50,7 +51,6 @@ const TabScreen = () => {
         name="Home"
         component={HomeScreen}
         options={{
-          headerShown: false,
           tabBarShowLabel: false,
           tabBarIcon: ({focused}) => {
             const color = focused ? colors.secondaryColor : colors.subtitleText;

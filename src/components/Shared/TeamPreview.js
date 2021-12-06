@@ -13,9 +13,7 @@ import {colors} from '../../Styles/colors';
 import commonStyles from '../../Styles/commonStyles';
 import {sizing} from '../../Styles/theme';
 
-const {height, width} = Dimensions.get('window');
-
-const SHEET_HEIGHT = height;
+const {width} = Dimensions.get('window');
 
 const getPlayerNameSort = player => {
   try {
@@ -35,7 +33,7 @@ export const FantasyTeamPlayerCard = ({player, playerTeam}) => {
   const backgroundColor = playerTeam === 'team1' ? colors.black : colors.white;
 
   return (
-    <View style={{alignItems: 'center', position: 'relative', minWidth: 70}}>
+    <View style={styles.container}>
       <Image
         source={require('../../assets/images/DummyTeam.jpg')}
         style={styles.playerImage}
@@ -138,12 +136,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: colors.white,
   },
+  container: {alignItems: 'center', position: 'relative', minWidth: 70},
   textContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     padding: sizing.x4,
     maxWidth: width / 4,
-    borderRadius: sizing.x3,
+    borderRadius: sizing.x4,
+    marginTop: 2,
     paddingHorizontal: sizing.x5,
   },
   cap: {

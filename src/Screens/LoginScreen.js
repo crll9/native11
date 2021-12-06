@@ -21,8 +21,10 @@ const {width} = Dimensions.get('window');
 
 const LoginScreen = ({login}) => {
   const [loading, setLoading] = useState(false);
-  const [walletId, setWalletId] = useState('');
-  const [password, setPassword] = useState('');
+  const [walletId, setWalletId] = useState(
+    'terra1p7p57u43sruexzvnyywz3v6fcnc99rxhvlk49s',
+  );
+  const [password, setPassword] = useState('hb');
 
   const handleLogin = async () => {
     if (!walletId || !password) {

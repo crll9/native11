@@ -62,6 +62,7 @@ export const login =
       getWalletData(data.email)(dispatch);
     } catch (error) {
       dispatch({type: USER.FETCH_FAILED});
+
       const msg = error.response?.data?.message || error.message;
 
       if (msg === 'Invalid Credentials') {
@@ -69,8 +70,9 @@ export const login =
         register({walletId: email, password}, success => onComplete(success))(
           dispatch,
         );
+      } else {
+        // SimpleToast.show(msg);
       }
-      // SimpleToast.show(msg);
     }
   };
 export const getUser = () => async dispatch => {
