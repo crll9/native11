@@ -12,6 +12,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		411333A87AB9828FCF62B3C4 /* libPods-FantasySports-FantasySportsTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32136CA061419B129A90CA0B /* libPods-FantasySports-FantasySportsTests.a */; };
+		589FCB8127858F9800CE4F45 /* ####.swift in Sources */ = {isa = PBXBuildFile; fileRef = 589FCB8027858F9800CE4F45 /* ####.swift */; };
 		720505A063D477A4DF04DD87 /* libPods-FantasySports.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 519EAE05A2012E0054B76A86 /* libPods-FantasySports.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -47,6 +48,9 @@
 		3D6B232DBA1544529B46B4A0 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		519EAE05A2012E0054B76A86 /* libPods-FantasySports.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FantasySports.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		52E0B4FC3266486FAD07D601 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		589FCB7D278569C100CE4F45 /* libFlipper.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFlipper.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		589FCB7F27858F9800CE4F45 /* FantasySports-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FantasySports-Bridging-Header.h"; sourceTree = "<group>"; };
+		589FCB8027858F9800CE4F45 /* ####.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "####.swift"; sourceTree = "<group>"; };
 		5AB9E0B0FAC0433EB9D6DD85 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		6D6C8BDA0F18EAE497531E80 /* Pods-FantasySports-FantasySportsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FantasySports-FantasySportsTests.release.xcconfig"; path = "Target Support Files/Pods-FantasySports-FantasySportsTests/Pods-FantasySports-FantasySportsTests.release.xcconfig"; sourceTree = "<group>"; };
 		750AB1DA19FB4AFBBFF96AC7 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
@@ -126,11 +130,13 @@
 			isa = PBXGroup;
 			children = (
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
+				589FCB8027858F9800CE4F45 /* ####.swift */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				589FCB7F27858F9800CE4F45 /* FantasySports-Bridging-Header.h */,
 			);
 			name = FantasySports;
 			sourceTree = "<group>";
@@ -138,6 +144,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				589FCB7D278569C100CE4F45 /* libFlipper.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				519EAE05A2012E0054B76A86 /* libPods-FantasySports.a */,
 				32136CA061419B129A90CA0B /* libPods-FantasySports-FantasySportsTests.a */,
@@ -199,8 +206,8 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				E4DF9D1A724A2D152CC58150 /* [CP] Embed Pods Frameworks */,
 				73DDF24D4E9B4AAB8FD16097 /* [CP] Copy Pods Resources */,
+				2FE9CE6501F883FE7DE6DC41 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -222,8 +229,8 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				7FDB62EA412804EB03F4EBB5 /* [CP] Embed Pods Frameworks */,
 				3C0B71F90FC68EF40B3DE453 /* [CP] Copy Pods Resources */,
+				6798226A9605C491F080A697 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -247,7 +254,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1320;
 					};
 				};
 			};
@@ -304,6 +311,23 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nexport NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
+		2FE9CE6501F883FE7DE6DC41 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FantasySports-FantasySportsTests/Pods-FantasySports-FantasySportsTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FantasySports-FantasySportsTests/Pods-FantasySports-FantasySportsTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FantasySports-FantasySportsTests/Pods-FantasySports-FantasySportsTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		3C0B71F90FC68EF40B3DE453 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -343,24 +367,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		73DDF24D4E9B4AAB8FD16097 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FantasySports-FantasySportsTests/Pods-FantasySports-FantasySportsTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FantasySports-FantasySportsTests/Pods-FantasySports-FantasySportsTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FantasySports-FantasySportsTests/Pods-FantasySports-FantasySportsTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7FDB62EA412804EB03F4EBB5 /* [CP] Embed Pods Frameworks */ = {
+		6798226A9605C491F080A697 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -377,21 +384,21 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FantasySports/Pods-FantasySports-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E4DF9D1A724A2D152CC58150 /* [CP] Embed Pods Frameworks */ = {
+		73DDF24D4E9B4AAB8FD16097 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FantasySports-FantasySportsTests/Pods-FantasySports-FantasySportsTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-FantasySports-FantasySportsTests/Pods-FantasySports-FantasySportsTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FantasySports-FantasySportsTests/Pods-FantasySports-FantasySportsTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-FantasySports-FantasySportsTests/Pods-FantasySports-FantasySportsTests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FantasySports-FantasySportsTests/Pods-FantasySports-FantasySportsTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FantasySports-FantasySportsTests/Pods-FantasySports-FantasySportsTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F5B4A811A7DF281B05F5C526 /* [CP] Check Pods Manifest.lock */ = {
@@ -451,6 +458,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				589FCB8127858F9800CE4F45 /* ####.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -470,6 +478,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 082BAED5BC37118D32441B6A /* Pods-FantasySports-FantasySportsTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -497,6 +506,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6D6C8BDA0F18EAE497531E80 /* Pods-FantasySports-FantasySportsTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = FantasySportsTests/Info.plist;
@@ -526,7 +536,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = S4X48H7NK2;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = FantasySports/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -541,6 +551,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = FantasySports;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "FantasySports-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -556,7 +567,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = S4X48H7NK2;
 				INFOPLIST_FILE = FantasySports/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -570,6 +581,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = FantasySports;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "FantasySports-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
