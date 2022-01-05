@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-elements';
 import {Shadow} from 'react-native-neomorph-shadows';
@@ -7,10 +7,23 @@ import Header from '../components/Header/Header';
 import {colors} from '../Styles/colors';
 import commonStyles from '../Styles/commonStyles';
 import {sizing} from '../Styles/theme';
+import { LCDClient, Coin } from '@terra-money/terra.js';
 
 const {width} = Dimensions.get('window');
 
 const MyWalletScreen = ({walletData}) => {
+
+  useEffect(() => {
+    const terra = new LCDClient({
+      URL: 'https://bombay-lcd.terra.dev',
+      chainID: 'bombay-12',
+    });
+    terra.bank.balance('terra1p7p57u43sruexzvnyywz3v6fcnc99rxhvlk49s').then(data=>{
+      console.log("terra response ",data);
+    }).catch(err=>{
+      console.log("terra error",err)
+    })
+  }, [])
   return (
     <>
       <Header />

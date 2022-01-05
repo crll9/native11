@@ -1,8 +1,10 @@
 import axios from 'axios';
 import SimpleToast from 'react-native-simple-toast';
-import {CREATE_FANTASY, MATCHES} from '../types';
+import {CONTRACT, CREATE_FANTASY, MATCHES} from '../types';
 import {getPoolDetailsByKey} from './matchDetailsAction';
 import {getAuthHeaders} from './matchesActions';
+import { LCDClient, Coin,MnemonicKey } from '@terra-money/terra.js';
+import { ContractConstants } from '../../components/Shared/ContractConstants';
 
 const API_URL =
   'http://backend-env.eba-tvmadbz2.ap-south-1.elasticbeanstalk.com';
@@ -45,27 +47,109 @@ export const placeBet =
       onComplete(false);
       SimpleToast.show('Failed to join contest!');
     }
-  };
+    };
+export const placeBetSmartQuery =
+  (team,terraWalletAdd, contractAddress, onComplete = () => { }) =>
+    async (dispatch, getState) => {
+        const {
+          matchDetails: { matchDetails, selectedPricePool },
+          auth: {
+            user: { userId },
+          },
+        } = getState();
+        //code to place smart query bid
+        const terra = new LCDClient({
+          URL: 'https://bombay-lcd.terra.dev',
+          chainID: 'bombay-12',
+        });
+        console.log('contractAddress', contractAddress);
+        terra.wasm.contractQuery(
+          //contractAddress,
+          //'terra1n3rxe7jsq8razp6vf5lxncayvtlgpcrtkvruw6',
+          ContractConstants.contractAddressGetQuery,
+          {
+            "pool_details": {
+              "pool_id": team.poolId
+            }
+          }).then(data => {
+            console.log('pool_details query data', data);
+            console.log('team details', team);
+            let queryData = {
+              "game_pool_bid_submit": {
+                "gamer": terraWalletAdd,
+                "pool_type": data.pool_type,
+                "pool_id": team.poolId,
+                "game_id": team.match.matchId,
+                "team_id": team._id,
+                "amount": '0.05'
+              }
+            };
+            console.log('game_pool_bid_submit request data', queryData)
+            terra.wasm.contractQuery(
+             // contractAddress,
+              //'terra1n3rxe7jsq8razp6vf5lxncayvtlgpcrtkvruw6',
+              //'terra1ttjw6nscdmkrx3zhxqx3md37phldgwhggm345k',
+              ContractConstants.contractAddressBidQuery,
+              queryData// query msg
+            ).then(data => {
+              console.log('game_pool_bid_submit data', data);
+
+              getPoolDetailsByKey(
+                matchDetails.key,
+                selectedPricePool.key,
+              ).then(res => {
+                dispatch({
+                  type: MATCHES.UPDATE_SINGLE_POOL,
+                  payload: { key: selectedPricePool.key, data: res.data },
+                });
+                onComplete(true);
+                SimpleToast.show('Joined successfully');
+              }).catch(err => {
+                onComplete(false);
+                SimpleToast.show('Failed to join contest!');
+              })
+
+
+            }).catch(err => {
+              onComplete(false);
+              SimpleToast.show('Failed to submit bid!');
+              console.log('game_pool_bid_submit error', JSON.stringify(err))
+            });
+          }).catch(err => {
+            onComplete(false);
+            SimpleToast.show('Failed to read pool details');
+            console.log('pool_details Query error', JSON.stringify(err))
+          });
+
+        ////
+
+     
+    };
 
 export const getFantasyData = () => async (dispatch, getState) => {
+  
   const {
     matchDetails: {
       matchDetails: {key},
     },
   } = getState();
+  console.log('getFantasyData match key',key);
   dispatch({type: CREATE_FANTASY.LOADING_PLAYERS});
+  console.log('getFantasyData URL',`${API_URL}/fantasy/fancredit/${key}`);
+  console.log('headers',getAuthHeaders(getState()));
   try {
     const response = await axios.get(
       `${API_URL}/fantasy/fancredit/${key}`,
       getAuthHeaders(getState()),
     );
-
-    const {fantacy, players, team} =
-      response.data?.data?.[0] || response.data.data;
-
+      console.log('getFantasyData api '+key,response);
+    const {fantasy, players, team} =
+      response.data?.data?.[0] || response.data.data.data || response.data.data;
     let teamArray = Object.values(team);
+    console.log('fantasy',fantasy);
+    console.log('fantasy?.credits[0]',fantasy?.credits);
 
-    const playerData = fantacy?.credits.map(item => {
+    const playerData = fantasy?.credits.map(item => {
       delete item.prev_points;
       return {
         ...item,
@@ -83,7 +167,8 @@ export const getFantasyData = () => async (dispatch, getState) => {
       payload: {players: playerData, teams: teamArray},
     });
   } catch (error) {
-    console.log(error.response?.data || error.message);
+    console.log('getFantasyData error ',error);
+    console.log('getFantasyData error ',error.response?.data || error.message);
     dispatch({type: CREATE_FANTASY.FETCH_FAILED_PLAYERS});
   }
 };
@@ -94,6 +179,7 @@ export const saveSelectedPlayers = (players, members) => dispatch => {
     payload: {players, members},
   });
 };
+
 
 export const saveFantasyTeam =
   (playerTeam, match, onComplete = () => {}) =>

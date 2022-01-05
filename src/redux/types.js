@@ -31,3 +31,6 @@ export const USER = {
   WALLET_DATA_FETCH_FAILED: 'wallet-failed',
   LOGOUT: 'logout',
 };
+export const CONTRACT={
+  ADD_CONTRACT_ADDRESS:'add-contract-address'
+} 

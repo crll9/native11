@@ -12,6 +12,9 @@ import {connect} from 'react-redux';
 import {ActivityIndicator} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 import {fetchUserFantasyTeams} from '../redux/actions/createFantasyTeamActions';
+import { LCDClient, Coin,MnemonicKey } from '@terra-money/terra.js';
+import { useSelector} from 'react-redux';
+import {fetchPools} from '../redux/actions/matchesActions';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
@@ -19,16 +22,52 @@ const MatchContestScreen = ({
   loading,
   matchDetails,
   pools,
-  fetchUserFantasyTeams,
+  fetchUserFantasyTeams,fetchPools,
   route: {params},
 }) => {
   const navigation = useNavigation();
+  const user = useSelector(sel=>sel.auth.user);
+  const contractAddress = useSelector(res=>res.auth.contractAddress);
+  console.log("user from redux",user);
+  console.log("user from terraWalletAdd",user.terraWalletAdd);
 
   useEffect(() => {
+    console.log('params',params);
     if (params?.key) {
       fetchUserFantasyTeams(params?.key);
+      fetchFantacyTeam(params?.key)
     }
-  }, [fetchUserFantasyTeams, params]);
+
+    if(params?._id){
+      console.log('fetchPools calles');
+    fetchPools(params?._id,contractAddress);
+    }
+
+  }, [ params]);
+
+  const fetchFantacyTeam=(key)=>{
+    console.log("Game id",key);
+    const terra = new LCDClient({
+      URL: 'https://bombay-lcd.terra.dev',
+      chainID: 'bombay-12',
+    });
+    let queryData = {
+      'get_all_pools_in_game': { "game_id": key }
+
+    };
+    console.log('fetchFantacyTeam get_all_pools_in_game query data',queryData)
+      terra.wasm.contractQuery(
+        //'terra1m5smuazxlcz5jp53amn62ztmpumhw3xndwaxfs',
+          //'terra1n3rxe7jsq8razp6vf5lxncayvtlgpcrtkvruw6',
+          //user.terraWalletAdd,
+          //'terra1lugnxn39q4d8xv2w939pxx0ag7ag6w5fd0k0uh',
+          contractAddress, queryData// query msg
+        ).then(data=>{
+          console.log('fetchFantacyTeam get_all_pools_in_game response',data);
+        }).catch(err=>{
+          console.log('fetchFantacyTeam get_all_pools_in_game error',JSON.stringify(err))
+        });
+  }
 
   return (
     <View style={{flex: 1, backgroundColor: colors.backgroundColor, flex: 1}}>
@@ -119,7 +158,7 @@ const mapStateToProps = ({
   pools,
 });
 
-export default connect(mapStateToProps, {fetchUserFantasyTeams})(
+export default connect(mapStateToProps, {fetchUserFantasyTeams,fetchPools})(
   MatchContestScreen,
 );
 

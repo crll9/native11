@@ -1,6 +1,6 @@
 import axios from 'axios';
 import SimpleToast from 'react-native-simple-toast';
-import {MATCHES} from '../types';
+import {MATCHES,CONTRACT} from '../types';
 import {logOut} from './authActions';
 import {data} from './mockData';
 
@@ -34,8 +34,13 @@ export const fetchAllMatches = () => async (dispatch, getState) => {
     );
 
     const matches = response.data.data.allMatches;
-
     dispatch({type: MATCHES.FETCH_SUCCESS, payload: matches});
+    //code to get contract_address
+    if(matches && matches.length>0 && matches[0].contract_address)
+    dispatch({
+      type: CONTRACT.ADD_CONTRACT_ADDRESS,
+      payload: matches[0].contract_address,
+    });
   } catch (error) {
     if (error.response.data === 'Invalid Token') {
       SimpleToast.show('Session expired!');
@@ -48,15 +53,17 @@ export const fetchAllMatches = () => async (dispatch, getState) => {
   }
 };
 
-export const fetchPools = () => async (dispatch, getState) => {
+export const fetchPools = (matchId,contractAddress) => async (dispatch, getState) => {
+  console.log('inside fetchPools '+matchId+' '+contractAddress);
   try {
     const res = await axios.get(
-      `${API_URL}/users/getpools`,
+      `${API_URL}/users/getpools?matchId=`+matchId+`&contract_address=`+contractAddress,
       getAuthHeaders(getState()),
     );
     const pools = res.data?.data;
+    console.log('pools data',pools);
     dispatch({type: MATCHES.FETCH_POOLS, payload: pools});
   } catch (error) {
-    console.log(error.message);
+    console.log('pools error',error.message);
   }
 };

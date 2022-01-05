@@ -25,10 +25,11 @@ const GameCard = ({match, setMatchDetail}) => {
 
   const [team1, team2] = short_name.split('vs');
   const navigation = useNavigation();
+  
 
   const handleOnPress = () => {
     setMatchDetail(_id);
-    navigation.navigate('TeamList', {key});
+    navigation.navigate('TeamList', {key,_id});
   };
 
   return (

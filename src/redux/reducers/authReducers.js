@@ -1,14 +1,21 @@
-import {USER} from '../types';
+import {CONTRACT, USER} from '../types';
+import { ContractConstants } from '../../components/Shared/ContractConstants';
 
 const initialState = {
   user: null,
   loading: false,
   walletLoading: false,
   walletData: null,
+  contractAddress:null
 };
 const authReducer = (state = initialState, action) => {
   const {type, payload} = action;
   switch (type) {
+    case CONTRACT.ADD_CONTRACT_ADDRESS:
+      return {
+        ...state,
+        contractAddress:payload
+      }
     case USER.LOADING_START:
       return {
         ...state,

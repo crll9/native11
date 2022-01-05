@@ -21,6 +21,7 @@ import {getPoolMembers} from '../components/Card/ContestCard';
 import LinearGradient from 'react-native-linear-gradient';
 import {FlatList} from 'react-native';
 import {setSelectedContest} from '../redux/actions/matchDetailsAction';
+import { LCDClient, Coin,MnemonicKey } from '@terra-money/terra.js';
 
 const API_URL =
   'http://backend-env.eba-tvmadbz2.ap-south-1.elasticbeanstalk.com';
@@ -28,6 +29,7 @@ const API_URL =
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
 const getLeaderBoardData = async (matchId, poolId) => {
+  //getPoolDetails(poolId);
   try {
     const user = await AsyncStorage.getItem('user');
 
@@ -46,6 +48,28 @@ const getLeaderBoardData = async (matchId, poolId) => {
     return [];
   }
 };
+
+const getPoolDetails=(poolId)=>{
+  const terra = new LCDClient({
+    URL: 'https://bombay-lcd.terra.dev',
+    chainID: 'bombay-12',
+  });
+  terra.wasm.contractQuery(
+    'terra1n3rxe7jsq8razp6vf5lxncayvtlgpcrtkvruw6',
+    { 
+      "pool_details" : { 
+        "pool_id" : poolId
+      }
+    }).then(data=>{
+    console.log('pool details query data',data);
+    setLoading(false);
+  }).catch(err=>{
+    setLoading(false);
+    console.log('pool details Query error',JSON.stringify(err))
+  });
+
+
+}
 
 const ContestDetailsScreen = ({pool, route: {params}, setSelectedContest}) => {
   const navigation = useNavigation();

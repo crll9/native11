@@ -357,7 +357,7 @@ const CreateTeamScreen = ({
                       adjustsFontSizeToFit
                       numberOfLines={1}
                       style={styles.teamName}>
-                      {team1.code}
+                      {team1?team1.code:'unknown code'}
                     </Text>
                     <Text>{teamPlayerCount.team1}</Text>
                   </View>
@@ -378,7 +378,7 @@ const CreateTeamScreen = ({
                       adjustsFontSizeToFit
                       numberOfLines={1}
                       style={styles.teamName}>
-                      {team2.code}
+                      {team2?team2.code:'unknown code'}
                     </Text>
                     <Text>{teamPlayerCount.team2}</Text>
                   </View>
@@ -479,7 +479,7 @@ const CreateTeamScreen = ({
                         <Text
                           style={{
                             color:
-                              team === team1.code
+                              team === team1 && team1.code
                                 ? colors.primary
                                 : colors.secondaryColor,
                             fontWeight: 'bold',

@@ -8,9 +8,10 @@ import {colors} from '../Styles/colors';
 import GameCard from '../components/Card/GameCard';
 import {Shadow} from 'react-native-neomorph-shadows';
 import ImageSlider from '../components/Carousel/ImageSlider';
-import {connect} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
 import {fetchAllMatches, fetchPools} from '../redux/actions/matchesActions';
 import {ActivityIndicator} from 'react-native';
+import { LCDClient, Coin,MnemonicKey } from '@terra-money/terra.js';
 
 const dummyData = [
   {
@@ -28,11 +29,58 @@ const dummyData = [
 
 const HomeScreen = ({loading, matches, fetchAllMatches, fetchPools}) => {
   const [selectedTab, setSelectedTab] = useState(0);
+  const contractAddress = useSelector(res=>res.auth.contractAddress);
 
   useEffect(() => {
+   // fetchBalance()
     fetchAllMatches();
-    fetchPools();
+   // fetchPools(1,contractAddress);
   }, []);
+  const fetchBalance=()=>{
+    const mk = new MnemonicKey({
+      mnemonic:
+        'notice oak worry limit wrap speak medal online prefer cluster roof addict wrist behave treat actual wasp year salad speed social layer crew genius',
+    });
+    
+    const terra = new LCDClient({
+      URL: 'https://bombay-lcd.terra.dev',
+      chainID: 'bombay-12',
+    });
+    console.log('terra object', terra)
+   // qyeryContract(terra)
+    //  terra.wallet(mk).accountNumber().then(data=>{
+    //    console.log('wallet data',data)
+    //  }).catch(err=>{
+    //    console.log('wallet error',err)
+    //  })
+    
+    //   terra.bank.balance(mk.accAddress).then(data=>{
+    //     console.log("terra balance ",JSON.parse(data));
+    //   }).catch(err=>{
+    //     console.log("terra balance error",err)
+    //   })
+      //  terra.wasm.contractQuery(
+      //    'terra1n3rxe7jsq8razp6vf5lxncayvtlgpcrtkvruw6',
+      //    {'Get all available pools':{  'get_all_pools_in_game' : { "game_id" : "1" }
+  
+      //    }} // query msg
+      //  ).then(data=>{
+      //    console.log('query data',data);
+      //  }).catch(err=>{
+      //    console.log('Query error',JSON.stringify(err))
+      //  });
+      
+  }
+//   const qyeryContract = async (terra) => {
+//     console.log("----> qyeryContract ")
+//     const result = await terra.wasm.contractQuery(
+//       'terra1n3rxe7jsq8razp6vf5lxncayvtlgpcrtkvruw6',
+//       { 'get_all_pools_in_game' : { "game_id" : "1" }}
+// //{ query: { queryMsgArguments } } // query msg
+//     );
+
+//     console.log("----> qyeryContract  1111 ", result)
+//   }
 
   const gameData = [
     {name: 'Football'},
