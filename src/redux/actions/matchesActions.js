@@ -57,7 +57,7 @@ export const fetchPools = (matchId,contractAddress) => async (dispatch, getState
   console.log('inside fetchPools '+matchId+' '+contractAddress);
   try {
     const res = await axios.get(
-      `${API_URL}/users/getpools?matchId=`+matchId+`&contract_address=`+contractAddress,
+      `${API_URL}/users/getpools/`+matchId+`/`+contractAddress,
       getAuthHeaders(getState()),
     );
     const pools = res.data?.data;

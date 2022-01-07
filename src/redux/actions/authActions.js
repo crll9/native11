@@ -48,6 +48,30 @@ export const login =
   (data, onComplete = () => {}) =>
   async dispatch => {
     try {
+      axios.interceptors.request.use(
+        (req) => {
+           // Add configurations here
+           console.log('interceptor request',req);
+           return req;
+        },
+        (err) => {
+           return Promise.reject(err);
+        }
+     );
+     
+     // For POST requests
+     axios.interceptors.response.use(
+        (res) => {
+           // Add configurations here
+           if (res.status === 201) {
+              console.log('Posted Successfully');
+           }
+           return res;
+        },
+        (err) => {
+           return Promise.reject(err);
+        }
+     );
       const res = await axios.post(`${API_URL}/users/login`, data, {
         headers: {
           'content-type': 'application/json',
@@ -61,6 +85,7 @@ export const login =
 
       getWalletData(data.email)(dispatch);
     } catch (error) {
+      console.log('login error',error)
       dispatch({type: USER.FETCH_FAILED});
 
       const msg = error.response?.data?.message || error.message;
