@@ -14,6 +14,8 @@
 		411333A87AB9828FCF62B3C4 /* libPods-FantasySports-FantasySportsTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32136CA061419B129A90CA0B /* libPods-FantasySports-FantasySportsTests.a */; };
 		589FCB8127858F9800CE4F45 /* ####.swift in Sources */ = {isa = PBXBuildFile; fileRef = 589FCB8027858F9800CE4F45 /* ####.swift */; };
 		589FCBB12786C7CB00CE4F45 /* WorkSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 589FCBB02786C7CB00CE4F45 /* WorkSans-SemiBold.ttf */; };
+		58E5EF36278C0268009EE95F /* WorkSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 58E5EF34278C0267009EE95F /* WorkSans-Bold.ttf */; };
+		58E5EF37278C0268009EE95F /* WorkSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 58E5EF35278C0268009EE95F /* WorkSans-Regular.ttf */; };
 		720505A063D477A4DF04DD87 /* libPods-FantasySports.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 519EAE05A2012E0054B76A86 /* libPods-FantasySports.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -53,6 +55,8 @@
 		589FCB7F27858F9800CE4F45 /* FantasySports-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FantasySports-Bridging-Header.h"; sourceTree = "<group>"; };
 		589FCB8027858F9800CE4F45 /* ####.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "####.swift"; sourceTree = "<group>"; };
 		589FCBB02786C7CB00CE4F45 /* WorkSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "WorkSans-SemiBold.ttf"; sourceTree = "<group>"; };
+		58E5EF34278C0267009EE95F /* WorkSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "WorkSans-Bold.ttf"; sourceTree = "<group>"; };
+		58E5EF35278C0268009EE95F /* WorkSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "WorkSans-Regular.ttf"; sourceTree = "<group>"; };
 		5AB9E0B0FAC0433EB9D6DD85 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		6D6C8BDA0F18EAE497531E80 /* Pods-FantasySports-FantasySportsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FantasySports-FantasySportsTests.release.xcconfig"; path = "Target Support Files/Pods-FantasySports-FantasySportsTests/Pods-FantasySports-FantasySportsTests.release.xcconfig"; sourceTree = "<group>"; };
 		750AB1DA19FB4AFBBFF96AC7 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
@@ -108,6 +112,8 @@
 		0E4E806398D04B23ABA9DD72 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				58E5EF34278C0267009EE95F /* WorkSans-Bold.ttf */,
+				58E5EF35278C0268009EE95F /* WorkSans-Regular.ttf */,
 				589FCBB02786C7CB00CE4F45 /* WorkSans-SemiBold.ttf */,
 				3D6B232DBA1544529B46B4A0 /* AntDesign.ttf */,
 				07D292FD565F4C6F840D817A /* Entypo.ttf */,
@@ -295,6 +301,8 @@
 				589FCBB12786C7CB00CE4F45 /* WorkSans-SemiBold.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				58E5EF36278C0268009EE95F /* WorkSans-Bold.ttf in Resources */,
+				58E5EF37278C0268009EE95F /* WorkSans-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
