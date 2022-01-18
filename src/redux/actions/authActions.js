@@ -47,6 +47,7 @@ export const getWalletData = walletId => async dispatch => {
 export const login =
   (data, onComplete = () => {}) =>
   async dispatch => {
+  console.log('login action working')
     try {
       axios.interceptors.request.use(
         (req) => {
@@ -58,7 +59,7 @@ export const login =
            return Promise.reject(err);
         }
      );
-     
+
      // For POST requests
      axios.interceptors.response.use(
         (res) => {

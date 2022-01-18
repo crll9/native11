@@ -3,7 +3,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-
+#import <RNTorusDirectSdk/RNTorus.h>
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -49,6 +49,24 @@ static void InitializeFlipper(UIApplication *application) {
   [self.window makeKeyAndVisible];
   return YES;
 }
+
+- (BOOL)application:(UIApplication *)app
+            openURL:(NSURL *)url
+            options:(NSDictionary<NSString *, id> *)options {
+  
+  NSString *myString = url.absoluteString;
+  
+  NSLog(@"String to handle : %@ ", myString);
+  if (@available(iOS 11.0, *)) {
+    [RNTorusDirectSdk handle:myString];
+  } else {
+    // Fallback on earlier versions
+  }
+
+  // Your additional URL handling (if any) goes here.
+  return NO;
+}
+
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {

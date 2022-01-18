@@ -21,6 +21,7 @@ import CustomAuth from '@toruslabs/torus-direct-react-native-sdk';
 const {width} = Dimensions.get('window');
 
 const LoginScreen = ({login}) => {
+  console.log('login open');
   const [loading, setLoading] = useState(false);
   const [walletId, setWalletId] = useState(
     'terra1p7p57u43sruexzvnyywz3v6fcnc99rxhvlk49s',
@@ -41,12 +42,14 @@ const LoginScreen = ({login}) => {
   }, []);
 
   const torusLoginHandler = async () => {
+    console.log('start torus');
     const credentials = await CustomAuth.triggerLogin({
       typeOfLogin: 'google',
       verifier: 'neolen-google-testnet1',
       clientId:
         '142703193622-h733d93kn1gk5bp4oq86qdkvgmbu7h4f.apps.googleusercontent.com',
     });
+    console.log('end torus', credentials);
     setGoogleUser(credentials?.userInfo?.name);
   };
 
@@ -75,38 +78,38 @@ const LoginScreen = ({login}) => {
         style={authStyles.logo}
       />
       {/* <Text style={authStyles.heading}>Login</Text> */}
-      <Text style={authStyles.label}>Wallet ID</Text>
-      <Neomorph inner style={authStyles.inputContainer}>
-        <TextInput
-          placeholder="ibsdrf7845df"
-          onChangeText={setWalletId}
-          value={walletId}
-          placeholderTextColor="rgba(255,255,255,.3)"
-          style={authStyles.input}
-        />
-      </Neomorph>
-      <View style={{height: sizing.x16}} />
-      <Text style={authStyles.label}>Password</Text>
-      <Neomorph inner style={authStyles.inputContainer}>
-        <TextInput
-          placeholder="*******"
-          secureTextEntry
-          onChangeText={setPassword}
-          value={password}
-          placeholderTextColor="rgba(255,255,255,.3)"
-          style={authStyles.input}
-        />
-      </Neomorph>
-      <View style={{height: sizing.x24}} />
-      <Button
-        titleStyle={{fontSize: 18, fontWeight: 'bold'}}
-        type="info"
-        title="Continue"
-        onPress={handleLogin}
-        loading={loading}
-        containerStyle={{width: '100%'}}
-        buttonStyle={{borderRadius: sizing.x12}}
-      />
+      {/*<Text style={authStyles.label}>Wallet ID</Text>*/}
+      {/*<Neomorph inner style={authStyles.inputContainer}>*/}
+      {/*  <TextInput*/}
+      {/*    placeholder="ibsdrf7845df"*/}
+      {/*    onChangeText={setWalletId}*/}
+      {/*    value={walletId}*/}
+      {/*    placeholderTextColor="rgba(255,255,255,.3)"*/}
+      {/*    style={authStyles.input}*/}
+      {/*  />*/}
+      {/*</Neomorph>*/}
+      {/*<View style={{height: sizing.x16}} />*/}
+      {/*<Text style={authStyles.label}>Password</Text>*/}
+      {/*<Neomorph inner style={authStyles.inputContainer}>*/}
+      {/*  <TextInput*/}
+      {/*    placeholder="*******"*/}
+      {/*    secureTextEntry*/}
+      {/*    onChangeText={setPassword}*/}
+      {/*    value={password}*/}
+      {/*    placeholderTextColor="rgba(255,255,255,.3)"*/}
+      {/*    style={authStyles.input}*/}
+      {/*  />*/}
+      {/*</Neomorph>*/}
+      {/*<View style={{height: sizing.x24}} />*/}
+      {/*<Button*/}
+      {/*  titleStyle={{fontSize: 18, fontWeight: 'bold'}}*/}
+      {/*  type="info"*/}
+      {/*  title="Continue"*/}
+      {/*  onPress={handleLogin}*/}
+      {/*  loading={loading}*/}
+      {/*  containerStyle={{width: '100%'}}*/}
+      {/*  buttonStyle={{borderRadius: sizing.x12}}*/}
+      {/*/>*/}
       <Button
         titleStyle={{fontSize: 18, fontWeight: 'bold'}}
         title="Continue with Google"
@@ -128,7 +131,7 @@ const LoginScreen = ({login}) => {
           <Text style={{color: colors.secondaryColor}}>Register</Text>
         </TouchableOpacity>
       </View> */}
-      <View style={{height: sizing.x16}} />
+      {/*<View style={{height: sizing.x16}} />*/}
     </ScrollView>
   );
 };
