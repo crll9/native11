@@ -18,6 +18,7 @@
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.1.0",
     "@terra-money/terra.js": "^3.0.1",
+    "@toruslabs/torus-direct-react-native-sdk": "^0.6.1",
     "axios": "^0.21.4",
     "date-fns": "^2.25.0",
     "lottie-ios": "^3.2.3",

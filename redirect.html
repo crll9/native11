@@ -1,0 +1,15 @@
+<html>
+<body onload="f()">
+
+
+<a id="redirect" href="crypto11://com.fantasysports/redirect">Redirect to Application</a>
+</body>
+<script>
+  function f() {
+    var url = window.location.href
+    var hash = url.split('#')[1]
+    var newUrl = 'crypto11://com.fantasysports/redirect#' + hash
+    document.getElementById('redirect').href = newUrl
+  }
+</script>
+</html>

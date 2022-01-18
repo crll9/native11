@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   Image,
@@ -16,6 +16,7 @@ import {connect} from 'react-redux';
 import {login} from '../redux/actions/authActions';
 import {colors} from '../Styles/colors';
 import {sizing} from '../Styles/theme';
+import CustomAuth from '@toruslabs/torus-direct-react-native-sdk';
 
 const {width} = Dimensions.get('window');
 
@@ -25,6 +26,29 @@ const LoginScreen = ({login}) => {
     'terra1p7p57u43sruexzvnyywz3v6fcnc99rxhvlk49s',
   );
   const [password, setPassword] = useState('hb');
+  const [googleUser, setGoogleUser] = useState(null);
+
+  useEffect(() => {
+    CustomAuth.init({
+      network: 'testnet',
+
+      // Final redirect to your app, can be either custom scheme or deep link
+      redirectUri: 'https://app.actormonster.com/redirect.html',
+
+      // Redirect from browser, some providers don't allow to redirect to custom scheme, you'll need to configure a proxy web address in which case
+      browserRedirectUri: 'https://app.actormonster.com/redirect.html',
+    });
+  }, []);
+
+  const torusLoginHandler = async () => {
+    const credentials = await CustomAuth.triggerLogin({
+      typeOfLogin: 'google',
+      verifier: 'neolen-google-testnet1',
+      clientId:
+        '142703193622-h733d93kn1gk5bp4oq86qdkvgmbu7h4f.apps.googleusercontent.com',
+    });
+    setGoogleUser(credentials?.userInfo?.name);
+  };
 
   const handleLogin = async () => {
     if (!walletId || !password) {
@@ -76,12 +100,22 @@ const LoginScreen = ({login}) => {
       <View style={{height: sizing.x24}} />
       <Button
         titleStyle={{fontSize: 18, fontWeight: 'bold'}}
+        type="info"
         title="Continue"
         onPress={handleLogin}
         loading={loading}
         containerStyle={{width: '100%'}}
         buttonStyle={{borderRadius: sizing.x12}}
       />
+      <Button
+        titleStyle={{fontSize: 18, fontWeight: 'bold'}}
+        title="Continue with Google"
+        onPress={() => torusLoginHandler()}
+        loading={loading}
+        containerStyle={{width: '100%', marginTop: 10}}
+        buttonStyle={{borderRadius: sizing.x12}}
+      />
+      {googleUser && (<Text style={{color: 'white'}}>Google Login Done {googleUser}</Text>)}
       {/* <View style={authStyles.link}>
         <Text style={{color: colors.white}}>Don't have an account?</Text>
         <TouchableOpacity
