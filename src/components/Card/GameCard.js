@@ -39,7 +39,7 @@ const GameCard = ({match, setMatchDetail}) => {
       style={[commonStyles.alignItemsCenter, {marginBottom: sizing.x12}]}>
       <Shadow inner style={styles.neomorphContainer}>
         <View style={[commonStyles.rowAlignCenterJustifyBetween]}>
-          <Text style={{color: colors.white}}>{tournament.name}</Text>
+          <Text style={{color: colors.white}}>{tournament.name+' '+match.contract_address}</Text>
           <Icon
             name="bell"
             size={20}

@@ -35,12 +35,13 @@ export const fetchAllMatches = () => async (dispatch, getState) => {
 
     const matches = response.data.data.allMatches;
     dispatch({type: MATCHES.FETCH_SUCCESS, payload: matches});
+    console.log('match list',matches);
     //code to get contract_address
-    if(matches && matches.length>0 && matches[0].contract_address)
-    dispatch({
-      type: CONTRACT.ADD_CONTRACT_ADDRESS,
-      payload: matches[0].contract_address,
-    });
+    // if(matches && matches.length>0 && matches[0].contract_address)
+    // dispatch({
+    //   type: CONTRACT.ADD_CONTRACT_ADDRESS,
+    //   payload: matches[0].contract_address,
+    // });
   } catch (error) {
     if (error.response.data === 'Invalid Token') {
       SimpleToast.show('Session expired!');

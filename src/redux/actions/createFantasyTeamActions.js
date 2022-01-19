@@ -5,6 +5,7 @@ import {getPoolDetailsByKey} from './matchDetailsAction';
 import {getAuthHeaders} from './matchesActions';
 import { LCDClient, Coin,MnemonicKey } from '@terra-money/terra.js';
 import { ContractConstants } from '../../components/Shared/ContractConstants';
+import { MsgExecuteContract } from '@terra-money/terra.js';
 
 const API_URL =
   'http://backend-env.eba-tvmadbz2.ap-south-1.elasticbeanstalk.com';
@@ -48,6 +49,49 @@ export const placeBet =
       SimpleToast.show('Failed to join contest!');
     }
     };
+    export const convertJsonToBase64=(jsonObj)=>{
+      let objJsonStr = JSON.stringify(jsonObj);
+      let objJsonB64 = Buffer.from(objJsonStr).toString("base64");
+      return objJsonB64;
+    }
+
+    export const executeContractMsg=(wallet,senderId,contractAddress,matchContractAddress,msg)=>{
+      console.log('executeContractMsg');
+      let messageBody={
+        "send": {
+          "contract": matchContractAddress, //contract_address you can get from matchAPI   
+          "amount": "1", //get this from the getPools API (backend )
+          "msg": msg  //this is betting payload - comes from the above step placeâBet
+        }
+      }
+      
+      const execute = new MsgExecuteContract(
+        senderId, // sender
+        contractAddress, // contract account address
+        messageBody // handle msg
+      );
+      console.log('wallet',wallet);
+      wallet.createAndSignTx({
+        msgs: [execute]
+      }).then(executeTx=>{
+        console.log('executeContractMsg createAndSignTx data',executeTx)
+     terra.tx.broadcast(executeTx).then(data=>{
+      console.log('executeContractMsg data',data)
+     }).catch(err=>{
+      console.log('executeContractMsg error',err)
+     })
+    }).catch(err1=>{
+      console.log('executeContractMsg createAndSignTx error',JSON.stringify(err1));
+    })
+     
+    }
+export const getDummyWallet=(terra)=>{
+  const mk = new MnemonicKey({
+    mnemonic:'phrase',
+  });
+  let wallet =  terra.wallet(mk);
+  return wallet;
+}
 export const placeBetSmartQuery =
   (team,terraWalletAdd, contractAddress, onComplete = () => { }) =>
     async (dispatch, getState) => {
@@ -63,37 +107,32 @@ export const placeBetSmartQuery =
           chainID: 'bombay-12',
         });
         console.log('contractAddress', contractAddress);
-        terra.wasm.contractQuery(
-          //contractAddress,
-          //'terra1n3rxe7jsq8razp6vf5lxncayvtlgpcrtkvruw6',
-          ContractConstants.contractAddressGetQuery,
-          {
-            "pool_details": {
-              "pool_id": team.poolId
-            }
-          }).then(data => {
-            console.log('pool_details query data', data);
+       
+           
             console.log('team details', team);
             let queryData = {
               "game_pool_bid_submit": {
                 "gamer": terraWalletAdd,
-                "pool_type": data.pool_type,
-                "pool_id": team.poolId,
-                "game_id": team.match.matchId,
-                "team_id": team._id,
-                "amount": '0.05'
+                "pool_type": 'H2H',
+                "pool_id": team?team.poolId:'1',
+                "game_id": team?team.match.matchId:'1',
+                "team_id": team?team._id:'1'
               }
             };
             console.log('game_pool_bid_submit request data', queryData)
+            //let wallet = getDummyWallet(terra);//wallet need to get
+            //executeContractMsg(wallet,terraWalletAdd,'terra1gs22hrmrtrfpqxtcn5ncykhazga9hmjlcyrlgs',contractAddress,convertJsonToBase64(queryData));
+            //if(wallet) return;
             terra.wasm.contractQuery(
-             // contractAddress,
+              contractAddress,
               //'terra1n3rxe7jsq8razp6vf5lxncayvtlgpcrtkvruw6',
               //'terra1ttjw6nscdmkrx3zhxqx3md37phldgwhggm345k',
-              ContractConstants.contractAddressBidQuery,
+              //ContractConstants.contractAddressBidQuery,
               queryData// query msg
             ).then(data => {
-              console.log('game_pool_bid_submit data', data);
-
+              console.log('game_pool_bid_submit response data', data);
+              let wallet = getDummyWallet(terra);//wallet need to get
+              executeContractMsg(wallet.key.accAddress,terraWalletAdd,'terra1gs22hrmrtrfpqxtcn5ncykhazga9hmjlcyrlgs',contractAddress,convertJsonToBase64(queryData));
               getPoolDetailsByKey(
                 matchDetails.key,
                 selectedPricePool.key,
@@ -115,11 +154,7 @@ export const placeBetSmartQuery =
               SimpleToast.show('Failed to submit bid!');
               console.log('game_pool_bid_submit error', JSON.stringify(err))
             });
-          }).catch(err => {
-            onComplete(false);
-            SimpleToast.show('Failed to read pool details');
-            console.log('pool_details Query error', JSON.stringify(err))
-          });
+         
 
         ////
 

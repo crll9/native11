@@ -29,7 +29,7 @@ const dummyData = [
 
 const HomeScreen = ({loading, matches, fetchAllMatches, fetchPools}) => {
   const [selectedTab, setSelectedTab] = useState(0);
-  const contractAddress = useSelector(res=>res.auth.contractAddress);
+  const contractAddress = useSelector(res=>res.auth);
 
   useEffect(() => {
    // fetchBalance()

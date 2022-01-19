@@ -24,6 +24,9 @@ import {connect} from 'react-redux';
 import Loader from '../components/Shared/Loader';
 import {TouchableOpacity} from 'react-native';
 import Toast from 'react-native-simple-toast';
+import {placeBet,placeBetSmartQuery} from '../redux/actions/createFantasyTeamActions';
+import {useSelector} from 'react-redux';
+import SimpleToast from 'react-native-simple-toast';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
@@ -177,6 +180,7 @@ const CreateTeamScreen = ({
   loading,
   players,
   saveSelectedPlayers,
+  placeBetSmartQuery,
   teams: [team1, team2],
 }) => {
   const [selectedType, setSelectedType] = useState('goalkeeper');
@@ -193,9 +197,20 @@ const CreateTeamScreen = ({
     team2: 0,
   });
   const navigation = useNavigation();
+  const user = useSelector(sel=>sel.auth.user);
+  const matchDetails = useSelector(res=>res.matchDetails.matchDetails);
 
   useEffect(() => {
-    getFantasyData();
+    //getFantasyData();
+    console.log('user details',user);
+     console.log('CreateTeamScreen useEffect',matchDetails)
+     if(matchDetails && matchDetails.contract_address && matchDetails.contract_address.startsWith('terra')){
+        placeBetSmartQuery(undefined,user.terraWalletAdd, matchDetails.contract_address, success => {
+         console.log('onCompletePlaceBetsmartQuery',success);
+       });
+       }else{
+         SimpleToast.show('No contract address found');
+       }
   }, []);
 
   const addPlayer = (item, playerType) => {
@@ -521,7 +536,7 @@ const mapStateToProps = ({createTeam: {loading, players, teams}}) => ({
   teams,
 });
 
-export default connect(mapStateToProps, {getFantasyData, saveSelectedPlayers})(
+export default connect(mapStateToProps, {getFantasyData, saveSelectedPlayers,placeBetSmartQuery})(
   CreateTeamScreen,
 );
 
