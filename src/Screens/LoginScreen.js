@@ -78,38 +78,37 @@ const LoginScreen = ({login}) => {
         style={authStyles.logo}
       />
       {/* <Text style={authStyles.heading}>Login</Text> */}
-      {/*<Text style={authStyles.label}>Wallet ID</Text>*/}
-      {/*<Neomorph inner style={authStyles.inputContainer}>*/}
-      {/*  <TextInput*/}
-      {/*    placeholder="ibsdrf7845df"*/}
-      {/*    onChangeText={setWalletId}*/}
-      {/*    value={walletId}*/}
-      {/*    placeholderTextColor="rgba(255,255,255,.3)"*/}
-      {/*    style={authStyles.input}*/}
-      {/*  />*/}
-      {/*</Neomorph>*/}
-      {/*<View style={{height: sizing.x16}} />*/}
-      {/*<Text style={authStyles.label}>Password</Text>*/}
-      {/*<Neomorph inner style={authStyles.inputContainer}>*/}
-      {/*  <TextInput*/}
-      {/*    placeholder="*******"*/}
-      {/*    secureTextEntry*/}
-      {/*    onChangeText={setPassword}*/}
-      {/*    value={password}*/}
-      {/*    placeholderTextColor="rgba(255,255,255,.3)"*/}
-      {/*    style={authStyles.input}*/}
-      {/*  />*/}
-      {/*</Neomorph>*/}
-      {/*<View style={{height: sizing.x24}} />*/}
-      {/*<Button*/}
-      {/*  titleStyle={{fontSize: 18, fontWeight: 'bold'}}*/}
-      {/*  type="info"*/}
-      {/*  title="Continue"*/}
-      {/*  onPress={handleLogin}*/}
-      {/*  loading={loading}*/}
-      {/*  containerStyle={{width: '100%'}}*/}
-      {/*  buttonStyle={{borderRadius: sizing.x12}}*/}
-      {/*/>*/}
+      <Text style={authStyles.label}>Wallet ID</Text>
+      <Neomorph inner style={authStyles.inputContainer}>
+        <TextInput
+          placeholder="ibsdrf7845df"
+          onChangeText={setWalletId}
+          value={walletId}
+          placeholderTextColor="rgba(255,255,255,.3)"
+          style={authStyles.input}
+        />
+      </Neomorph>
+      <View style={{height: sizing.x16}} />
+      <Text style={authStyles.label}>Password</Text>
+      <Neomorph inner style={authStyles.inputContainer}>
+        <TextInput
+          placeholder="*******"
+          secureTextEntry
+          onChangeText={setPassword}
+          value={password}
+          placeholderTextColor="rgba(255,255,255,.3)"
+          style={authStyles.input}
+        />
+      </Neomorph>
+      <View style={{height: sizing.x24}} />
+      <Button
+        titleStyle={{fontSize: 18, fontWeight: 'bold'}}
+        title="Continue"
+        onPress={handleLogin}
+        loading={loading}
+        containerStyle={{width: '100%'}}
+        buttonStyle={{borderRadius: sizing.x12}}
+      />
       <Button
         titleStyle={{fontSize: 18, fontWeight: 'bold'}}
         title="Continue with Google"
@@ -118,7 +117,9 @@ const LoginScreen = ({login}) => {
         containerStyle={{width: '100%', marginTop: 10}}
         buttonStyle={{borderRadius: sizing.x12}}
       />
-      {googleUser && (<Text style={{color: 'white'}}>Google Login Done {googleUser}</Text>)}
+      {googleUser && (
+        <Text style={{color: 'white'}}>Google Login Done {googleUser}</Text>
+      )}
       {/* <View style={authStyles.link}>
         <Text style={{color: colors.white}}>Don't have an account?</Text>
         <TouchableOpacity
@@ -131,7 +132,7 @@ const LoginScreen = ({login}) => {
           <Text style={{color: colors.secondaryColor}}>Register</Text>
         </TouchableOpacity>
       </View> */}
-      {/*<View style={{height: sizing.x16}} />*/}
+      <View style={{height: sizing.x16}} />
     </ScrollView>
   );
 };
