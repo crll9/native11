@@ -74,7 +74,7 @@ const getPoolDetails=(poolId)=>{
 const ContestDetailsScreen = ({pool, route: {params}, setSelectedContest}) => {
   const navigation = useNavigation();
 
-  const {membersRequired, price, data, _id} = pool;
+  const {minTeamsForPool,maxTeamsForPool, price, data, _id} = pool;
   const [poolMembers, setPoolMembers] = useState([]);
 
   const init = async () => {
@@ -106,7 +106,7 @@ const ContestDetailsScreen = ({pool, route: {params}, setSelectedContest}) => {
               styles.container,
             ]}>
             <Text style={styles.subtitle}>PRIZE POOL</Text>
-            <Text style={styles.subtitle}>{getPoolMembers(data)} ENTRIES</Text>
+            <Text style={styles.subtitle}>{maxTeamsForPool} ENTRIES</Text>
           </View>
 
           <View
@@ -155,7 +155,7 @@ const ContestDetailsScreen = ({pool, route: {params}, setSelectedContest}) => {
           </View>
           <LinearProgress
             color="primary"
-            value={getPoolMembers(data) / pool.membersRequired}
+            value={maxTeamsForPool / minTeamsForPool}
             variant="determinate"
           />
           <View
@@ -164,9 +164,9 @@ const ContestDetailsScreen = ({pool, route: {params}, setSelectedContest}) => {
               styles.container,
             ]}>
             <Text style={[Typography.h3Style, {color: colors.secondaryColor}]}>
-              {getPoolMembers(data)} Teams
+              {maxTeamsForPool} Teams
             </Text>
-            <Text>{membersRequired} Teams</Text>
+            <Text>{minTeamsForPool} Teams</Text>
           </View>
         </Shadow>
 
