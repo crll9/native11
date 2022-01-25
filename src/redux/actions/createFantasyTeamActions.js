@@ -55,22 +55,25 @@ export const placeBet =
       return objJsonB64;
     }
 
-    export const executeContractMsg=(wallet,senderId,contractAddress,matchContractAddress,msg)=>{
+    export const executeContractMsg=(wallet,senderId,mintingContractAddress,matchContractAddress,msg)=>{
       console.log('executeContractMsg');
       let messageBody={
         "send": {
           "contract": matchContractAddress, //contract_address you can get from matchAPI   
-          "amount": "1", //get this from the getPools API (backend )
+          "amount": "1300000", //get this from the getPools API (backend )
           "msg": msg  //this is betting payload - comes from the above step placeâBet
         }
       }
+      console.log('wallet ',wallet.key.accAddress+' match '+matchContractAddress+' senderId '+senderId+' mintingContractAddress '+mintingContractAddress);
+      console.log()
+      console.log('messageBody executeContractMsg', messageBody);
       
       const execute = new MsgExecuteContract(
         senderId, // sender
-        contractAddress, // contract account address
+        mintingContractAddress, // contract account address
         messageBody // handle msg
       );
-      console.log('wallet',wallet);
+      console.log('MsgExecuteContract',execute);
       wallet.createAndSignTx({
         msgs: [execute]
       }).then(executeTx=>{
@@ -81,13 +84,14 @@ export const placeBet =
       console.log('executeContractMsg error',err)
      })
     }).catch(err1=>{
-      console.log('executeContractMsg createAndSignTx error',JSON.stringify(err1));
+      //console.log('executeContractMsg createAndSignTx error',JSON.stringify(err1));
+      console.log('executeContractMsg createAndSignTx error response',err1.response || '');
     })
      
     }
 export const getDummyWallet=(terra)=>{
   const mk = new MnemonicKey({
-    mnemonic:'phrase',
+    mnemonic:'satisfy adjust timber high purchase tuition stool faith fine install that you unaware feed domain license impose boss human eager hat rent enjoy dawn',
   });
   let wallet =  terra.wallet(mk);
   return wallet;
@@ -115,14 +119,13 @@ export const placeBetSmartQuery =
                 "gamer": terraWalletAdd,
                 "pool_type": 'H2H',
                 "pool_id": team?team.poolId:'1',
-                "game_id": team?team.match.matchId:'1',
                 "team_id": team?team._id:'1'
               }
             };
             console.log('game_pool_bid_submit request data', queryData)
-            //let wallet = getDummyWallet(terra);//wallet need to get
-            //executeContractMsg(wallet,terraWalletAdd,'terra1gs22hrmrtrfpqxtcn5ncykhazga9hmjlcyrlgs',contractAddress,convertJsonToBase64(queryData));
-            //if(wallet) return;
+            let wallet = getDummyWallet(terra);//wallet need to get
+            executeContractMsg(wallet,terraWalletAdd,'terra1xzlgeyuuyqje79ma6vllregprkmgwgavjx2h6m',contractAddress,convertJsonToBase64(queryData));
+            if(wallet) return;
             terra.wasm.contractQuery(
               contractAddress,
               //'terra1n3rxe7jsq8razp6vf5lxncayvtlgpcrtkvruw6',
@@ -132,7 +135,7 @@ export const placeBetSmartQuery =
             ).then(data => {
               console.log('game_pool_bid_submit response data', data);
               let wallet = getDummyWallet(terra);//wallet need to get
-              executeContractMsg(wallet.key.accAddress,terraWalletAdd,'terra1gs22hrmrtrfpqxtcn5ncykhazga9hmjlcyrlgs',contractAddress,convertJsonToBase64(queryData));
+              executeContractMsg(wallet,terraWalletAdd,'terra1gs22hrmrtrfpqxtcn5ncykhazga9hmjlcyrlgs',contractAddress,convertJsonToBase64(queryData));
               getPoolDetailsByKey(
                 matchDetails.key,
                 selectedPricePool.key,

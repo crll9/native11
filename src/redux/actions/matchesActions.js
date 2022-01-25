@@ -29,7 +29,7 @@ export const fetchAllMatches = () => async (dispatch, getState) => {
 
   try {
     const response = await axios.get(
-      `${API_URL}/match/todaysmatches/`,
+      `${API_URL}/match/todaysmatches/2022-01-18`,
       getAuthHeaders(getState()),
     );
 
@@ -43,6 +43,7 @@ export const fetchAllMatches = () => async (dispatch, getState) => {
     //   payload: matches[0].contract_address,
     // });
   } catch (error) {
+    console.log('match list error',error)
     if (error.response.data === 'Invalid Token') {
       SimpleToast.show('Session expired!');
       logOut()(dispatch);
@@ -57,14 +58,19 @@ export const fetchAllMatches = () => async (dispatch, getState) => {
 export const fetchPools = (matchId,contractAddress) => async (dispatch, getState) => {
   console.log('inside fetchPools '+matchId+' '+contractAddress);
   try {
+    console.log('api call poolType',`${API_URL}/poolType`);
     const res = await axios.get(
-      `${API_URL}/users/getpools/`+matchId+`/`+contractAddress,
+      `${API_URL}/poolType`,
       getAuthHeaders(getState()),
     );
+    // const res = await axios.get(
+    //   `${API_URL}/users/getpools/`+matchId+`/`+contractAddress,
+    //   getAuthHeaders(getState()),
+    // );
     const pools = res.data?.data;
     console.log('pools data',pools);
     dispatch({type: MATCHES.FETCH_POOLS, payload: pools});
   } catch (error) {
-    console.log('pools error',error.message);
+    console.log('pools error',error);
   }
 };

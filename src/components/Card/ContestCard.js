@@ -137,7 +137,7 @@ const ContestCard = ({
               <Text style={{color: colors.primary}}>1200</Text>
             </View>
             <View style={{marginLeft: sizing.x24}}>
-              <Text style={styles.subtitle}>{members.length} Entries</Text>
+              <Text style={styles.subtitle}>Entries</Text>
             </View>
           </View>
         </Shadow>

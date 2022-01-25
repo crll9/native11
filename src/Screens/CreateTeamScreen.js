@@ -201,7 +201,7 @@ const CreateTeamScreen = ({
   const matchDetails = useSelector(res=>res.matchDetails.matchDetails);
 
   useEffect(() => {
-    //getFantasyData();
+    getFantasyData();
     console.log('user details',user);
      console.log('CreateTeamScreen useEffect',matchDetails)
      if(matchDetails && matchDetails.contract_address && matchDetails.contract_address.startsWith('terra')){
