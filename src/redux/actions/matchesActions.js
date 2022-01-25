@@ -74,3 +74,25 @@ export const fetchPools = (matchId,contractAddress) => async (dispatch, getState
     console.log('pools error',error);
   }
 };
+
+export const fetchPoolDetails = (poolTypeId,matchContractAddress, callback) => async (dispatch, getState) => {
+  
+  try {
+    console.log('api call poolType',`${API_URL}/pool/${matchContractAddress}/${poolTypeId}`);
+    const res = await axios.get(
+      `${API_URL}/pool/${matchContractAddress}/${poolTypeId}`,
+      getAuthHeaders(getState()),
+    );
+    // const res = await axios.get(
+    //   `${API_URL}/users/getpools/`+matchId+`/`+contractAddress,
+    //   getAuthHeaders(getState()),
+    // );
+    const poolDetail = res.data?.data;
+    console.log('pools detail',poolDetail);
+    if(callback)
+    callback(poolDetail);
+     poolDetail
+  } catch (error) {
+    console.log('pools error',error);
+  }
+};

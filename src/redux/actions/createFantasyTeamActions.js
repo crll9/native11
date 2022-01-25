@@ -97,7 +97,7 @@ export const getDummyWallet=(terra)=>{
   return wallet;
 }
 export const placeBetSmartQuery =
-  (team,terraWalletAdd, contractAddress, onComplete = () => { }) =>
+  (team,terraWalletAdd, contractAddress, poolType,poolId,onComplete = () => { }) =>
     async (dispatch, getState) => {
         const {
           matchDetails: { matchDetails, selectedPricePool },
@@ -114,11 +114,19 @@ export const placeBetSmartQuery =
        
            
             console.log('team details', team);
+            // let queryData = {
+            //   "game_pool_bid_submit": {
+            //     "gamer": terraWalletAdd,
+            //     "pool_type": 'H2H',
+            //     "pool_id": team?team.poolId:'1',
+            //     "team_id": team?team._id:'1'
+            //   }
+            // };
             let queryData = {
               "game_pool_bid_submit": {
                 "gamer": terraWalletAdd,
-                "pool_type": 'H2H',
-                "pool_id": team?team.poolId:'1',
+                "pool_type": poolType,
+                "pool_id": poolId || '1',
                 "team_id": team?team._id:'1'
               }
             };
@@ -180,7 +188,7 @@ export const getFantasyData = () => async (dispatch, getState) => {
       `${API_URL}/fantasy/fancredit/${key}`,
       getAuthHeaders(getState()),
     );
-      console.log('getFantasyData api '+key,response);
+      console.log('getFantasyData api '+key,JSON.stringify(response));
     const {fantasy, players, team} =
       response.data?.data?.[0] || response.data.data.data || response.data.data;
     let teamArray = Object.values(team);

@@ -38,11 +38,14 @@ export const setMatchDetail = id => async (dispatch, getState) => {
     dispatch({type: MATCH_DETAILS.FETCH_FAILED});
   }
 };
-export const setSelectedContest = id => (dispatch, getState) => {
+export const setSelectedContest = (id,poolId) => (dispatch, getState) => {
   const {
     matches: {pools},
   } = getState();
   const payload = pools.find(item => item._id === id);
+  payload.poolId = poolId;
+  console.log('select pool id',payload);
   // const contestDetails = await axios.get()
-  dispatch({type: MATCH_DETAILS.SET_SELECTED_PRICE_POOL, payload});
+  dispatch({type: MATCH_DETAILS.SET_SELECTED_PRICE_POOL,payload});
 };
+

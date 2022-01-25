@@ -49,27 +49,7 @@ const getLeaderBoardData = async (matchId, poolId) => {
   }
 };
 
-const getPoolDetails=(poolId)=>{
-  const terra = new LCDClient({
-    URL: 'https://bombay-lcd.terra.dev',
-    chainID: 'bombay-12',
-  });
-  terra.wasm.contractQuery(
-    'terra1n3rxe7jsq8razp6vf5lxncayvtlgpcrtkvruw6',
-    { 
-      "pool_details" : { 
-        "pool_id" : poolId
-      }
-    }).then(data=>{
-    console.log('pool details query data',data);
-    setLoading(false);
-  }).catch(err=>{
-    setLoading(false);
-    console.log('pool details Query error',JSON.stringify(err))
-  });
 
-
-}
 
 const ContestDetailsScreen = ({pool, route: {params}, setSelectedContest}) => {
   const navigation = useNavigation();

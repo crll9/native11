@@ -23,10 +23,12 @@ const TeamsOverviewScreen = ({teams, placeBet,placeBetSmartQuery}) => {
   const [loading, setLoading] = useState(false);
   const user = useSelector(sel=>sel.auth.user);
   const matchDetails = useSelector(res=>res.matchDetails.matchDetails);
+  const poolDetail = useSelector(res=>res.matchDetails.selectedPricePool);
   const joinContest = async () => {
     setLoading(true);
     const {key} = teams[selectedTeamIndex];
     console.log('Team detail',teams[selectedTeamIndex])
+    console.log('Pool detail',poolDetail)
     //placeBidToTerra(teams[selectedTeamIndex]);
     const onComplete = success => {
       setLoading(false);
@@ -34,9 +36,9 @@ const TeamsOverviewScreen = ({teams, placeBet,placeBetSmartQuery}) => {
         navigation.navigate('TeamList');
       }
     };
-    await placeBet(key, onComplete);
+    //await placeBet(key, onComplete);
      if(matchDetails && matchDetails.contract_address && matchDetails.contract_address.startsWith('terra')){
-     await placeBetSmartQuery(teams[selectedTeamIndex],user.terraWalletAdd, matchDetails.contract_address, onComplete);
+     await placeBetSmartQuery(teams[selectedTeamIndex],user.terraWalletAdd, matchDetails.contract_address,poolDetail.poolType,poolDetail.poolId, onComplete);
      }else{
        SimpleToast.show('No contract address found');
      }

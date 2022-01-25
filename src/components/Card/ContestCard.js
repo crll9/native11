@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -14,8 +14,10 @@ import Typography from '../../Styles/Typography';
 import {Shadow, Neomorph} from 'react-native-neomorph-shadows';
 import {useNavigation} from '@react-navigation/native';
 import {setSelectedContest} from '../../redux/actions/matchDetailsAction';
-import {connect} from 'react-redux';
+import {fetchPoolDetails} from '../../redux/actions/matchesActions';
+import {connect,useSelector} from 'react-redux';
 import SimpleToast from 'react-native-simple-toast';
+import { useState } from 'react';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
@@ -29,22 +31,31 @@ export const getPoolMembers = data => {
 };
 
 const ContestCard = ({
-  pool: {poolFee, minTeamsForPool,maxTeamsForPool, members, _id, key, data},
+  pool: {poolFee, minTeamsForPool,maxTeamsForPool, members, _id, key, data,poolType},
   active,
   setSelectedContest,
   matchKey,
+  fetchPoolDetails
 }) => {
   const navigation = useNavigation();
+  const matchDetails = useSelector(res=>res.matchDetails.matchDetails);
+  const [poolDetail,setPoolDetail] = useState({});
+  useEffect(()=>{
+    fetchPoolDetails(_id,matchDetails.contract_address,(pd)=>{
+      setPoolDetail(pd)
+      console.log('pool detail loaded',pd);
+    });
+  },[])
   const handleCardPress = () => {
     navigation.navigate('Tournament', {matchKey, poolKey: key});
-    setSelectedContest(_id);
+    setSelectedContest(_id,poolDetail.poolId);
   };
   const navigateToTeamList = () => {
-    if (!active) {
+    if (!poolDetail || poolDetail.poolState!='ACTIVE') {
       SimpleToast.show('Pool not active now!');
       return;
     }
-    setSelectedContest(_id);
+    setSelectedContest(_id,poolDetail.poolId);
     navigation.navigate('TeamsOverview');
   };
   return (
@@ -148,7 +159,7 @@ const ContestCard = ({
 
 const mapStateToProps = state => ({});
 
-export default connect(mapStateToProps, {setSelectedContest})(ContestCard);
+export default connect(mapStateToProps, {setSelectedContest,fetchPoolDetails})(ContestCard);
 
 const styles = StyleSheet.create({
   neomorphContainer: {

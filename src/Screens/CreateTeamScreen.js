@@ -204,13 +204,13 @@ const CreateTeamScreen = ({
     getFantasyData();
     console.log('user details',user);
      console.log('CreateTeamScreen useEffect',matchDetails)
-     if(matchDetails && matchDetails.contract_address && matchDetails.contract_address.startsWith('terra')){
-        placeBetSmartQuery(undefined,user.terraWalletAdd, matchDetails.contract_address, success => {
-         console.log('onCompletePlaceBetsmartQuery',success);
-       });
-       }else{
-         SimpleToast.show('No contract address found');
-       }
+    //  if(matchDetails && matchDetails.contract_address && matchDetails.contract_address.startsWith('terra')){
+    //     placeBetSmartQuery(undefined,user.terraWalletAdd, matchDetails.contract_address, success => {
+    //      console.log('onCompletePlaceBetsmartQuery',success);
+    //    });
+    //    }else{
+    //      SimpleToast.show('No contract address found');
+    //    }
   }, []);
 
   const addPlayer = (item, playerType) => {
