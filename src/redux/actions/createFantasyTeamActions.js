@@ -60,7 +60,7 @@ export const placeBet =
       let messageBody={
         "send": {
           "contract": matchContractAddress, //contract_address you can get from matchAPI   
-          "amount": "1300000", //get this from the getPools API (backend )
+          "amount": "10300000", //get this from the getPools API (backend )
           "msg": msg  //this is betting payload - comes from the above step placeâBet
         }
       }
