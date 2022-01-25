@@ -29,7 +29,7 @@ export const getPoolMembers = data => {
 };
 
 const ContestCard = ({
-  pool: {price, membersRequired, members, _id, key, data},
+  pool: {poolFee, minTeamsForPool,maxTeamsForPool, members, _id, key, data},
   active,
   setSelectedContest,
   matchKey,
@@ -97,7 +97,7 @@ const ContestCard = ({
                   color: colors.secondaryColor,
                   fontSize: Typography.fontSizes.x18,
                 }}>
-                {`${price} `}
+                 {poolFee/1000000}
               </Text>
               <Text
                 style={{
@@ -113,12 +113,12 @@ const ContestCard = ({
 
         <View
           style={[commonStyles.rowAlignCenterJustifyBetween, styles.container]}>
-          <Text>{getPoolMembers(data)} Teams</Text>
-          <Text>{membersRequired} Teams</Text>
+          <Text>{maxTeamsForPool} Teams</Text>
+          <Text>{minTeamsForPool} Teams</Text>
         </View>
         <LinearProgress
           color="primary"
-          value={getPoolMembers(data) / membersRequired}
+          value={maxTeamsForPool / minTeamsForPool}
           variant="determinate"
         />
         <Shadow inner style={styles.bottomShadow}>
