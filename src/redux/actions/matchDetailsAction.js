@@ -42,9 +42,9 @@ export const setSelectedContest = (id,poolId) => (dispatch, getState) => {
   const {
     matches: {pools},
   } = getState();
-  const payload = pools.find(item => item._id === id);
-  payload.poolId = poolId;
-  console.log('select pool id',payload);
+  let payload = pools.find(item => item._id === id);
+  payload = {...payload,poolId:poolId};
+  console.log('select pool id '+poolId,payload);
   // const contestDetails = await axios.get()
   dispatch({type: MATCH_DETAILS.SET_SELECTED_PRICE_POOL,payload});
 };

@@ -15,7 +15,7 @@ import SimpleToast from 'react-native-simple-toast';
 
 const CARD_WIDTH = Dimensions.get('window').width - 32;
 
-const TeamsOverviewScreen = ({teams, placeBet,placeBetSmartQuery}) => {
+const TeamsOverviewScreen = ({teams, placeBet}) => {
   const navigation = useNavigation();
   const [modalVisibility, setModalVisibility] = useState(false);
   const [selectedTeamIndex, setSelectedTeamIndex] = useState(0);
@@ -24,7 +24,7 @@ const TeamsOverviewScreen = ({teams, placeBet,placeBetSmartQuery}) => {
   const user = useSelector(sel=>sel.auth.user);
   const matchDetails = useSelector(res=>res.matchDetails.matchDetails);
   const poolDetail = useSelector(res=>res.matchDetails.selectedPricePool);
-  const joinContest = async () => {
+  const joinContest = () => {
     setLoading(true);
     const {key} = teams[selectedTeamIndex];
     console.log('Team detail',teams[selectedTeamIndex])
@@ -38,60 +38,21 @@ const TeamsOverviewScreen = ({teams, placeBet,placeBetSmartQuery}) => {
     };
     //await placeBet(key, onComplete);
      if(matchDetails && matchDetails.contract_address && matchDetails.contract_address.startsWith('terra')){
-     await placeBetSmartQuery(teams[selectedTeamIndex],user.terraWalletAdd, matchDetails.contract_address,poolDetail.poolType,poolDetail.poolId, onComplete);
+     placeBetSmartQuery(teams[selectedTeamIndex],user.terraWalletAdd, matchDetails.contract_address,poolDetail.poolType,poolDetail.poolId,poolDetail.poolFee,300000, (data)=>{
+        placeBet(key, onComplete);
+     },(err)=>{
+       setLoading(false);
+      SimpleToast.show(err.message);
+     });
      }else{
+      setLoading(false);
        SimpleToast.show('No contract address found');
      }
    
 
   };
 
-  const placeBidToTerra=(team)=>{
-    const terra = new LCDClient({
-      URL: 'https://bombay-lcd.terra.dev',
-      chainID: 'bombay-12',
-    });
-    console.log('contractAddress',contractAddress);
-    terra.wasm.contractQuery(
-      //contractAddress,
-      'terra1n3rxe7jsq8razp6vf5lxncayvtlgpcrtkvruw6',
-      { 
-        "pool_details" : { 
-          "pool_id" : team.poolId
-        }
-      }).then(data=>{
-      console.log('pool_details query data',data);
-      console.log('team details',team);
-      let queryData = {"game_pool_bid_submit": { 
-        "gamer":user.terraWalletAdd,
-        "pool_type":data.pool_type, 
-        "pool_id":team.poolId,
-        "game_id":team.match.matchId,
-        "team_id":team._id,
-        "amount":'1'}} ;
-        console.log('game_pool_bid_submit request data',queryData)
-      terra.wasm.contractQuery(
-        contractAddress,
-        //'terra1n3rxe7jsq8razp6vf5lxncayvtlgpcrtkvruw6',
-        //'terra1ttjw6nscdmkrx3zhxqx3md37phldgwhggm345k',
-        queryData// query msg
-      ).then(data=>{
-        console.log('game_pool_bid_submit data',data);
-        setLoading(false);
-        navigation.navigate('TeamList');
-      }).catch(err=>{
-        setLoading(false);
-        console.log('game_pool_bid_submit error',JSON.stringify(err))
-      });
-    }).catch(err=>{
-      setLoading(false);
-      console.log('pool_details Query error',JSON.stringify(err))
-    });
-
-  
-
-
-  }
+ 
 
   const onTeamPreview = team => {
     setSelectedTeam(team);
@@ -157,7 +118,7 @@ const mapStateToProps = ({createTeam: {createdTeams}}) => ({
   teams: createdTeams,
 });
 
-export default connect(mapStateToProps, {placeBet,placeBetSmartQuery})(TeamsOverviewScreen);
+export default connect(mapStateToProps, {placeBet})(TeamsOverviewScreen);
 
 const styles = StyleSheet.create({
   emptyText: {

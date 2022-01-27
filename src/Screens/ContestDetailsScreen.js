@@ -14,7 +14,7 @@ import {Shadow} from 'react-native-neomorph-shadows';
 import Typography from '../Styles/Typography';
 import TeamHeader from '../components/Header/TeamHeader';
 import {useNavigation} from '@react-navigation/native';
-import {connect} from 'react-redux';
+import {connect,useSelector} from 'react-redux';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getPoolMembers} from '../components/Card/ContestCard';
@@ -56,6 +56,7 @@ const ContestDetailsScreen = ({pool, route: {params}, setSelectedContest}) => {
 
   const {minTeamsForPool,maxTeamsForPool, price, data, _id} = pool;
   const [poolMembers, setPoolMembers] = useState([]);
+  const poolDetail = useSelector(res=>res.matchDetails.selectedPricePool);
 
   const init = async () => {
     const res = await getLeaderBoardData(params?.matchKey, params?.poolKey);
@@ -204,7 +205,7 @@ const ContestDetailsScreen = ({pool, route: {params}, setSelectedContest}) => {
         <Button
           title="Join Contest"
           onPress={() => {
-            setSelectedContest(_id);
+            setSelectedContest(_id,poolDetail?poolDetail.poolId:'');
             navigation.navigate('TeamsOverview');
           }}
           containerStyle={{flex: 1, margin: sizing.x16, marginLeft: sizing.x8}}
