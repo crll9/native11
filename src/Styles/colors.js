@@ -19,7 +19,7 @@ export const colors = {
 
   // Colors
   backgroundColor: '#282a37',
-  secondaryColor: '#027ff0',
+  secondaryColor: '#854fc8',
 };
 
 export const darkColors = {};
