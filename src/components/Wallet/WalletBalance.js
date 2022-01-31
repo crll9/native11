@@ -1,98 +1,134 @@
-import React, {useState} from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Icon, Text} from 'react-native-elements';
-import Modal from 'react-native-modal';
-import {connect} from 'react-redux';
-import {colors} from '../../Styles/colors';
-import commonStyles from '../../Styles/commonStyles';
-import {sizing} from '../../Styles/theme';
+import React, { useRef, useState } from 'react';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Text } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { colors } from '../../Styles/colors';
+import { CARD_WIDTH, sizing, WindowHeight } from '../../Styles/theme';
+import { Neomorph } from 'react-native-neomorph-shadows';
+import BottomSheet from './BottomSheet';
+import NeomorphButton from './NeomorphButton';
+import NotificationCard from './NotificationCard';
 
-const WalletBalance = ({walletData, walletLoading}) => {
-  const {item, all} = walletData || {item: {}, all: []};
-  const [visibility, setVisibility] = useState(false);
-
-  const handleModalOpen = () => {
-    if (all?.length > 0) {
-      setVisibility(true);
+const WalletBalance = ({ walletData, walletLoading }) => {
+  const refWalletSheet = useRef();
+  const refNotificationSheet = useRef();
+  const [notifications, setNotifications] = useState([
+    {
+      title: 'Notification 1',
+      content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'
+    },
+    {
+      title: 'Notification 2',
+      content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'
+    },
+    {
+      title: 'Notification 3',
+      content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'
+    },
+    {
+      title: 'Notification 4',
+      content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'
+    },
+    {
+      title: 'Notification 5',
+      content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'
+    },
+    {
+      title: 'Notification 6',
+      content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'
+    },
+    {
+      title: 'Notification 1',
+      content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'
+    },
+    {
+      title: 'Notification 2',
+      content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'
+    },
+    {
+      title: 'Notification 3',
+      content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'
+    },
+    {
+      title: 'Notification 4',
+      content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'
+    },
+    {
+      title: 'Notification 5',
+      content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'
+    },
+    {
+      title: 'Notification 6',
+      content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'
     }
-  };
+  ]);
   return (
     <>
-      <View style={{width: 88, alignItems: 'flex-end'}}>
-        <Text style={styles.smallText}>Wallet Balance</Text>
-        {!walletLoading && (
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() => handleModalOpen()}
-            style={commonStyles.rowAlignCenter}>
-            <Icon
-              name="wallet"
-              size={23}
-              containerStyle={{marginRight: 2}}
-              type="material-community"
-              color={colors.secondaryColor}
-            />
-            <Text
-              numberOfLines={1}
-              adjustsFontSizeToFit
-              style={styles.deepText}>
-              {item['amount'] === 'not-found'
-                ? item['amount']
-                : +item['amount'] / 1000000}
-            </Text>
-          </TouchableOpacity>
-        )}
+      <View style={styles.neomorphOpacities}>
+        <NeomorphButton
+          onPress={() => refNotificationSheet.current.open()}
+          icon='bell'
+          size={20}
+          color={colors.steelgrey}
+        />
+        <NeomorphButton
+          onPress={() => refWalletSheet.current.open()}
+          icon='wallet'
+          size={20}
+          color={colors.steelgrey}
+        />
       </View>
-      <Modal
-        onBackButtonPress={() => setVisibility(false)}
-        isVisible={visibility}
-        onBackdropPress={() => setVisibility(false)}
-        animationOut="slideOutDown"
-        animationIn="fadeIn"
-        animationInTiming={300}
-        animationOutTiming={300}>
-        <View
-          style={{
-            backgroundColor: colors.backgroundColor,
-            padding: sizing.x16,
-            borderRadius: sizing.x8,
-          }}>
-          <View style={styles.header}>
-            <Text
-              style={{
-                color: colors.white,
-                textAlign: 'center',
-                fontSize: 16,
-              }}>
-              Wallet Balance
-            </Text>
+
+      <BottomSheet
+        refSheet={refWalletSheet}
+        height={WindowHeight * 0.75}
+        closeOnDragDown={true}
+        draggableIcon
+      >
+        <Text>Test</Text>
+      </BottomSheet>
+
+      <BottomSheet
+        refSheet={refNotificationSheet}
+        height={WindowHeight}
+        closeOnDragDown={false}
+      >
+        <View style={styles.notficationContainer}>
+          <View style={styles.notificationHeader}>
+            <Text h2>Notifications</Text>
+            <NeomorphButton
+              onPress={() => refNotificationSheet.current.close()}
+              icon='times'
+              size={20}
+              color={colors.steelgrey}
+            />
           </View>
-          {all.map(item => (
-            <View style={styles.row}>
-              <Text
-                style={{
-                  color: colors.white,
-                  fontSize: 16,
-                }}>
-                {item.denom?.toUpperCase()}
-              </Text>
-              <Text
-                style={{
-                  color: colors.secondaryColor,
-                  fontSize: 15,
-                  fontWeight: '700',
-                }}>
-                {+item.amount / 1000000}
-              </Text>
+          <ScrollView style={styles.notificationArray}>
+            {notifications.map((notification, key) => (
+              <NotificationCard
+                title={notification.title}
+                content={notification.content}
+                key={key}
+              />
+            ))}
+            <View style={styles.notificationBSfooter}>
+              <Neomorph
+                style={styles.neomorphContainer}
+              >
+                <TouchableOpacity
+                  onPress={() => console.log('Load More')}>
+                  <Text style={styles.loadMore}>Load More</Text>
+                </TouchableOpacity>
+              </Neomorph>
             </View>
-          ))}
+          </ScrollView>
         </View>
-      </Modal>
+      </BottomSheet>
     </>
   );
 };
 
-const mapStateToProps = ({auth: {walletLoading, walletData}}) => ({
+const mapStateToProps = ({ auth: { walletLoading, walletData } }) => ({
   walletData,
   walletLoading,
 });
@@ -100,24 +136,46 @@ const mapStateToProps = ({auth: {walletLoading, walletData}}) => ({
 export default connect(mapStateToProps, {})(WalletBalance);
 
 const styles = StyleSheet.create({
-  smallText: {
-    fontSize: 10,
-    color: colors.white,
+  neomorphContainer: {
+    shadowRadius: 3,
+    borderRadius: 30,
+    backgroundColor: colors.backgroundColor,
+    width: CARD_WIDTH / 2,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: sizing.x8,
   },
-  deepText: {
-    fontSize: 20,
-    color: colors.secondaryColor,
-    fontWeight: 'bold',
+  neomorphOpacities: {
+    flexDirection: 'row',
   },
-  header: {
-    paddingBottom: sizing.x16,
-    borderBottomColor: 'rgba(0,0,0,.3)',
-    borderBottomWidth: 0.7,
+  notificationHeader: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginVertical: sizing.x16,
+    width: CARD_WIDTH,
   },
-  row: {
-    ...commonStyles.rowAlignCenterJustifyBetween,
-    paddingVertical: sizing.x8,
-    borderBottomColor: 'rgba(0,0,0,.3)',
-    borderBottomWidth: 0.7,
+  notficationContainer: {
+    flex: 1,
+    width: CARD_WIDTH + 32,
+    alignItems: 'center',
   },
+  notificationArray: {
+    height: WindowHeight,
+    width: '100%',
+    borderTopWidth: 1,
+    borderTopColor: colors.steelgrey,
+    marginTop: sizing.x16,
+  },
+  notificationBSfooter: {
+    width: CARD_WIDTH + 32,
+    height: 80,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loadMore: {
+    color: colors.offWhiteText,
+  }
 });

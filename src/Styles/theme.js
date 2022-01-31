@@ -80,6 +80,7 @@ const Card = {
   },
 };
 export const CARD_WIDTH = Dimensions.get('window').width - 32;
+export const WindowHeight = Dimensions.get('window').height;
 
 export const theme = {
   Text,

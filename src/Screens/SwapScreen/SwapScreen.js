@@ -35,102 +35,102 @@ const SwapScreen = () => {
             currency: temp,
         })
     }
-    return(
+    return (
         <>
-        <Header/>
-        <ScrollView
-        style={styles.scrollView}>
-        <View style={commonStyles.centerInFlex1}>
-            <View style={styles.balanceText}>
-                <Text>Available </Text>
-                <Text style={{color:colors.secondaryColor}}> 48,453 UST</Text>
-            </View>
-            <Neomorph
-            swapShadows
-            style={styles.neomorphContainer}
-            >
-                <View style={styles.formContainer}>
-                    <Text>
-                        From
-                    </Text>
-                    <View style={styles.currencyContainer}>
-                        <TextInputNeomorph
-                        placeholder={fromState.currency == 'UST' ? 'UST' : 'FURY'}
-                        editable={false}
-                        />
-                        <TextInputNeomorph
-                        placeholder={'90.00'}
-                        editable={true}
-                        value={fromState}
-                        setstate={setFromState}
+            <Header />
+            <ScrollView
+                style={styles.scrollView}>
+                <View style={commonStyles.centerInFlex1}>
+                    <View style={styles.balanceText}>
+                        <Text>Available </Text>
+                        <Text style={{ color: colors.secondaryColor }}> 48,453 UST</Text>
+                    </View>
+                    <Neomorph
+                        swapShadows
+                        style={styles.neomorphContainer}
+                    >
+                        <View style={styles.formContainer}>
+                            <Text>
+                                From
+                            </Text>
+                            <View style={styles.currencyContainer}>
+                                <TextInputNeomorph
+                                    placeholder={fromState.currency == 'UST' ? 'UST' : 'FURY'}
+                                    editable={false}
+                                />
+                                <TextInputNeomorph
+                                    placeholder={'90.00'}
+                                    editable={true}
+                                    value={fromState}
+                                    setstate={setFromState}
+                                />
+                            </View>
+                        </View>
+                    </Neomorph>
+
+                    <SwapNeomorph onPress={switchSwap} />
+
+                    <Neomorph
+                        style={styles.neomorphContainer}
+                    >
+                        <View style={styles.formContainer}>
+                            <Text>
+                                To
+                            </Text>
+                            <View style={styles.currencyContainer}>
+                                <TextInputNeomorph
+                                    placeholder={fromState.currency == 'UST' ? 'FURY' : 'UST'}
+                                    editable={false}
+                                />
+                                <TextInputNeomorph
+                                    placeholder={'120.00'}
+                                    editable={true}
+                                    value={toState}
+                                    setstate={setToState}
+                                />
+                            </View>
+                        </View>
+                    </Neomorph>
+
+                    <View style={styles.slippageContainer}>
+                        <View style={styles.slippageText}>
+                            <Text>Slippage</Text>
+                        </View>
+                        <SlippageButtonGroup
+                            array={[0.1, 0.5, 1]}
+                            suffix={'%'}
+                            onPress={setSlippage}
+                            currentValue={slippage}
                         />
                     </View>
-                </View>
-            </Neomorph>
 
-            <SwapNeomorph onPress={switchSwap}/>
+                    <Neomorph
+                        inner
+                        swapShadows
+                        style={styles.neomorphContainer2}>
+                        <View style={styles.infoContainer}>
+                            <Text>Rate</Text>
+                            <Text>1 UST = 0.98 $FURY</Text>
+                        </View>
+                        <View style={styles.infoContainer}>
+                            <Text>Trading Fee</Text>
+                            <Text>$0.98</Text>
+                        </View>
+                        <View style={styles.infoContainer}>
+                            <Text>Slippage</Text>
+                            <Text>{slippage}%</Text>
+                        </View>
+                    </Neomorph>
 
-              <Neomorph
-            style={styles.neomorphContainer}
-            >
-                <View style={styles.formContainer}>
-                    <Text>
-                        To
-                    </Text>
-                    <View style={styles.currencyContainer}>
-                    <TextInputNeomorph
-                        placeholder={fromState.currency == 'UST' ? 'FURY' : 'UST'}
-                        editable={false}
-                        />
-                        <TextInputNeomorph
-                        placeholder={'120.00'}
-                        editable={true}
-                        value={toState}
-                        setstate={setToState}
-                        />
+                    <TouchableOpacity
+                        style={styles.swapButton}
+                    >
+                        <Text style={styles.swapButtonText}>Swap</Text>
+                    </TouchableOpacity>
                 </View>
-                </View>
-            </Neomorph>
-            
-            <View style={styles.slippageContainer}>
-                <View style={styles.slippageText}>
-                <Text>Slippage</Text>
-                </View>
-                <SlippageButtonGroup
-                array={[0.1, 0.5, 1]}
-                suffix={'%'}
-                onPress={setSlippage}
-                currentValue={slippage}
-                />
-            </View>
-
-            <Neomorph 
-            inner 
-            swapShadows
-            style={styles.neomorphContainer2}>
-                <View style={styles.infoContainer}>
-                <Text>Rate</Text>
-                <Text>1 UST = 0.98 $FURY</Text>
-                </View>
-                <View style={styles.infoContainer}>
-                <Text>Trading Fee</Text>
-                <Text>$0.98</Text>
-                </View>
-                <View style={styles.infoContainer}>
-                <Text>Slippage</Text>
-                <Text>{slippage}%</Text>
-                </View>
-            </Neomorph>
-
-            <TouchableOpacity
-            style={styles.swapButton}
-            >
-                <Text style={styles.swapButtonText}>Swap</Text>
-            </TouchableOpacity>
-        </View>
-        </ScrollView>
+            </ScrollView>
         </>
-  );
+    );
 };
 
 const styles = StyleSheet.create({
@@ -142,8 +142,8 @@ const styles = StyleSheet.create({
         height: 110,
         padding: sizing.x12,
         margin: sizing.x12,
-      },
-      neomorphContainer2: {
+    },
+    neomorphContainer2: {
         flexDirection: 'column',
         shadowRadius: 5,
         borderRadius: 16,
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
         padding: sizing.x12,
         justifyContent: 'space-evenly',
         margin: sizing.x16,
-      },
+    },
     formContainer: {
         flexDirection: 'column',
     },
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
         width: CARD_WIDTH,
         height: 50,
         alignItems: 'center',
-        justifyContent : 'center',
+        justifyContent: 'center',
     },
     swapButtonText: {
         color: colors.white,
@@ -181,8 +181,8 @@ const styles = StyleSheet.create({
         width: CARD_WIDTH,
     },
     slippageText: {
-        alignItems:'center', 
-        justifyContent:'center'
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     infoContainer: {
         flexDirection: 'row',
@@ -193,10 +193,10 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         flexDirection: 'row',
     },
-    scrollView:{
-        backgroundColor:colors.backgroundColor, 
+    scrollView: {
+        backgroundColor: colors.backgroundColor,
         paddingTop: 5
-    },   
+    },
 });
 
 export default SwapScreen;
