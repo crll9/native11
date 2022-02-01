@@ -1,0 +1,26 @@
+diff --git a/node_modules/@walletconnect/react-native-dapp/dist/components/QrcodeModal.js b/node_modules/@walletconnect/react-native-dapp/dist/components/QrcodeModal.js
+index 71a38c4..f51137f 100644
+--- a/node_modules/@walletconnect/react-native-dapp/dist/components/QrcodeModal.js
++++ b/node_modules/@walletconnect/react-native-dapp/dist/components/QrcodeModal.js
+@@ -60,7 +60,7 @@ export default function QrcodeModal({ visible, walletServices, connectToWalletSe
+         shouldAnimate(visible ? 600 : 600, visible);
+     }, [shouldAnimate, visible]);
+     const onPressLogo = React.useCallback(async () => {
+-        const url = 'https://walletconnect.org/';
++        const url = 'https://terrastation.page.link/?link=https://terra.money?action=wallet_connect&apn=money.terra.station&ibi=money.terra.station&isi=1548434735';
+         return (await Linking.canOpenURL(url)) && Linking.openURL(url);
+     }, []);
+     const keyExtractor = React.useCallback((walletServiceRow) => {
+diff --git a/node_modules/@walletconnect/react-native-dapp/dist/providers/WalletConnectProvider.js b/node_modules/@walletconnect/react-native-dapp/dist/providers/WalletConnectProvider.js
+index 9b5b1e2..b07de99 100644
+--- a/node_modules/@walletconnect/react-native-dapp/dist/providers/WalletConnectProvider.js
++++ b/node_modules/@walletconnect/react-native-dapp/dist/providers/WalletConnectProvider.js
+@@ -23,7 +23,7 @@ export default function WalletConnectProvider({ children, renderQrcodeModal: may
+         if (Platform.OS === 'android') {
+             const canOpenURL = await Linking.canOpenURL(uri);
+             if (!canOpenURL) {
+-                Linking.openURL('https://walletconnect.org/wallets');
++                Linking.openURL('https://terrastation.page.link/?link=https://terra.money?action=wallet_connect&apn=money.terra.station&ibi=money.terra.station&isi=1548434735');
+                 throw new Error('No wallets found.');
+             }
+             await Linking.openURL(uri);

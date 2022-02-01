@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "prebuild": "npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "build": "cd android && ./gradlew assembleDebug && cd ../",
-    "postinstall": "patch-package"
+    "postinstall": "rn-nodeify --install --hack && patch-package && npm run custom-patch",
+    "custom-patch": "bash ./postinstall.sh"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.17",
@@ -34,6 +35,7 @@
     "lottie-react-native": "^5.0.1",
     "node-libs-browser": "^2.2.1",
     "node-libs-react-native": "^1.2.1",
+    "punycode": "^1.2.4",
     "querystring-es3": "~0.2.0",
     "react": "17.0.2",
     "react-native": "0.65.1",

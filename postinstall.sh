@@ -1,0 +1,1 @@
+sed -i '31d' ./node_modules/react-native-os/android/src/main/java/com/peel/react/RNOSModule.java
