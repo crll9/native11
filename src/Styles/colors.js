@@ -16,10 +16,12 @@ export const colors = {
   successTransparent: 'rgba(49,208,170,.16)',
   black: '#000',
   angelBlue: '#1e7adf',
-
+  steelgrey: '#7f8489',
+  geryText: '#3b405a',
+  offWhiteText: '#e3e3e3',
   // Colors
-  backgroundColor: '#282a37',
-  secondaryColor: '#027ff0',
+  backgroundColor: '#292a39',
+  secondaryColor: '#854fc8',
 };
 
 export const darkColors = {};

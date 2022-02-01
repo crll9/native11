@@ -3,11 +3,12 @@ import {StyleSheet, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {
-  MyWalletScreen,
   HomeScreen,
   ContestScreen,
   MoreScreen,
+  SwapScreen,
 } from '../Screens';
+// import { SwapScreen } from '../Screens/SwapScreen';
 import {colors} from '../Styles/colors';
 import Typography from '../Styles/Typography';
 import {Icon, Text} from 'react-native-elements';
@@ -97,7 +98,7 @@ const TabScreen = () => {
         component={ContestScreen}
       />
       <Tab.Screen
-        name="My Wallet"
+        name="Swap"
         options={{
           tabBarIcon: ({focused}) => {
             const color = focused ? colors.secondaryColor : colors.subtitleText;
@@ -105,7 +106,7 @@ const TabScreen = () => {
             return (
               <Shadow inner style={{...styles.tabBarItem, shadowRadius}}>
                 <Icon
-                  name="wallet"
+                  name="swap-horizontal"
                   size={22}
                   type="material-community"
                   color={color}
@@ -114,13 +115,13 @@ const TabScreen = () => {
                   numberOfLines={1}
                   adjustsFontSizeToFit
                   style={[styles.tabBarText, {color}]}>
-                  My Wallet
+                  Swap
                 </Text>
               </Shadow>
             );
           },
         }}
-        component={MyWalletScreen}
+        component={SwapScreen}
       />
       <Tab.Screen
         name="More"

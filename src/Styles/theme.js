@@ -1,3 +1,4 @@
+import { Dimensions } from 'react-native';
 import {colors as ThemeColor} from 'react-native-elements';
 import {colors} from './colors';
 import Typography from './Typography';
@@ -78,6 +79,8 @@ const Card = {
     borderWidth: 0,
   },
 };
+export const CARD_WIDTH = Dimensions.get('window').width - 32;
+export const WindowHeight = Dimensions.get('window').height;
 
 export const theme = {
   Text,
