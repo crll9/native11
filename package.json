@@ -19,12 +19,9 @@
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.1.0",
     "@terra-money/terra.js": "^3.0.1",
-<<<<<<< HEAD
-=======
     "@tradle/react-native-http": "2.0.0",
     "@walletconnect/client": "^1.7.1",
     "@walletconnect/qrcode-modal": "^1.7.1",
->>>>>>> ef2ccbd12766adb40b2dd374def432b9a25ec1db
     "@walletconnect/react-native-dapp": "^1.7.1",
     "axios": "^0.21.4",
     "babel-cli": "^6.26.0",
