@@ -12,15 +12,23 @@ index 71a38c4..f51137f 100644
      }, []);
      const keyExtractor = React.useCallback((walletServiceRow) => {
 diff --git a/node_modules/@walletconnect/react-native-dapp/dist/providers/WalletConnectProvider.js b/node_modules/@walletconnect/react-native-dapp/dist/providers/WalletConnectProvider.js
-index 9b5b1e2..b07de99 100644
+index 9b5b1e2..352861b 100644
 --- a/node_modules/@walletconnect/react-native-dapp/dist/providers/WalletConnectProvider.js
 +++ b/node_modules/@walletconnect/react-native-dapp/dist/providers/WalletConnectProvider.js
-@@ -23,7 +23,7 @@ export default function WalletConnectProvider({ children, renderQrcodeModal: may
+@@ -8,6 +8,7 @@ import { defaultRenderQrcodeModal, formatWalletServiceUrl } from '../constants';
+ import { WalletConnectContext } from '../contexts';
+ import { useMobileRegistry, useWalletConnectContext } from '../hooks';
+ import { ConnectorEvents, } from '../types';
++import {uuid} from '@walletconnect/utils'
+ const defaultState = Object.freeze({
+     visible: false,
+ });
+@@ -23,7 +24,7 @@ export default function WalletConnectProvider({ children, renderQrcodeModal: may
          if (Platform.OS === 'android') {
              const canOpenURL = await Linking.canOpenURL(uri);
              if (!canOpenURL) {
 -                Linking.openURL('https://walletconnect.org/wallets');
-+                Linking.openURL('https://terrastation.page.link/?link=https://terra.money?action=wallet_connect&apn=money.terra.station&ibi=money.terra.station&isi=1548434735');
++                Linking.openURL(`https://terrastation.page.link/?link=https://terra.money?action=wallet_connect&apn=money.terra.station&ibi=money.terra.station&isi=1548434735&payload=wc:${uuid()}@1?bridge=https://walletconnect.terra.dev/&key=station`);
                  throw new Error('No wallets found.');
              }
              await Linking.openURL(uri);
